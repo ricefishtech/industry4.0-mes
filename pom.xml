@@ -186,13 +186,6 @@
         </repository>
     </repositories>
 
-    <scm>
-        <connection>scm:git:ssh://github.com/qcadoo/mes.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/qcadoo/mes.git</developerConnection>
-        <url>http://github.com/qcadoo/mes</url>
-        <tag>HEAD</tag>
-    </scm>
-
 
     <profiles>
         <profile>
@@ -205,38 +198,7 @@
             <properties>
                 <profile.name>${profile}</profile.name>
             </properties>
-        </profile>
-        <profile>
-            <id>saas</id>
-            <activation>
-                <property>
-                    <name>spring.profiles.active</name>
-                    <value>saas</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>com.qcadoo.saas</groupId>
-                    <artifactId>qcadoo-saas-model</artifactId>
-                    <version>${qcadoo.saas.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.qcadoo.saas</groupId>
-                    <artifactId>qcadoo-saas-tenant</artifactId>
-                    <version>${qcadoo.saas.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.qcadoo.saas</groupId>
-                    <artifactId>qcadoo-saas-plugin</artifactId>
-                    <version>${qcadoo.saas.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.qcadoo.saas</groupId>
-                    <artifactId>qcadoo-saas-shop</artifactId>
-                    <version>${qcadoo.saas.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
+             </profile>
     </profiles>
 
 </project>
