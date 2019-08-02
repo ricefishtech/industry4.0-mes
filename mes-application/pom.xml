@@ -299,29 +299,6 @@
             <artifactId>yuicompressor</artifactId>
             <version>2.3.6</version>
         </dependency>
-<!-- ignite -->
-        <!--dependency>
-            <groupId>org.apache.ignite</groupId>
-            <artifactId>ignite-core</artifactId>
-            <version> ${ignite.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ignite</groupId>
-            <artifactId>ignite-log4j</artifactId>
-            <version>${ignite.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ignite</groupId>
-            <artifactId>ignite-web</artifactId>
-            <version> ${ignite.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ignite</groupId>
-            <artifactId>ignite-spring</artifactId>
-            <version>${ignite.version}</version>
-        </dependency-->
-
-
 
         <dependency>
             <groupId>com.vividsolutions</groupId>
@@ -336,18 +313,6 @@
             <artifactId>hazelcast-hibernate3</artifactId>
             <version>3.8.1</version>
         </dependency>
-
-
-
-
-
-        <!--dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.0.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/driver/postgresql-42.0.0.jar</systemPath>
-        </dependency-->
 
     </dependencies>
     <build>
