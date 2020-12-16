@@ -1,7 +1,7 @@
 # industry4.0-mes
 基于QCADOO的开源MES，生产制造管理系统,Manufacturing Execution System
 
-# Demo: http://demo.cloudmes.io DEMO版本是完整的商业版本，商业部分付费开源。 
+# Demo: http://demo.cloudmes.io DEMO版本是完整的商业版本。 
 
 
 # 新版本演示：
