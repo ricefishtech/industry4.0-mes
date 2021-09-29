@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e137c86-0753-45b7-a6a9-ba51d7d92ecb" name="Default" comment="0.2" />
+    <list default="true" id="0e137c86-0753-45b7-a6a9-ba51d7d92ecb" name="Default" comment="0.2">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -94,7 +96,7 @@
     <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.25230414" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -121,15 +123,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -175,6 +175,7 @@
       <workItem from="1523086723595" duration="16000" />
       <workItem from="1632890442772" duration="710000" />
       <workItem from="1632891504351" duration="5236000" />
+      <workItem from="1632898167972" duration="57000" />
     </task>
     <task id="LOCAL-00001" summary="update readme">
       <created>1523011414802</created>
@@ -298,6 +299,12 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/mes" />
+      <path value="$PROJECT_DIR$/qcadoo" />
+      <path value="$PROJECT_DIR$/qcadoo-maven-plugin" />
+      <path value="$PROJECT_DIR$/qcadoo-super-pom-open" />
+    </ignored-roots>
     <MESSAGE value="first version" />
     <MESSAGE value="update readme" />
     <MESSAGE value="0.2" />

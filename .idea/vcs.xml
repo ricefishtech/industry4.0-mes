@@ -2,9 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mes" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/qcadoo" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/qcadoo-maven-plugin" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/qcadoo-super-pom-open" vcs="Git" />
   </component>
 </project>
