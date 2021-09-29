@@ -22,7 +22,7 @@
 打包后的war包在mes/mes-application/target/，可以直接copy war包到tomcat/webapps下面
 
 ## **升级的最新版本演示**：
-## DEMO 版本是完整的商业版本 \
+## DEMO 版本是完整的商业版本 
 http://demo.cloudmes.io/login.html \
 test001/123456 \
 test002/123456 \
@@ -31,7 +31,7 @@ test004/123456 \
 test005/123456 \
 test006/123456 \
 
-## **联系我们：** \
+## **联系我们：** 
 QQ群：622319616 \
 微信：17898898894 \
 contact@cloudmes.io
