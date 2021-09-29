@@ -11,7 +11,8 @@ industry4.0-mes
 
 3、编译源码
 1）导入maven project,调整JDK、tomcat安装文件夹
-2）maven顺序：
+2) 将lib文件夹里面的内容复制到maven repository文件夹里面，比如/users/aa/.m2/repository
+3）maven顺序：
 qcadoo-super-pom-open
 qcadoo-maven-plugin
 qcadoo
@@ -20,7 +21,7 @@ mes
 打包后的war包在mes/mes-application/target/，可以直接copy war包到tomcat/webapps下面
 
 
-## **新版本演示：**
+## **升级的最新版本演示：**
 DEMO 版本是完整的商业版本 \
 http://demo.cloudmes.io/login.html \
 test001/123456 \

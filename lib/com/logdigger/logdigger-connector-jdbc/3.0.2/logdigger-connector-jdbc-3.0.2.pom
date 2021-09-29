@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.logdigger</groupId>
+  <artifactId>logdigger-connector-jdbc</artifactId>
+  <packaging>jar</packaging>
+  <version>3.0.2</version>
+  <name>LogDigger Connector for Java - JDBC Support</name>
+  <url>http://logdigger.com</url>
+  <build>
+    <finalName>${project.groupId}-${project.artifactId}</finalName>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0-beta-6</version>
+      </extension>
+    </extensions>
+  </build>
+  <distributionManagement>
+    <repository>
+      <id>logdigger</id>
+      <url>scpexe://logdigger.com/data/www/maven/public/repos</url>
+    </repository>
+  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>logdigger</id>
+      <build>
+        <plugins>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <configuration>
+              <url>scpexe://logdigger.com/data/www/maven/public/repos</url>
+              <updateReleaseInfo>true</updateReleaseInfo>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
