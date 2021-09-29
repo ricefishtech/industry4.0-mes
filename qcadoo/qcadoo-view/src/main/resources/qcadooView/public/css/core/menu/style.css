@@ -1,0 +1,1347 @@
+/**
+ * ***************************************************************************
+ * Copyright (c) 2010 Qcadoo Limited
+ * Project: Qcadoo Framework
+ * Version: 1.4
+ *
+ * This file is part of Qcadoo.
+ *
+ * Qcadoo is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * ***************************************************************************
+ */
+.clear {
+	clear:both;
+}
+.float_left {
+	float:left;
+}
+.float_right {
+	float:right;
+}
+
+#mainPageIframeWrapper{
+	top: 61px;
+	z-index: 9;
+}
+/********************************* clearfix */
+.clearfix:before,.clearfix:after{
+	content:" ";display:table
+}
+.clearfix:after{
+	clear:both
+}
+
+/********************************* page header */
+.pageTopHeader{
+	position: relative;
+	z-index: 10;
+	border-bottom: 1px solid #bebebe;
+	padding: 6px 12px 6px 7px;
+	background: rgb(255,255,255);
+	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 30%, rgba(255,255,255,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(30%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,1)));
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 100%);
+	background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 100%);
+}
+
+/********************************* page title */
+.pageTitle{
+	float: left;
+	padding: 10px 0 0 20px;
+}
+.pageTitle .category{
+	display: block;
+	font-size: 12px;
+	text-transform: uppercase;
+}
+.pageTitle h1{
+	font-size: 16px;
+	font-weight: normal;
+	margin: 0;
+}
+/********************************* top title */
+.topTitle{
+	float: left;
+	font-weight:bold;
+	color:#FF9900;
+	padding: 10px 0 0 100px;
+}
+/********************************* user menu */
+.not-active {
+   pointer-events: none;
+   cursor: default;
+}
+.userMenuBackdoor{
+	position: fixed;
+	background: #FFF;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	opacity: 0;
+	display: none;
+}
+
+.userMenuBackdoor.open{
+	display: block;
+}
+.userMenu{
+	float: right;
+	padding-top: 17px;
+}
+.userMenu > ul{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.userMenu > ul > li{
+	float: left;
+	font-size: 12px;
+	margin-left: 13px;
+}
+.userMenu > ul > li > a{
+	text-decoration: none;
+}
+.userMenu > ul > li > a.help{
+	color: #27BFA6;
+}
+.userMenu .icon{
+	width: 13px;
+	height: 13px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.userMenu .icon.iconHelp{
+	background: url('/qcadooView/public/css/core/menu/images-new/help-13.png');
+}
+.userMenu .icon.iconUser{
+	background: url('/qcadooView/public/css/core/menu/images-new/user-13.png');
+}
+.userMenu .icon.iconDropdown{
+	background: url('/qcadooView/public/css/core/menu/images-new/arrow-bottom-13.png');
+}
+.userMenu .icon.iconLogout{
+	background: url('/qcadooView/public/css/core/menu/images-new/logout-13.png');
+}
+.userMenuDropdown{
+	display: inline-block;
+	position: relative;
+	margin-top: -2px;
+}
+.userMenuDropdown .toggle{
+	border: 1px solid transparent;
+	border-bottom: none;
+	border-radius: 3px 3px 0 0;
+	padding: 2px 3px 6px 3px;
+	background: #FFFFFF;
+	z-index: 2;
+	position: relative;
+	display: inline-block;
+}
+.userMenuDropdown > ul{
+	list-style: none;
+	padding: 5px 12px 5px 10px;
+	margin: -1px 0 0 0;
+	border: 1px solid #cfcfcf;
+	border-radius: 3px 0 3px 3px;
+	float: right;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	background: #fefefe;
+	z-index: 1;
+	display: none;
+}
+.userMenuDropdown > ul > li{
+	padding: 3px 0;
+}
+.userMenuDropdown > ul > li > a{
+	color: #000;
+	text-decoration: none;
+	white-space: nowrap;
+}
+.userMenuDropdown:hover .toggle{
+	border-color: #cfcfcf;
+	background: #fefefe;
+}
+.userMenuDropdown:hover > ul{
+	display: block;
+}
+
+/********************************* logo dropdown */
+.logoDropdownBox{
+	float: left;
+	position: relative;
+	z-index: 10;
+}
+.logoDropdownBoxToggle{
+	position: relative;
+	z-index: 2;
+}
+.logoDropdownBoxToggle .logo{
+	padding: 11px 20px 11px 10px;
+	border: 1px solid #c8c8c8;
+	border-right: none;
+	border-radius:  4px 0 0 4px;
+	background: rgb(255,255,255);
+	float: left;
+	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(244,244,244,1) 51%, rgba(244,244,244,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(255,255,255,1)), color-stop(51%,rgba(244,244,244,1)), color-stop(100%,rgba(244,244,244,1)));
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 50%,rgba(244,244,244,1) 51%,rgba(244,244,244,1) 100%);
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 50%,rgba(244,244,244,1) 51%,rgba(244,244,244,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 50%,rgba(244,244,244,1) 51%,rgba(244,244,244,1) 100%);
+	background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 50%,rgba(244,244,244,1) 51%,rgba(244,244,244,1) 100%);
+}
+.logoDropdownBoxToggle .logo .logoWhite{
+	display: none;
+}
+.logoDropdownBoxToggle .arrow{
+	display: block;
+	border: 1px solid #27BFA6;
+	border-radius:  0 4px 4px 0;
+	float: right;
+	padding: 20px 10px 18px 10px;
+	background: rgb(39,191,166);
+	background: -moz-linear-gradient(top,  rgba(39,191,166,1) 0%, rgba(39,191,166,1) 50%, rgba(46,191,166,1) 51%, rgba(46,191,166,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(39,191,166,1)), color-stop(50%,rgba(39,191,166,1)), color-stop(51%,rgba(46,191,166,1)), color-stop(100%,rgba(46,191,166,1)));
+	background: -webkit-linear-gradient(top,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+	background: -o-linear-gradient(top,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+	background: linear-gradient(to bottom,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+}
+.logoDropdownBoxToggle .arrow i{
+	display: block;
+	width: 13px;
+	height: 8px;
+	background: url('/qcadooView/public/css/core/menu/images-new/header-dropdown-arrow.png');
+}
+
+.logoDropdownBoxContent{
+	position: absolute;
+	top: 100%;
+	width: 363px;
+	box-shadow: 0px 5px 5px #888888;
+	border-radius: 0 0 4px 4px;
+	margin-bottom: 20px;
+	display: none;
+	margin-top: -1px;
+	z-index: 1;
+}
+.logoDropdownBoxContent .icon{
+	width: 13px;
+	height: 13px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.logoDropdownBoxContent .iconSearch{
+	background: url('/qcadooView/public/css/core/menu/images-new/search-13.png');
+}
+.logoDropdownBoxContent .iconFavoriteMenu{
+	background: url('/qcadooView/public/css/core/menu/images-new/favorite-menu-13.png');
+}
+.logoDropdownBoxContent .iconFavoriteAdded{
+	background: url('/qcadooView/public/css/core/menu/images-new/favorite-added-13.png');
+}
+.logoDropdownBoxContent .iconFavoriteAdd{
+	background: url('/qcadooView/public/css/core/menu/images-new/favorite-add-13.png');
+}
+.logoDropdownBoxContent .iconInfo{
+	width: 26px;
+	height: 26px;
+	background: url('/qcadooView/public/css/core/menu/images-new/info-26.png');
+}
+
+/********************************* logo dropdown */
+/****************** logo dropdown - open */
+.logoDropdownBox.open .logoDropdownBoxContent{
+	display: block;
+}
+.logoDropdownBox.open .logoDropdownBoxToggle .logo {
+	border-color: #27BFA6;
+	background: rgb(39,191,166);
+	background: -moz-linear-gradient(top,  rgba(39,191,166,1) 0%, rgba(39,191,166,1) 50%, rgba(46,191,166,1) 51%, rgba(46,191,166,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(39,191,166,1)), color-stop(50%,rgba(39,191,166,1)), color-stop(51%,rgba(46,191,166,1)), color-stop(100%,rgba(46,191,166,1)));
+	background: -webkit-linear-gradient(top,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+	background: -o-linear-gradient(top,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+	background: linear-gradient(to bottom,  rgba(39,191,166,1) 0%,rgba(39,191,166,1) 50%,rgba(46,191,166,1) 51%,rgba(46,191,166,1) 100%);
+	border-bottom-left-radius: 0;
+	border-bottom: 1px solid #27BFA6;
+}
+.logoDropdownBox.open .logoDropdownBoxToggle .arrow{
+	border-left: none;
+	padding-left: 11px;
+	border-bottom-right-radius: 0;
+	border-bottom: 1px solid #27BFA6;
+}
+.logoDropdownBox.open .logoDropdownBoxToggle .arrow i{
+	transform: rotate(180deg);
+}
+.logoDropdownBox.open .logoDropdownBoxToggle .logo .logoWhite{
+	display: block;
+}
+.logoDropdownBox.open .logoDropdownBoxToggle .logo .logoDark{
+	display: none;
+}
+
+/****************** search */
+.headerSearchForm{
+	border: 1px solid #27BFA6;
+	background: #27BFA6;
+	padding: 15px;
+	border-radius: 0 4px 0 0 ;
+}
+.headerSearchForm [type="text"]{
+	border: 1px solid #27BFA6;
+	background: #FFF;
+	width: 100%;
+	font-size: 12px;
+	padding: 0 20px 0 10px;
+	height: 24px;
+	-webkit-box-sizing:  border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.headerSearchForm [type="text"]::-ms-clear {
+    display: none;
+}
+.headerSearchFormContent{
+	position: relative;
+}
+.headerSearchForm .icon.iconSearch{
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+.headerSearchForm .iconDel{
+	position: absolute;
+	right: 3px;
+	top: 0px;
+	text-decoration: none;
+	font-size: 24px;
+	line-height: 1;
+	color: #bebebe;
+	display: none;
+}
+.headerSearchForm.showClear .icon.iconSearch{
+	display: none;
+}
+.headerSearchForm.showClear .iconDel{
+	display: block;
+}
+
+/****************** menu */
+.headerMenuBox{
+	border-radius: 0 0 4px 4px ;
+}
+.headerMenuContent{
+	display: table;
+	width: 100%;
+}
+.headerMenuRowMain{
+	vertical-align: top;
+	display: table-cell;
+	width: 150px;
+	background: rgb(123,123,123);
+	background: -moz-linear-gradient(left,  rgba(123,123,123,1) 0%, rgba(98,98,98,1) 80%, rgba(98,98,98,1) 100%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(123,123,123,1)), color-stop(80%,rgba(98,98,98,1)), color-stop(100%,rgba(98,98,98,1)));
+	background: -webkit-linear-gradient(left,  rgba(123,123,123,1) 0%,rgba(98,98,98,1) 80%,rgba(98,98,98,1) 100%);
+	background: -o-linear-gradient(left,  rgba(123,123,123,1) 0%,rgba(98,98,98,1) 80%,rgba(98,98,98,1) 100%);
+	background: -ms-linear-gradient(left,  rgba(123,123,123,1) 0%,rgba(98,98,98,1) 80%,rgba(98,98,98,1) 100%);
+	background: linear-gradient(to right,  rgba(123,123,123,1) 0%,rgba(98,98,98,1) 80%,rgba(98,98,98,1) 100%);
+	border: 1px solid #666666;
+	border-right: none;
+	border-radius: 0 0 0 4px ;
+}
+.headerMenuRowSub{
+	vertical-align: top;
+	display: table-cell;background: rgb(254,254,254);
+	background: -moz-linear-gradient(left,  rgba(254,254,254,1) 0%, rgba(245,245,245,1) 100%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(254,254,254,1)), color-stop(100%,rgba(245,245,245,1)));
+	background: -webkit-linear-gradient(left,  rgba(254,254,254,1) 0%,rgba(245,245,245,1) 100%);
+	background: -o-linear-gradient(left,  rgba(254,254,254,1) 0%,rgba(245,245,245,1) 100%);
+	background: -ms-linear-gradient(left,  rgba(254,254,254,1) 0%,rgba(245,245,245,1) 100%);
+	background: linear-gradient(to right,  rgba(254,254,254,1) 0%,rgba(245,245,245,1) 100%);
+	border: 1px solid #cfcfcf;
+	border-radius: 0 0 4px 0  ;
+}
+.openSearchResult .headerMenuRowMain{
+	display: none;
+}
+.openSearchResult .headerMenuRowSub{
+	display: block;
+	padding: 10px 0;
+	background: rgb(254,254,254);
+	background: -moz-linear-gradient(left,  rgba(254,254,254,1) 60%, rgba(245,245,245,1) 100%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(60%,rgba(254,254,254,1)), color-stop(100%,rgba(245,245,245,1)));
+	background: -webkit-linear-gradient(left,  rgba(254,254,254,1) 60%,rgba(245,245,245,1) 100%);
+	background: -o-linear-gradient(left,  rgba(254,254,254,1) 60%,rgba(245,245,245,1) 100%);
+	background: -ms-linear-gradient(left,  rgba(254,254,254,1) 60%,rgba(245,245,245,1) 100%);
+	background: linear-gradient(to right,  rgba(254,254,254,1) 60%,rgba(245,245,245,1) 100%);
+	border-radius: 0 0 4px 4px ;
+}
+.openSearchResult .subMenu{
+	margin: 0;
+}
+.openSearchResult .subMenu a{
+	font-size: 13px;
+	color: #000;
+	display: none;
+}
+.openSearchResult #searchResult .subMenu a{
+	display: block;
+}
+.openSearchResult .subMenuBox.active{
+	display: none;
+}
+.openSearchResult .subMenuBoxLiveSearch{
+	display: block !important;
+}
+.openSearchResult .highlight{
+	color: #fe9e28;
+}
+.openSearchResult #menu-ulubione{
+	display: none !important;
+}
+.openSearchResult #searchResult{
+	display: block !important;
+}
+/****************** main menu */
+.mainMenu{
+	list-style: none;
+	padding: 0;
+	margin: 0 0 5px 0;
+}
+.mainMenu li{
+	position: relative;
+}
+.mainMenu li a{
+	color: #FFF;
+	text-decoration: none;
+	font-size: 13px;
+	display: block;
+	margin-left: -1px;
+	margin-right: -1px;
+	border: 1px solid transparent;
+	border-right: none;
+	padding: 6px 19px;
+	position: relative;
+	z-index: 10;
+}
+.mainMenu li.favorite{
+	margin-top: -1px;
+	margin-bottom: -1px;
+}
+.mainMenu li.favorite:after{
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0px;
+	bottom: 0;
+	height: 1px;
+	background: #959595;
+}
+.mainMenu li.favorite a{
+	padding-top: 14px;
+	padding-bottom: 15px;
+}
+.mainMenu li.favorite a:after{
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 1px;
+	bottom: 0;
+	height: 1px;
+	background: #666666;
+}
+.mainMenu li a.maintainHover{
+	background: #FFF;
+	border-color: #cfcfcf;
+	color: #363636;
+}
+.mainMenu li a.maintainHover:after{
+	display: none;
+}
+
+/****************** sub menu */
+.subMenuBox{
+	display: none;
+}
+.subMenuBox.active{
+	display: block;
+}
+.emptyFavorite{
+	text-align: center;
+	padding: 20px;
+	font-size: 13px;
+	color: #b3b3b3;
+}
+.emptyFavorite .iconInfo{
+	margin-bottom: 10px;
+}
+#emptySearchResult, #tooManySearchResult{
+	text-align: center;
+	padding: 10px 20px;
+	font-size: 13px;
+	color: #b3b3b3;
+}
+#emptySearchResult .iconInfo, #tooManySearchResult .iconInfo{
+	margin-bottom: 10px;
+}
+.subMenu{
+	list-style: none;
+	padding: 0;
+	margin: 5px 0 5px 0;
+}
+.subMenu a{
+	font-size: 12px;
+	color: #363636;
+	text-decoration: none;
+	padding: 6px 25px 6px 20px;
+	display: block;
+	position: relative;
+}
+.subMenu a.maintainHover {
+	background: #e8e8e8;
+}
+.subMenu .currentActive {
+	background: #D6D6D6;
+}
+
+.subMenu a .iconFavoriteAdded, .subMenu a .iconFavoriteAdd{
+	position: absolute;
+	top: 7px;
+	right: 8px;
+}
+.subMenu a .iconFavoriteAdd{
+	display: none;
+}
+.subMenu a:hover, .subMenu a.active{
+	background: #e8e8e8;
+}
+.subMenu a:hover .iconFavoriteAdd{
+	display: block;
+}
+
+/* ribbon [group] */
+.ribbonMenu {
+	/*display:block;*/
+	display:inline-block;
+	vertical-align: top;
+	width:auto;
+	/*margin-right:10px;*/
+	/*margin-right:5px;*/
+	margin-right: 0px;
+	/*float:left;*/
+	background-image:url('/qcadooView/public/css/core/menu/images/ribbon_down.png');
+	background-position:bottom;
+	background-repeat:repeat-x;
+	line-height:110%;
+	font-size:14px;
+}
+.ribbonMenu_left {
+	background-image:url('/qcadooView/public/css/core/menu/images/ribbon_left.png');
+	background-position:left;
+	background-repeat:no-repeat;
+}
+.ribbonMenu_right {
+	height:61px;
+	/*padding: 0px 10px;*/
+	padding: 0px 2px;
+	/*background-image:url('/qcadooView/public/css/core/menu/images/ribbon_right.png');*/
+	background-position:right;
+	background-repeat:no-repeat;
+	text-align:center;
+}
+.lastRibbonMenu .ribbonMenu_right {
+	background-image:url('/qcadooView/public/css/core/menu/images/ribbon_right.png');
+}
+.ribbon_title {
+	display:inline;
+	position:relative;
+	top:54px;
+	min-width:45px;
+	height:10px;
+	padding: 0px 4px;
+	margin:auto;
+	font-size:10px;
+	/*color:#b7b7b7;*/
+	color:#777;
+	background-color:#f5f5f5;
+	text-align:center;
+}
+.ribbon_content {
+	margin-top:-4px;
+	text-align:left;
+}
+.ribbonMenu label {
+	line-height:8px;
+}
+.ribbonMenu label input {
+
+}
+/* RIBBON [elements] */
+.ribbonBigElement {
+	float:left;
+	margin-right:0px;
+}
+
+.ribbonBigElement.disabled label {
+//	color: red;
+}
+.ribbonBigElement.disabled .hasIcon {
+	//background-position: 10px 10px;
+}
+
+/* :[ADD] */
+ul.ribbonAddElement {
+	margin: 0px;
+	padding:0;
+	float:left;
+	list-style: none;
+}
+ul.ribbonAddElement li {
+	float:left;
+	display:block;
+	padding: 0px 0px;
+	margin: 0px 2px 0px;
+	height: 45px;
+}
+ul.ribbonAddElement > li:hover {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_add_c.png');
+	background-repeat:repeat-x;
+
+}
+ul.ribbonAddElement > li:hover > span {
+	display:block;
+	width:auto;
+	height: 45px;
+	text-decoration:none;
+	text-align:left;
+	padding: 0px;
+	margin: 0px;
+	color:#454545;
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_add_r.png');
+	background-repeat:no-repeat;
+	background-position:top right;
+}
+ul.ribbonAddElement > li:hover > span > div {
+	display:block;
+	margin:0px;
+	height: 45px;
+	padding:0px;
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_add_l.png');
+	background-repeat:no-repeat;
+	background-position:top left;
+}
+ul.ribbonAddElement li ul {
+	padding: 0;
+}
+ul.ribbonAddElement li ul li {
+	float:none;
+	display:block;
+	padding: 0px;
+	margin:0px;
+	height: 33px;
+	background-repeat:no-repeat;
+	background-position:top left;
+}
+ul.ribbonAddElement li ul li a {
+	display:block;
+	width:auto;
+	height: 33px;
+	text-decoration:none;
+	text-align:left;
+	padding: 0px;
+	margin: 0px;
+	color:#454545;
+	background-repeat:no-repeat;
+	background-position:top right;
+}
+ul.ribbonAddElement li ul li a span {
+	display:block;
+	margin:0px 5px;
+	height: 33px;
+	padding:0px;
+	background-repeat:repeat-x;
+}
+
+ul.ribbonAddElement li ul li a span div.bigDropdownButtonDiv {
+	background-repeat:no-repeat;
+	background-position: 0px 1px;
+	vertical-align: middle;
+	display: inline-block;
+	height:34px;
+	vertical-align: middle;
+	margin: auto;
+
+}
+ul.ribbonAddElement li ul li a span div.bigDropdownButtonDiv.hasIcon {
+	padding-left: 34px;
+}
+ul.ribbonAddElement li ul li a span div.bigDropdownButtonDiv label {
+	vertical-align: middle;
+	display: inline-block;
+	line-height: 110%;
+	cursor: pointer;
+}
+ul.ribbonAddElement li ul li a span div.bigDropdownButtonDiv div {
+	vertical-align: middle;
+	display: inline-block;
+	height: 34px;
+
+}
+
+ul.ribbonAddElement li ul li:hover {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_add_hover_l.png');
+
+}
+ul.ribbonAddElement li ul li:hover a {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_add_hover_r.png');
+}
+ul.ribbonAddElement li ul li:hover a span {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_add_hover_c.png');
+}
+/* AddB */
+ul.ribbonAddElement li ul li.addB {
+	float:none;
+	display:block;
+	padding: 0px;
+	margin:0px;
+	height: 12px;
+
+}
+ul.ribbonAddElement li ul li.addB a {
+	display:block;
+	width:auto;
+	height: 12px;
+	text-decoration:none;
+	text-align:left;
+	padding: 0px;
+	margin: 0px;
+	color:#454545;
+
+}
+ul.ribbonAddElement li ul li.addB a span {
+	display:block;
+	margin:0px 5px;
+	height: 12px;
+	padding:0px;
+}
+
+
+
+ul.ribbonAddElement li ul li.addB:hover {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_addB_hover_l.png');
+
+}
+ul.ribbonAddElement li ul li.addB:hover a {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_addB_hover_r.png');
+}
+ul.ribbonAddElement li ul li.addB:hover a span {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_addB_hover_c.png');
+}
+.icon_btn_add {
+	/*display:block;
+	height:28px;
+	background-image:url('/qcadooView/public/css/core/menu/images/icon_btn_add.png');
+	background-repeat:no-repeat;
+	background-position: top left;
+	padding: 5px 5px 0px 34px;
+*/}
+.icon_btn_addB {
+	display:block;
+	width:5px;
+	height:12px;
+	margin:auto;
+	background-image:url('/qcadooView/public/css/core/menu/images/icon_btn_addB.png');
+	background-repeat:no-repeat;
+	background-position: center;
+}
+/* :[BUTTON2] */
+ul.ribbonListElement {
+	margin: 0px;
+	padding:0;
+	float:left;
+	list-style: none;
+}
+ul.ribbonListElement li {
+	float:left;
+	display:block;
+	padding: 0px 0px;
+	height: 45px;
+	margin: 0px 2px 0px;
+	position: relative;
+}
+ul.ribbonListElement li > a {
+	display:block;
+	width:auto;
+	height: 45px;
+	text-decoration:none;
+	padding: 0;
+	margin: 0px;
+	color:#454545;
+	cursor: default;
+}
+.enabled ul.ribbonListElement li>  a {
+	cursor: pointer;
+}
+ul.ribbonListElement li a span {
+	display:block;
+	margin-right:5px;
+	height: 45px;
+	padding: 0px;
+	margin: 0px 5px;
+}
+ul.ribbonListElement li a span div {
+	background-repeat:no-repeat;
+	background-position: 0px 10px;
+	vertical-align: middle;
+	display: inline-block;
+	width: 0px;
+	height:40px;
+	vertical-align: middle;
+	margin: auto;
+}
+ul.ribbonListElement li a span div.hasIcon {
+	width: 24px;
+	filter:alpha(opacity=50); /* filtr dla IE*/
+	opacity: 0.5; /* filtr dla Opera*/
+	-moz-opacity:0.5; /* filtr dla Mozilla Firefox */
+}
+.enabled ul.ribbonListElement li a span div.hasIcon {
+	filter:alpha(opacity=100); /* filtr dla IE*/
+	opacity: 1; /* filtr dla Opera*/
+	-moz-opacity:1; /* filtr dla Mozilla Firefox */
+}
+ul.ribbonListElement li a span label {
+	vertical-align: middle;
+	display: inline-block;
+	margin-left: 5px;
+	margin-top: 5px;
+	line-height: 100%;
+	cursor: default;
+	color: #aaaaaa;
+}
+.enabled ul.ribbonListElement li a span label {
+	cursor: pointer;
+	color: #464646;
+}
+ul.ribbonListElement li a span div div {
+	vertical-align: middle;
+	display: inline-block;
+	height: 45px;
+
+}
+
+.enabled ul.ribbonListElement li:hover {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_list_hover_l.png');
+	background-repeat:no-repeat;
+	background-position: left;
+}
+.enabled ul.ribbonListElement li:hover > a {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_listUp.png');
+	background-repeat:no-repeat;
+	background-position: right;
+}
+.enabled ul.ribbonListElement li:hover a span {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_list_hover_c.png');
+}
+ul.ribbonListElement li.active {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_list_activ_l.png');
+	background-position: left;
+	background-repeat:no-repeat;
+}
+ul.ribbonListElement li.active a {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_listActive.png');
+	background-position: right;
+	background-repeat:no-repeat;
+}
+ul.ribbonListElement li.active a span {
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_list_activ_c.png');
+	background-repeat: repeat-x;
+}
+ul.ribbonListElement li.noActive {
+	background-image:none;
+	color:#b7b7b7;
+}
+.icon_folder_noActive {
+	display:block;
+	height:40px;
+	background-image:url('/qcadooView/public/css/core/menu/images/btn_list_noactive.png');
+	background-repeat:no-repeat;
+	background-position: top left;
+	padding: 5px 2px 0px 32px;
+}
+/* :[LIST] */
+ul.ribbon_box {
+	list-style: none;
+	margin:6px 0px 0px;
+	padding:0;
+}
+ul.ribbon_box li {
+	display:block;
+	padding: 0px 0px 0px;
+	height: 20px;
+}
+ul.ribbon_list {
+	list-style: none;
+	margin:0px;
+	padding:0;
+	float:left;
+	margin-right:0px;
+}
+ul.ribbon_list li {
+	display:block;
+	padding: 0px;
+	height: 23px;
+	background-image:none;
+}
+ul.ribbon_list li.btnOne > a,
+ul.ribbon_list li.twoB a {
+	display:block;
+	width:auto;
+	height: 23px;
+	text-decoration:none;
+	padding: 0;
+	color: #aaaaaa;
+	font-size:14px;
+	background-image:none;
+	cursor: default;
+	position: relative;
+}
+ul.ribbon_list li.btnOne.enabled > a {
+	color:#464646;
+	cursor: pointer;
+}
+ul.ribbon_list li.arrow a, ul.ribbon_list li > a.make {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1arrow.png');
+	background-repeat:no-repeat;
+	background-position: right;
+}
+ul.ribbon_list li a span {
+	display:block;
+	padding:0px;
+	margin: 0px 3px 0px 3px;
+}
+ul.ribbon_list li a span div.btnOneLabel {
+	display: inline-block;
+	padding-top: 6px;
+	padding-left: 2px;
+	padding-right: 2px;
+	height: 18px;
+	vertical-align: middle;
+}
+ul.ribbon_list .hasIcon {
+	height: 18px;
+	width: 16px;
+	height: 16px;
+	margin-top: 0px;
+	margin-left: 2px;
+	vertical-align: middle;
+	display: inline-block;
+	filter:alpha(opacity=50); /* filtr dla IE*/
+	opacity: 0.5; /* filtr dla Opera*/
+	-moz-opacity:0.5; /* filtr dla Mozilla Firefox */
+}
+ul.ribbon_list li.enabled .hasIcon {
+	filter:alpha(opacity=100); /* filtr dla IE*/
+	opacity: 1; /* filtr dla Opera*/
+	-moz-opacity:1; /* filtr dla Mozilla Firefox */
+}
+ul.ribbon_list li.btnOne.enabled:hover  {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_hover_l.png');
+	background-position: 0px -1px;
+	background-repeat:no-repeat;
+}
+ul.ribbon_list li.btnOne.enabled:hover > a  {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1Up.png');
+	background-position: right -1px;
+	background-repeat:no-repeat;
+}
+ul.ribbon_list li.btnOne.enabled:hover a span  {
+	display:block;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_hover_c.png');
+	background-position: 0px -1px;
+	background-repeat:repeat-x;
+}
+ul.ribbon_list li.arrow:hover a {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1arrowUp.png');
+	background-position: right;
+}
+ul.ribbon_list li.noActive {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1arrownoActive.png');
+	background-repeat:no-repeat;
+	background-position: right;
+}
+ul.ribbon_list li.noActive span {
+	display:block;
+	margin:0px;
+	color:#b7b7b7;
+}
+ul.ribbon_list li.activ_list {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_activ_l.png');
+	background-position: left;
+	background-repeat:no-repeat;
+}
+ul.ribbon_list li.activ_list a {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_activ_r.png');
+	background-position: right;
+	background-repeat:no-repeat;
+}
+ul.ribbon_list li.activ_list a span {
+	display:block;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_activ_c.png');
+	background-repeat:repeat-x;
+}
+/* [LIST twoB] */
+ul.ribbon_list > li {
+	display: block;
+	clear: left;
+	float: left;
+}
+ul.ribbon_list li.twoB.enabled a {
+	cursor: pointer;
+	color:#464646;
+}
+ul.ribbon_list > li.twoB.enabled:hover {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_twoB_c.png') !important;
+	background-repeat:repeat-x;
+	background-position: left -1px;
+ }
+ul.ribbon_list li.twoB.enabled:hover > span {
+	display:block;
+	height: 23px;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_twoB_l.png') !important;
+	background-repeat:no-repeat;
+	background-position: left -1px;
+}
+ul.ribbon_list li.twoB.enabled:hover > span > div {
+	display:block;
+	height: 23px;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_twoB_r.png');
+	background-repeat:no-repeat;
+	background-position: 1px -1px;
+}
+ul.ribbon_list li.twoB.enabled span div ul li:hover {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_hover_l.png');
+	background-position: left -1px;
+	background-repeat:no-repeat;
+}
+ul.ribbon_list li.twoB.enabled span div ul li:hover a {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1Up.png');
+	background-position: right -1px;
+	background-repeat:no-repeat;
+}
+ul.ribbon_list li.twoB.enabled span div ul li:hover a span {
+	display:block;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_hover_c.png');
+	background-position: left -1px;
+	background-repeat:repeat-x;
+}
+/* [LIST icon] */
+
+ul.ribbon_list .icon_list {
+	/*display:block;
+	margin-right:0px;
+	height: 18px;
+	padding: 5px 0px 0px 23px;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1span.png');
+	background-repeat:no-repeat;
+	background-position: left;
+*/}
+.icon_make {
+	display:block;
+	margin-right:0px;
+	height: 18px;
+	padding: 5px 0px 0px 23px;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1spanMake.png');
+	background-repeat:no-repeat;
+}
+.icon_noActive {
+	display:block;
+	margin-left:7px;
+	height: 15px;
+	padding: 5px 0px 0px 23px;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_1spannoActive.png');
+	background-repeat:no-repeat;
+}
+/* [LIST two button] */
+ul.ribbon_list li.twoB ul {
+	margin: 0;
+	padding: 0;
+}
+ul.ribbon_list li.twoB ul li {
+	float:left;
+}
+ul.ribbon_list li.twoB ul li a.twoB_down {
+	width:15px;
+	height:23px;
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_twoB_down.png');
+	background-position: 0px -1px;
+	background-repeat:no-repeat;
+}
+ul.ribbon_list li.twoB.enabled ul li a.twoB_down:hover {
+	background-image:url('/qcadooView/public/css/core/menu/images/lt_twoB_downClick.png') !important;
+	background-position: 0px -1px;
+}
+/* SUBMENU */
+.m_warp {
+	border:1px solid #eaeaea;
+	display:block;
+	width:160px;
+}
+.ribbonDropdownContainer {
+	position: relative;
+}
+.m_module {
+	border:1px solid #d8d8d8;
+	background-color:#f0f0f0;
+	display: none;
+	z-index: 20;
+	position: absolute;
+}
+.m_module.bigButtonDropdownMenu {
+	top: 45px;
+	left: 0px;
+}
+.m_module.smallButtonDropdownMenu {
+	top: 22px;
+	right: 0px;
+}
+.m_module ul {
+	list-style: none;
+	margin:0;
+	padding:0;
+	background-image:url('/qcadooView/public/css/core/menu/images/m_ul_tlo.png');
+	background-repeat:repeat-y;
+}
+.m_module ul li {
+	display:block;
+	padding: 0px;
+	float: none !important;
+	height: auto !important;
+}
+.m_module ul li a {
+	display:block;
+	text-decoration:none;
+	height: auto !important;
+	clear: both;
+	margin: 0;
+	padding: 0;
+	cursor: default !important;
+}
+.m_module ul li a span.dropdownItemIcon {
+	display: block;
+	float: left;
+	width: 22px;
+	height: 26px;
+	background-repeat:no-repeat;
+	background-position: 4px 6px;
+	vertical-align: middle;
+	filter:alpha(opacity=50); /* filtr dla IE*/
+	opacity: 0.5; /* filtr dla Opera*/
+	-moz-opacity:0.5; /* filtr dla Mozilla Firefox */
+}
+.m_module ul li.enabled a span.dropdownItemIcon {
+	filter:alpha(opacity=100); /* filtr dla IE*/
+	opacity: 1; /* filtr dla Opera*/
+	-moz-opacity:1; /* filtr dla Mozilla Firefox */
+}
+.m_module ul li a span.dropdownItemLabel {
+	display: block;
+	color: #aaaaaa;
+	padding: 0px 5px 0px 30px;
+	line-height: 26px;
+	margin: 1px;
+	border: 1px solid transparent;
+}
+.m_module ul li.enabled a span.dropdownItemLabel {
+	color:#464646;
+	cursor: pointer;
+}
+.m_module ul li.enabled a:hover span.dropdownItemLabel {
+	border-color: #f29d15;
+}
+
+.ribbon_description_icon {
+	position: absolute;
+	width: 9px;
+	height: 9px;
+	top: 0;
+	left: 0;
+	background: url(/qcadooView/public/css/core/images/info.icon.grey.png);
+	filter:alpha(opacity=80); /* filtr dla IE*/
+	opacity: 0.8; /* filtr dla Opera*/
+	-moz-opacity:0.8; /* filtr dla Mozilla Firefox */
+}
+.ribbon_content .ribbonListElement .ribbon_description_icon {
+	top: 8px;
+}
+.ribbon_content .enabled .ribbon_description_icon {
+	background-image: url(/qcadooView/public/css/core/images/info.icon.png);
+}
+.ribbon_description_icon:hover {
+	filter:alpha(opacity=100); /* filtr dla IE*/
+	opacity: 1; /* filtr dla Opera*/
+	-moz-opacity:1; /* filtr dla Mozilla Firefox */
+}
+.ribbon_content .btnOne.enabled .description_message,
+.ribbon_content .enabled .ribbonListElement .description_message {
+	border-color: #0076ca;
+	background: #f9f9f9;
+}
+.ribbon_content .btnOne .description_message,
+.ribbon_content .ribbonListElement .description_message {
+	border-color: #464646;
+	background: #e0e0e0;
+}
+.ribbon_content .btnOne .description_message p a,
+.ribbon_content .ribbonListElement .description_message p a {
+	color: #464646;
+	height: auto;
+}
+
+.ribbonGroupsDropdownButton {
+	display: inline-block;
+	float: right;
+	width: 48px;
+	height: 46px;
+	margin-top: 12px;
+	margin-left: 5px;
+	background-image: url('/qcadooView/public/img/core/icons/dropdownIcon46.png');
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	position: relative;
+	cursor: pointer;
+}
+.ribbonGroupsDropdownButton:hover {
+	background-position: 0px -46px;
+}
+.ribbonGroupsDropdownButton.ribbonGroupsDropdownButtonActive {
+	background-position: 0px -92px;
+}
+.ribbonGroupsDropdownButton.ribbonGroupsDropdownButtonActive:hover {
+	background-position: 0px -138px;
+}
+.ribbonGroupsDropdown {
+	width: 200px;
+	background-color: #F5F5F5;
+	position: absolute;
+	top: 70px;
+	right: 20px;
+	border: solid #707070 1px;
+	display: none;
+	padding-top: 5px;
+}
+.ribbonGroupsDropdown .ribbonMenu {
+	display: block;
+	background-position: center top;
+	margin-top: 3px;
+}
+.ribbonGroupsDropdown .ribbonMenu .ribbonMenu_left,
+.ribbonGroupsDropdown .ribbonMenu .ribbonMenu_right {
+	background: transparent;
+}
+
+.ribbonGroupsDropdown .ribbonMenu .ribbonMenu_right .ribbon_title {
+	top: -5px;
+}
+.ribbonGroupsDropdown .ribbonMenu_right {
+	height: auto;
+}
+.ribbonGroupsDropdown .ribbonBigElement,
+.ribbonGroupsDropdown .ribbon_list {
+	float: none;
+	display: inline-block;
+}
+
+.activityStreamMenu {
+	float: right;
+    padding-top: 15px;
+}
+
+.activityStreamMenu .activityStreamIcon {
+	display: block;
+}
+
+.activityStreamMenu .activityStreamIcon i {
+	display: block;
+	width: 20px;
+	height: 20px;
+	background: url('/qcadooView/public/css/core/menu/images-new/bell-light-grey-64.png');
+	background-size: 20px 20px;
+}
+.activityStreamMenu .activityStreamActive i {
+	display: block;
+	width: 20px;
+	height: 20px;
+	background: url('/qcadooView/public/css/core/menu/images-new/bell-orange-64.png');
+	background-size: 20px 20px;
+}
+
+
+.activityStreamMenu .activityStreamContainer {
+    overflow: auto;
+    width: 320px;
+    height: 500px;
+    border: 1px solid #333333;
+    display: none;
+    position: fixed;
+    background: white;
+}
+
+.activityStreamMenu .activityStreamContainer .productionTracking {
+    border-bottom: solid #333333 1px;
+}
+
+.activityStreamMenu .activityStreamContainer .other {
+    border-bottom: solid #333333 1px;
+}
+.activityStreamContainer {
+	font-size: 11px;
+    color: #333333;
+    background: #f2f2f2;
+    border: solid #333333 1px;
+}
+.activityStreamContainer div {
+    padding: 10px;
+    border-left: 10px solid #f2f2f2;
+}
+.activityStreamContainer .activityStreamPlaceholder {
+	text-transform: uppercase;
+    text-align: center;
+	display: block;
+}
+.activityStreamContainer a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #2fa917;
+}
+
+.activityStreamContainer i {
+}
+.activityStreamContainer .newMessage {
+	color: #555555;
+	background: #fafafa;
+	border-left: 10px solid #2fa917;
+}
+.activityStreamDate {
+    text-align: right;
+    font-style: italic;
+    margin: 0;
+}

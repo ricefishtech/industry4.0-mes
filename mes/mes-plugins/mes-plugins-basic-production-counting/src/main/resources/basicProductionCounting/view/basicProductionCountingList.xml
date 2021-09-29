@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_BASE_FUNCTIONALITY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+	xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+	name="basicProductionCountingList" modelName="order" modelPlugin="orders">
+
+	<component type="window" name="window">
+
+		<ribbon>
+			<group template="navigation" />
+
+			<template name="standardGridTemplate" excludeItems="actions.new,actions.copy,actions.delete" />
+			
+			<group name="productionCounting">
+				<bigButton name="showDetailedProductionCountingAndProgress"
+					icon="genealogyIcon24.png">
+					<script>
+						<![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if(window.canClose()) {
+										#{order}.performEvent('showDetailedProductionCountingAndProgress', []);
+									}
+								}
+							});		
+						]]>
+					</script>
+				</bigButton>
+			</group>
+		</ribbon>
+
+		<component type="form" name="order" reference="order">
+			<listener 
+				event="showDetailedProductionCountingAndProgress" 
+				class="com.qcadoo.mes.basicProductionCounting.listeners.BasicProductionCountingListListeners" 
+				method="showDetailedProductionCountingAndProgress" />
+		</component>
+		<component type="form" name="basicProductionCounting"
+			reference="form">
+			<component type="grid" name="basicProductionCountings" reference="grid"
+					   useDto="true"
+					   source="#{order}.basicProductionCountingDtos"
+					   model="basicProductionCountingDto">
+				<option type="column" name="productNumber" fields="productNumber"
+					link="true" width="100"/>
+				<option type="column" name="productName" fields="productName"
+					link="true" width="100"/>
+				<option type="column" name="plannedQuantity" fields="plannedQuantity" width="50"/>
+				<option type="column" name="usedQuantity" fields="usedQuantity" width="50"/>
+				<option type="column" name="producedQuantity" fields="producedQuantity" width="50"/>
+				<option type="column" name="productUnit" fields="productUnit"
+					width="25"/>
+
+				<option type="order" column="productNumber" direction="desc" />
+				
+				<option type="searchable" value="productNumber,productName,plannedQuantity,usedQuantity,producedQuantity,productUnit" />
+				<option type="orderable" value="productNumber,productName,plannedQuantity,usedQuantity,producedQuantity,productUnit" />
+				
+				<option type="correspondingView"
+					value="basicProductionCounting/basicProductionCountingDetails" />
+				<option type="correspondingComponent" value="form" />
+
+				<option type="fullscreen" value="true" />
+				<option type="multiselect" value="true" />
+			</component>
+		</component>
+
+		<option type="fixedHeight" value="true" />
+		<option type="header" value="false" />
+	</component>
+
+	<hooks>
+	</hooks>
+
+</view>

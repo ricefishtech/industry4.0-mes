@@ -1,0 +1,295 @@
+/**
+ * ***************************************************************************
+ * Copyright (c) 2010 Qcadoo Limited
+ * Project: Qcadoo Framework
+ * Version: 1.4
+ *
+ * This file is part of Qcadoo.
+ *
+ * Qcadoo is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * ***************************************************************************
+ */
+.ganttContainer {
+	border: solid #666666 1px;
+	background: #f3f3f3;
+	position: relative;
+	margin: 0px 10px 10px 10px;
+	font-family:"Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.ganttContainer .ganttRowNamesWrapper {
+	display: inline-block;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-right: solid #666666 1px;
+}
+
+.ganttContainer .ganttRowNamesWrapper .ganttRowNamesConteiner {
+	overflow: hidden;
+	border-bottom: solid #666666 1px;
+	border-top: solid #666666 1px;
+}
+
+.ganttContainer .ganttCenterConteiner {
+	display: inline-block;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	border-right: solid #666666 1px;
+	z-index: 30;
+}
+
+.ganttContainer .ganttCenterConteiner {
+}
+
+.ganttContainer .ganttCenterConteiner .ganttTopRow {
+	border-bottom: solid #666666 1px;
+	border-right: solid #666666 1px;
+	overflow: hidden;
+}
+.ganttTopRow .ganttTopRow1 {
+	border-bottom: solid #999999 1px;
+}
+.ganttTopRow .ganttTopRowElement {
+	border-right: solid #999999 1px;
+	display: inline-block;
+	text-align: center;
+	position: relative;
+}
+.ganttTopRow .ganttTopRowElement > div {
+	position: absolute;
+	top: 8px;
+	left: -10px;
+	width: 20px;
+	height: 12px;
+	line-height: 12px;
+	background: #F3F3F3;
+}
+.ganttTopRow .ganttTopRowElement.ganttTopRowElementEnd,
+.ganttRowElement .ganttCellElement.ganttTopRowElementEnd {
+	border-color: #666666;
+}
+
+.ganttContainer .ganttCenterConteiner .rowsContainerWrapper {
+	overflow: auto;
+}	
+
+.ganttContainer .ganttCenterConteiner .rowsContainerWrapper .rowsContainer {
+	background: white;
+}
+
+.ganttContainer .ganttCenterConteiner .rowsContainerWrapper .rowsContainer .ganttRowElement {
+	border-bottom: solid #999999 1px;
+	position: relative;
+}
+.ganttRowElement .ganttCellElement {
+	border-right: solid #dddddd 1px;
+	display: inline-block;
+}
+
+.ganttContainer .ganttRowNamesConteiner .ganttRowNameElement {
+	border-bottom: solid #999999 1px;
+	text-align: center;
+	overflow-y: auto;
+	word-wrap: break-word;
+}
+.ganttContainer .ganttCenterConteiner .rowsContainerWrapper .rowsContainer .ganttRowElement.ganttFirstRow,
+.ganttContainer .ganttRowNamesConteiner .ganttRowNameElement.ganttFirstRow {
+	border-bottom: none;
+}
+
+.ganttItem {
+	position: absolute;
+	background-color: #FFDB67;
+	border: 1px solid #c0c0c0;
+	padding-left: 0;
+	padding-right: 0;
+	cursor: default;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	filter: alpha(opacity=70);
+	opacity: 0.7;
+	-moz-opacity: 0.7;
+	overflow:hidden;
+}
+.ganttItem.ganttItemHovered {
+	filter: alpha(opacity=100);
+	opacity: 1;
+	-moz-opacity:1;
+	z-index: 200;
+}
+.ganttItem.ganttItemSelected {
+	background-color: #FC9B2B;
+}
+
+.ganttItem.ganttItemSelected .ganttItemStrip {
+	filter: alpha(opacity=22);
+	opacity: 0.22;
+	-moz-opacity: 0.22;
+}
+
+.ganttItem .ganttItemStrip.verticalStrip {
+	width: 100%;
+}
+.ganttItem .ganttItemStrip.horizontalStrip {
+	display: inline-block;
+	height: 100%;
+}
+.ganttItem .ganttItemContent {
+	padding: 0 5px;
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.ganttItem.ganttCollisionItem {
+	background-color: red;
+	background-repeat: no-repeat;
+	background-position: 4px 1px;
+	z-index: 210;
+	filter: alpha(opacity=100);
+	opacity: 1;
+	-moz-opacity:1;
+	overflow: visible;
+}
+.collisionInfoBoxOverlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 210;
+	display: none;
+	background-image: url('/qcadooView/public/img/core/bg50.png');
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper {
+	position: absolute;
+	top: 10px;
+	bottom: 10px;
+	left: 200px;
+	right: 200px;
+	overflow: auto;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox {
+	border: solid black 1px;
+	background: #EEEEEE;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox .collisionInfoBoxHeader {
+	line-height: 30px;
+	border-bottom: solid #666 1px;
+	background: url("/qcadooView/public/css/crud/images/grid/gradientygrid/gradient_header.png") repeat-x scroll 0 0 transparent;
+    color: #E8E8E8;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox .collisionInfoBoxHeader .collisionInfoBoxHeaderCloseButton {
+	width: 30px;
+	height: 30px;
+	float: right;
+	cursor: pointer;
+	border-left: solid #666 1px;
+	background: url("/qcadooView/public/img/core/icons/closeIcon24.png") no-repeat scroll 3px 3px transparent;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox .collisionInfoBoxHeader .collisionInfoBoxHeaderCloseButton:hover {
+	background-color: #808080;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox .collisionInfoBoxItem {
+	border: solid #bbb 1px;
+	cursor: pointer;
+	text-align: left;
+	margin: 5px;
+	padding: 5px;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox .collisionInfoBoxItem:hover {
+	background-color: #dcdcdc;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox .collisionInfoBoxItem.ganttItemSelected {
+	background: #FFDB67;
+	border-color: #dba700;
+}
+.collisionInfoBoxOverlay .collisionInfoBoxWrapper .collisionInfoBox .collisionInfoBoxItem.ganttItemSelected:hover {
+	background: #F8C426;
+}
+.ganttItem.ganttCollisionItem.withIcon {
+	background-image: url('/qcadooView/public/img/core/icons/warningIcon24.png');
+}
+.ganttItem.ganttCollisionItem.withIcon .ganttItemContent {
+	padding-left: 32px;
+}
+.ganttItem.ganttItemType_disabled {
+	background-color: #888888;
+}
+
+.ganttChartTooltip {
+	z-index: 300;
+	background-color: #ffffff;
+	border: 1px solid #666666;
+	border-radius: 5px;
+	box-shadow: 0 0 6px #888;
+	padding: 5px;
+	max-width: 300px;
+	font-family: 'Trebuchet MS',Arial;
+	font-size: 12px;
+	font-weight: normal;
+	color: black;
+	text-align: center;
+}
+
+.ganttItemDescriptionName {
+	font-size: 14px;
+}
+.ganttItemDescriptionName div {
+	color: #333;
+	text-align: left;
+}
+.ganttItemDescriptionInfo {
+	text-align: left;
+}
+.ganttItemDescriptionInfo .ganttItemDescriptionLabel {
+	font-weight: bold;
+	display: inline-block;
+	width: 100px;
+}
+.ganttItemDescriptionInfo .ganttItemDescriptionValue {
+	display: inline-block;
+}
+
+.ganttHeaderContainer {
+	border-left: solid #666666 1px;
+	border-right: solid #666666 1px;
+	border-top: solid #666666 1px;
+	background: #eeeeee;
+	margin: 10px 10px 0px 10px;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 10px;
+	text-align: left;
+	color: #555555;
+	font-family:"Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+.ganttHeaderContainer .ganttHeaderContainerLabel {
+	display: inline-block;
+	font-weight: bold;
+}
+.ganttHeaderContainer .ganttHeaderZoomButtons {
+	display: inline-block;
+	margin-left: 30px;
+}
+.ganttHeaderContainer .labelbox {
+	height: auto;	
+}

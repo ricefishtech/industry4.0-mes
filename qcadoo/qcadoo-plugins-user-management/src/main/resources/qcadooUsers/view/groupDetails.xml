@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+	  xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd" name="groupDetails"
+	  modelPlugin="qcadooSecurity" modelName="group" defaultAuthorizationRole="ROLE_ADMIN">
+
+	<component type="window" name="window">
+
+		<ribbon>
+			<template name="standardFormTemplate"/>
+		</ribbon>
+
+		<component type="form" name="group" reference="form">
+			<component type="gridLayout" name="gridLayout" columns="3" rows="8">
+				<layoutElement column="1" row="1">
+					<component type="input" name="name" field="name" reference="name"/>
+				</layoutElement>
+				<layoutElement column="1" row="2" height="3">
+					<component type="textarea" name="description" field="description" reference="description"/>
+				</layoutElement>
+				<layoutElement column="2" row="1" width="2" height="8">
+					<component type="lookup" name="role" reference="roleLookup" field="roles" defaultVisible="false"
+							   persistent="false" hasLabel="false">
+						<option type="column" name="description" fields="identifier,description"
+								expression="(#description == null) ? '@qcadooSecurity.role.' + #identifier + '.description' : #description" link="true"
+								width="250"/>
+
+						<option type="expression"
+								value="'&lt;/b&gt; - ' + #identifier"/>
+
+						<option type="fieldCode" value="identifier"/>
+						<option type="multiselect" value="true"/>
+
+						<option type="searchable" value="identifier"/>
+						<option type="orderable" value="identifier"/>
+
+						<criteriaModifier
+								class="com.qcadoo.plugins.users.internal.GroupDetailsCriteriaModifiers"
+								method="criteriaForGroups"/>
+					</component>
+					<component type="grid" name="groupComponents"
+							   reference="groupComponents" source="#{form}.roles" defaultEnabled="false">
+						<option type="column" name="identifier" fields="identifier" width="50"/>
+						<option type="column" name="description" fields="identifier,description"
+								expression="(#description == null) ? '@qcadooSecurity.role.' + #identifier + '.description' : #description"/>
+
+						<option type="order" column="identifier" direction="asc"/>
+
+						<option type="searchable" value="identifier,description"/>
+						<option type="orderable" value="identifier"/>
+
+						<option type="paginable" value="false"/>
+						<option type="multiselect" value="true"/>
+						<option type="creatable" value="true"/>
+						<option type="deletable" value="true"/>
+
+						<option type="width" value="450"/>
+
+						<option type="weakRelation" value="true"/>
+						<option type="correspondingLookup" value="roleLookup"/>
+
+						<option type="fullscreen" value="true"/>
+						<option type="fixedHeight" value="true"/>
+					</component>
+				</layoutElement>
+			</component>
+
+			<option type="header" value="true"/>
+			<option type="expression" value="(#identifier == null) ? #name : #identifier"/>
+		</component>
+
+	</component>
+
+	<hooks>
+		<beforeRender
+				class="com.qcadoo.plugins.users.hooks.GroupDetailsHooks"
+				method="fillCriteriaModifiers"/>
+	</hooks>
+
+</view>

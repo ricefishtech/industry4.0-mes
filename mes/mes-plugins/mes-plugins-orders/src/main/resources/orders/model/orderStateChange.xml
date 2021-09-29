@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<model name="orderStateChange" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/model"
+	xsi:schemaLocation="http://schema.qcadoo.org/model http://schema.qcadoo.org/model.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<fields>
+		<hasMany name="reasonTypes" joinField="orderStateChange" model="reasonTypeOfChangingOrderState" cascade="delete" />
+		<string name="comment" />
+		<boolean name="reasonRequired" default="false" />
+	
+		<!-- generic state change fields -->
+		<datetime name="dateAndTime" />
+		<enum name="sourceState"
+			values="01pending,02accepted,03inProgress,04completed,05declined,06interrupted,07abandoned" />
+		<enum name="targetState"
+			values="01pending,02accepted,03inProgress,04completed,05declined,06interrupted,07abandoned"
+			required="true" />
+		<enum name="status" values="01inProgress,02paused,03successful,04failure,05canceled" required="true"/>
+		<integer name="phase" />
+		<string name="worker" />
+		<hasMany name="messages" joinField="orderStateChange" model="message" plugin="states" cascade="delete" /> <!-- messages -->
+		<belongsTo name="order" model="order" /> <!-- owner -->
+		<belongsTo name="shift" model="shift" plugin="basic" />
+		<string name="additionalInformation" />
+		
+		<!-- end -->
+		<!-- date audit fields -->
+		
+        <datetime name="sourceCorrectedDateFrom"/>
+        <datetime name="sourceCorrectedDateTo"/>
+        <datetime name="sourceStartDate"/>
+        <datetime name="sourceFinishDate"/>
+        
+        <datetime name="targetCorrectedDateFrom"/>
+        <datetime name="targetCorrectedDateTo"/>
+        <datetime name="targetStartDate"/>
+        <datetime name="targetFinishDate"/>
+        
+        <boolean name="datesChanged" default="false"/>
+		
+	</fields>
+	<hooks>
+		<onCreate class="com.qcadoo.mes.orders.listeners.OrderStateReasonViewListeners" method="onOrderStateChangeCreate"/>
+	</hooks>
+</model>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_WAREHOUSE_STATES" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+      name="warehouseStocksList"
+      modelName="resourceStockDto"
+      menuAccessible="true">
+
+    <component type="window" name="window">
+        <ribbon>
+            <template name="standardGridTemplate" excludeItems="actions.new, actions.copy"/>
+        </ribbon>
+
+        <component type="grid" name="grid" reference="grid">
+            <option type="column" name="locationNumber" fields="locationNumber" width="100"/>
+            <option type="column" name="locationName" fields="locationName" width="140"/>
+            <option type="column" name="productNumber" fields="productNumber" width="100"/>
+            <option type="column" name="productName" fields="productName" width="250"/>
+            <option type="column" name="quantity" fields="quantity" width="100"/>
+            <option type="column" name="reservedQuantity" fields="reservedQuantity" width="100"/>
+            <option type="column" name="availableQuantity" fields="availableQuantity" width="100"/>
+            <option type="column" name="unit" fields="productUnit" width="60"/>
+            <option type="column" name="quantityInAdditionalUnit" fields="quantityInAdditionalUnit" width="100"/>
+            <option type="column" name="totalValue" fields="totalValue" width="100"/>
+            <option type="column" name="familyNumber" fields="familyNumber" width="100"/>
+
+            <option type="order" column="locationName" direction="asc"/>
+
+            <option type="searchable"
+                    value="locationNumber,locationName,productNumber,productName,quantity,unit,reservedQuantity,availableQuantity,quantityInAdditionalUnit,totalValue,familyNumber"/>
+            <option type="orderable"
+                    value="locationNumber,locationName,productNumber,productName,quantity,unit,reservedQuantity,availableQuantity,quantityInAdditionalUnit,totalValue,familyNumber"/>
+
+            <!-- column orderedQuantity from deliveriesToMaterialFlow -->
+            <option type="columnsToSummary"
+                    value="quantity,reservedQuantity,availableQuantity,orderedQuantity,quantityInAdditionalUnit,totalValue"/>
+
+            <option type="footerRow" value="true"/>
+            <option type="fullscreen" value="true"/>
+            <option type="multiselect" value="true"/>
+            <rowStyleResolver
+                    class="com.qcadoo.mes.materialFlowResources.rowStyleResolvers.WarehouseStocksListResolver"
+                    method="fillRowStyles"/>
+            <criteriaModifier class="com.qcadoo.mes.materialFlowResources.criteriaModifiers.WarehouseStocksCriteriaModifier"
+                              method="restrictToUserLocations"/>
+        </component>
+
+        <component type="checkbox" name="initialized" reference="initialized" defaultVisible="false"/>
+
+        <option type="fixedHeight" value="true"/>
+        <option type="header" value="false"/>
+    </component>
+
+    <hooks>
+        <beforeRender class="com.qcadoo.mes.materialFlowResources.hooks.WarehouseStockListHooks"
+                      method="fillDefaultFilters"/>
+    </hooks>
+
+</view>

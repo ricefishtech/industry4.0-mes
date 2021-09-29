@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schema.qcadoo.org/view/components/component"
+           xmlns="http://schema.qcadoo.org/view/components/component">
+
+    <xs:include schemaLocation="../../common/view.xsd"/>
+
+    <xs:complexType name="basicComponentType">
+        <xs:sequence>
+            <xs:element name="script" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="listener" type="listenerType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="identifierType" use="required"/>
+        <xs:attribute name="type" type="identifierType" use="required"/>
+        <xs:attribute name="reference" type="identifierType" use="optional"/>
+        <xs:attribute name="defaultEnabled" type="enabledAttribute" default="true"/>
+        <xs:attribute name="defaultVisible" type="xs:boolean" default="true"/>
+    </xs:complexType>
+
+    <xs:complexType name="fieldComponentType">
+        <xs:complexContent>
+            <xs:extension base="basicComponentType">
+                <xs:attribute name="field" type="xs:string"/>
+                <xs:attribute name="source" type="xs:string"/>
+                <xs:attribute name="hasDescription" type="xs:boolean" default="false"/>
+                <xs:attribute name="persistent" type="xs:boolean" default="true"/>
+                <xs:attribute name="required" type="xs:boolean" default="false"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="containerType">
+        <xs:complexContent>
+            <xs:extension base="basicComponentType">
+                <xs:sequence>
+                    <xs:element name="component" type="basicComponentType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="optionType">
+    </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_BASE_FUNCTIONALITY" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+	xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+	name="basicProductionCountingDetails" modelName="basicProductionCounting">
+
+	<component type="window" name="window">
+
+		<ribbon>
+			<group template="navigation" />
+			<group template="formSaveAction" />
+		</ribbon>
+
+		<windowTab name="mainTab">
+			<component type="form" name="basicProductionCountingDetails"
+				reference="form">
+				<component type="gridLayout" name="mainTabGridLayout"
+					columns="3" rows="1" hasBorders="false">
+					<layoutElement column="1" row="1">
+						<component type="gridLayout" name="plannedQuantityGridLayout"
+							reference="plannedQuantityGridLayout" columns="4" rows="1"
+							hasBorders="false">
+							<layoutElement column="1" row="1" width="3">
+								<component type="input" name="plannedQuantity"
+									field="plannedQuantity" reference="plannedQuantity"
+									defaultEnabled="false">
+									<option type="alignment" value="right" />
+									<option type="labelWidth" value="50" />
+								</component>
+							</layoutElement>
+							<layoutElement column="4" row="1">
+								<component type="input" name="plannedQuantityUnit"
+									reference="plannedQuantityUnit" defaultEnabled="false"
+									hasLabel="false">
+									<option type="textRepresentationOnDisabled" value="true" />
+								</component>
+							</layoutElement>
+						</component>
+						<component type="gridLayout" name="usedQuantityGridLayout"
+							reference="usedQuantityGridLayout" columns="4" rows="1"
+							hasBorders="false">
+							<layoutElement column="1" row="1" width="3">
+								<component type="input" name="usedQuantity" field="usedQuantity"
+									reference="usedQuantity">
+									<option type="alignment" value="right" />
+									<option type="labelWidth" value="50" />
+								</component>
+							</layoutElement>
+							<layoutElement column="4" row="1">
+								<component type="input" name="usedQuantityUnit"
+									reference="usedQuantityUnit" defaultEnabled="false"
+									hasLabel="false">
+									<option type="textRepresentationOnDisabled" value="true" />
+								</component>
+							</layoutElement>
+						</component>
+						<component type="gridLayout" name="producedQuantityGridLayout"
+							reference="producedQuantityGridLayout" columns="4" rows="1"
+							hasBorders="false">
+							<layoutElement column="1" row="1" width="3">
+								<component type="input" name="producedQuantity"
+									field="producedQuantity" reference="producedQuantity">
+									<option type="alignment" value="right" />
+									<option type="labelWidth" value="50" />
+								</component>
+							</layoutElement>
+							<layoutElement column="4" row="1">
+								<component type="input" name="producedQuantityUnit"
+									reference="producedQuantityUnit" defaultEnabled="false"
+									hasLabel="false">
+									<option type="textRepresentationOnDisabled" value="true" />
+								</component>
+							</layoutElement>
+						</component>
+					</layoutElement>
+				</component>
+
+				<option type="header" value="true" />
+				<option type="expression" value="#product['name']" />
+
+				<listener event="save"
+					class="com.qcadoo.mes.basicProductionCounting.listeners.BasicProductionCountingDetailsListeners"
+					method="fillDoneQuantityField" />
+			</component>
+		</windowTab>
+
+		<windowTab name="details">
+			<component type="gridLayout" name="detailsGridLayout"
+				columns="3" rows="1" hasBorders="false">
+				<layoutElement column="1" row="1" width="3">
+					<component type="grid" name="productionCountingQuantities"
+						reference="productionCountingQuantities" source="#{form}.productionCountingQuantities">
+						<option type="column" name="nodeNumber" fields="technologyOperationComponent"
+							expression="(#technologyOperationComponent == null) ? '' : #technologyOperationComponent.get('nodeNumber')"
+							link="true" />
+						<option type="column" name="operationName" fields="technologyOperationComponent"
+							expression="(#technologyOperationComponent == null) ? '' : #technologyOperationComponent.get('operation')?.get('name')"
+							link="true" />
+						<option type="column" name="role" fields="role" link="true" />
+						<option type="column" name="typeOfMaterial" fields="typeOfMaterial"
+							link="true" />
+						<option type="column" name="plannedQuantity" fields="plannedQuantity" />
+						<option type="column" name="productUnit" fields="product"
+							expression="#product?.get('unit')" />
+
+						<option type="order" column="nodeNumber" direction="desc" />
+
+						<option type="searchable" value="role,typeOfMaterial,plannedQuantity,productUnit" />
+						<option type="orderable" value="role,typeOfMaterial,plannedQuantity,productUnit" />
+
+						<option type="correspondingView"
+							value="basicProductionCounting/productionCountingQuantityAdvancedDetails" />
+						<option type="correspondingComponent" value="form" />
+						<option type="correspondingViewInModal" value="true" />
+
+						<option type="creatable" value="false" />
+						<option type="deletable" value="false" />
+						<option type="fullscreen" value="true" />
+						<option type="multiselect" value="true" />
+						<option type="fixedHeight" value="true" />
+					</component>
+				</layoutElement>
+			</component>
+		</windowTab>
+
+	</component>
+
+	<hooks>
+		<beforeRender
+				class="com.qcadoo.mes.basicProductionCounting.hooks.BasicProductionCountingDetailsHooks"
+				method="onBeforeRender"/>
+	</hooks>
+
+</view>

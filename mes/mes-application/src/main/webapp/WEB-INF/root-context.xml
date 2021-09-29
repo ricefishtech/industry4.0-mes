@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/util 
+       http://www.springframework.org/schema/util/spring-util-3.1.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/task
+	   http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+    <context:property-placeholder
+            location="
+            file:${QCADOO_CONF}/app.properties,
+            file:${QCADOO_CONF}/connectors.properties,
+            file:${QCADOO_CONF}/db.properties,
+            file:${QCADOO_CONF}/mail.properties,
+            file:${QCADOO_CONF}/mailing.properties,
+            file:${QCADOO_CONF}/report.properties"
+            ignore-resource-not-found="true"
+            ignore-unresolvable="true"
+            properties-ref="defaultConfiguration"/>
+
+    <util:properties id="defaultConfiguration">
+        <prop key="defaultLocale">default</prop>
+        <prop key="showContextualHelpPaths">false</prop>
+    </util:properties>
+
+    <bean id="log4jConfigurer" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass">
+            <value>org.springframework.util.Log4jConfigurer</value>
+        </property>
+        <property name="targetMethod">
+            <value>initLogging</value>
+        </property>
+        <property name="arguments">
+            <list>
+                <value>file:${QCADOO_CONF}/log4j.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="logdiggerFilter" class="com.logdigger.connector.servlet.LogDiggerConnectorFilter">
+        <property name="config" value="${logdigger}"/>
+    </bean>
+
+    <task:annotation-driven executor="wrappedExecutor" mode="aspectj"/>
+
+    <bean id="wrappedExecutor" class="com.qcadoo.commons.tasks.DefaultAsyncTaskExecutorWrapper">
+        <constructor-arg ref="executor"/>
+    </bean>
+
+    <task:executor id="executor" pool-size="2" rejection-policy="CALLER_RUNS"/>
+
+</beans>

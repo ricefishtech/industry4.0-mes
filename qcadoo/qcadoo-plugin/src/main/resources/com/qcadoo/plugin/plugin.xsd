@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://schema.qcadoo.org/plugin" xmlns="http://schema.qcadoo.org/plugin" elementFormDefault="qualified">
+
+	<xs:include schemaLocation="http://schema.qcadoo.org/common/plugin.xsd" />
+	
+	<xs:element name="plugin">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="information" type="information" minOccurs="1" maxOccurs="1" />
+				<xs:element name="dependencies" type="dependencies" minOccurs="0" maxOccurs="1" />
+				<xs:element name="modules" type="modules" minOccurs="1" maxOccurs="1" />
+				<xs:element name="features" type="features" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>	
+			<xs:attribute name="plugin" type="identifier" use="required" />
+			<xs:attribute name="group" type="xs:string" use="optional" />
+			<xs:attribute name="version" type="version" use="required" />
+			<xs:attribute name="system" type="xs:boolean" use="optional" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="information">
+		<xs:all>
+			<xs:element name="name" type="notEmptyString" minOccurs="1" maxOccurs="1" />
+			<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="vendor" type="vendorType" minOccurs="0" maxOccurs="1" />
+			<xs:element name="license" type="xs:string" minOccurs="1" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="features">
+		<xs:sequence minOccurs="1" maxOccurs="unbounded">
+				<xs:group ref="featuresType" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="featureType">
+		<xs:attribute name="system" type="xs:string" use="optional" />
+	</xs:complexType>
+	
+	<xs:complexType name="vendorType">
+		<xs:all>
+			<xs:element name="name" type="notEmptyString" minOccurs="1" maxOccurs="1" />
+			<xs:element name="url" type="xs:string" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="dependencies">
+		<xs:sequence>
+			<xs:element name="dependency" type="dependency" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="dependency">
+		<xs:all>
+			<xs:element name="plugin" type="identifier" minOccurs="1" maxOccurs="1" />
+			<xs:element name="version" type="dependencyVersion" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+	</xs:complexType>
+	
+	<xs:complexType name="modules">
+		<xs:sequence>
+			<xs:any minOccurs="0" maxOccurs="unbounded" processContents="strict" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="version">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]+.[0-9]+.[0-9]+" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="dependencyVersion">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9]+.[0-9]+.[0-9]+)|((\[|\()[0-9]+.[0-9]+.[0-9]+)|([0-9]+.[0-9]+.[0-9]+(\)|\]))|((\[|\()[0-9]+.[0-9]+.[0-9]+,[0-9]+.[0-9]+.[0-9]+(\]|\)))" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:group name="featuresType">
+		<xs:choice>
+			<xs:element name="end-user" type="featureType" />
+			<xs:element name="external-integration" type="featureType" />
+			<xs:element name="internal-integration" type="featureType" />
+			<xs:element name="dev-library" type="featureType" />
+			<xs:element name="plugin-pack" type="featureType" />
+		</xs:choice>
+	</xs:group>
+	
+</xs:schema>

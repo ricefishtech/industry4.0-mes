@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schema.qcadoo.org/modules/view" xmlns="http://schema.qcadoo.org/modules/view"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="http://schema.qcadoo.org/common/plugin.xsd"/>
+
+    <xs:element name="view">
+        <xs:complexType>
+            <xs:attribute name="resource" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-ribbon-group">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="resource" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-ribbon-template">
+        <xs:complexType>
+            <xs:attribute name="resource" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-ribbon-template-extension">
+        <xs:complexType>
+            <xs:attribute name="resource" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-tab">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="resource" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-hook">
+        <xs:annotation>
+            <xs:documentation>Hooks are methods that will be executed every time when request to server is send
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="plugin" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>Name of the plugin where the view belongs</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="view" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>Name of the view where the component belongs</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="type" use="required">
+                <xs:annotation>
+                    <xs:documentation>Type of the hook</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="beforeInitialize">
+                            <xs:annotation>
+                                <xs:documentation>This hook is executed before view state initialization
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="afterInitialize">
+                            <xs:annotation>
+                                <xs:documentation>This hook is executed after initialization, but before event
+                                    execution
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="beforeRender">
+                            <xs:annotation>
+                                <xs:documentation>This is most common used hook type. This hook is executed after event
+                                    execution, just before response is send to clients browser
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:enumeration>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="class" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>Name of the class where the hook is defined</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="method" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>Name of the hooks's method</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-listener">
+        <xs:complexType>
+            <xs:attribute name="plugin" type="xs:string" use="required"/>
+            <xs:attribute name="view" type="xs:string" use="required"/>
+            <xs:attribute name="component" type="xs:string" use="required"/>
+            <xs:attribute name="event" type="xs:string" use="required"/>
+            <xs:attribute name="class" type="xs:string" use="required"/>
+            <xs:attribute name="method" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-component">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="class" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="view-grid-column">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="column" maxOccurs="unbounded" minOccurs="1">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="notEmptyString" use="required"/>
+                        <xs:attribute name="fields" type="notEmptyString" use="required"/>
+                        <xs:attribute name="expression" type="xs:string" use="optional"/>
+                        <xs:attribute name="link" type="xs:boolean" use="optional"/>
+                        <xs:attribute name="width" type="xs:integer" use="optional"/>
+                        <xs:attribute name="searchable" type="xs:boolean" use="optional"/>
+                        <xs:attribute name="orderable" type="xs:boolean" use="optional"/>
+                        <xs:attribute name="hidden" type="xs:boolean" use="optional"/>
+                        <xs:attribute name="multiSearch" type="xs:boolean" use="optional"/>
+                        <xs:attribute name="align" type="alignType" use="optional"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="plugin" type="notEmptyString" use="required"/>
+            <xs:attribute name="view" type="notEmptyString" use="required"/>
+            <xs:attribute name="component" type="notEmptyString" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="alignType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="right"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="resource">
+        <xs:complexType>
+            <xs:attribute name="uri" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

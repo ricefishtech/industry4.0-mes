@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_PRODUCTION_COUNTING" name="productionBalanceDetails" modelName="productionBalance"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd">
+
+    <component type="window" name="window" reference="window">
+
+        <ribbon>
+            <template name="standardFormTemplate"/>
+            <group name="generate">
+                <bigButton name="generate" icon="generateIcon24.png"
+                           action="#{form}.fireEvent(generateProductionBalance);" state="disabled"/>
+            </group>
+            <group name="exportXls">
+                <bigButton name="xls" icon="xlsIcon24.png"
+                           action="#{form}.fireEvent(printProductionBalance,xls);" state="disabled"/>
+            </group>
+        </ribbon>
+
+        <windowTab name="mainTab">
+            <component type="form" name="productionBalanceDetails"
+                       reference="form">
+
+                <script>
+                    <![CDATA[
+						var copyRibbonItem = #{window}.getRibbonItem("actions.copy");
+						var save = #{window}.getRibbonItem("actions.save");
+						var saveBack = #{window}.getRibbonItem("actions.saveBack");
+						var saveNew = #{window}.getRibbonItem("actions.saveNew");
+						var entityExists = false;
+						var generatedRibbonItem =  #{window}.getRibbonItem("generate.generate");
+						var deletedRibbonItem =  #{window}.getRibbonItem("actions.delete");
+						var xlsItem = #{window}.getRibbonItem("exportXls.xls");
+						this.addOnChangeListener({
+							onSetValue: function(value) {
+								if (!value || !value.content) {
+									return;
+								}
+								if (value.content.entityId) {
+									entityExists = true;
+								} else {
+									entityExists = false;
+								}
+								updateRibbon();
+							}
+						});
+						
+						function updateRibbon() {
+							if (entityExists) {
+								var isGeneratedCheckboxValue = #{generated}.getValue();
+								if (isGeneratedCheckboxValue && isGeneratedCheckboxValue.content.value == "1") {
+                                    xlsItem.enable();
+									save.disable("#{translate(productionCounting.productionBalance.report.error.documentsWasGenerated)}");
+									saveBack.disable("#{translate(productionCounting.productionBalance.report.error.documentsWasGenerated)}");
+									saveNew.disable("#{translate(productionCounting.productionBalance.report.error.documentsWasGenerated)}");
+									copyRibbonItem.enable();
+									generatedRibbonItem.disable("#{translate(productionCounting.productionBalance.report.error.documentsWasGenerated)}");
+									deletedRibbonItem.enable();
+								} else {
+									xlsItem.disable("#{translate(orders.ribbon.message.recordNotGenerated)}");
+									save.enable();
+									saveBack.enable();
+									saveNew.enable();
+									copyRibbonItem.enable();
+									generatedRibbonItem.enable();
+									deletedRibbonItem.enable();
+								}
+							} else {
+								copyRibbonItem.disable("#{translate(recordNotCreated)}");
+								xlsItem.disable("#{translate(recordNotCreated)}");
+								save.enable();
+								saveBack.enable();
+								saveNew.enable();
+								copyRibbonItem.enable();
+								generatedRibbonItem.disable();
+								deletedRibbonItem.disable();
+							}
+						}
+					]]>
+                </script>
+
+                <component type="gridLayout" name="gridLayout" columns="3"
+                           rows="7">
+                    <layoutElement column="1" row="1">
+                        <component type="checkbox" name="generated" field="generated"
+                                   reference="generated" defaultEnabled="false">
+                            <option type="textRepresentationOnDisabled" value="false"/>
+                        </component>
+                        <component type="input" name="number" reference="number"
+                                   field="number" defaultEnabled="false">
+                            <option type="alignment" value="right"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="2">
+                        <component type="input" name="date" field="date"
+                                   reference="date" defaultEnabled="false"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="3">
+                        <component type="input" name="worker" field="worker"
+                                   reference="worker" defaultEnabled="false">
+                            <option type="textRepresentationOnDisabled" value="false"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="4" height="2">
+                        <component type="textarea" name="name" field="name"
+                                   reference="name"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="6" height="2">
+                        <component type="textarea" name="description" field="description"
+                                   reference="description"/>
+                    </layoutElement>
+                    <layoutElement column="2" row="1" height="4">
+                        <component type="borderLayout" name="parametersBorderLayout">
+                            <component type="gridLayout" name="parametersGidLayout"
+                                       columns="1" rows="4">
+                                <layoutElement column="1" row="1">
+                                    <component type="select" name="sourceOfOperationCostsPB"
+                                               field="sourceOfOperationCostsPB"
+                                               reference="sourceOfOperationCostsPB">
+                                    </component>
+                                </layoutElement>
+                                <layoutElement column="1" row="2">
+                                    <component type="checkbox" name="includeTPZ" field="includeTPZ"
+                                               reference="includeTPZ"/>
+                                </layoutElement>
+                                <layoutElement column="1" row="3">
+                                    <component type="checkbox" name="includeAdditionalTime"
+                                               field="includeAdditionalTime" reference="includeAdditionalTime"/>
+                                </layoutElement>
+
+                                <layoutElement column="1" row="4">
+                                    <component type="checkbox" name="includeWageGroups"
+                                               field="includeWageGroups" reference="includeWageGroups"
+                                               hasDescription="true"/>
+                                </layoutElement>
+                            </component>
+
+                            <option type="label" value="parameters"/>
+                        </component>
+                    </layoutElement>
+                </component>
+
+                <option type="header" value="true"/>
+                <option type="expression" value="#number"/>
+
+                <listener event="generateProductionBalance"
+                          class="com.qcadoo.mes.productionCounting.listeners.ProductionBalanceDetailsListeners"
+                          method="generateProductionBalance"/>
+                <listener event="printProductionBalance"
+                          class="com.qcadoo.mes.productionCounting.listeners.ProductionBalanceDetailsListeners"
+                          method="printProductionBalance"/>
+                <listener event="addAllRelatedOrders"
+                          class="com.qcadoo.mes.productionCounting.listeners.ProductionBalanceDetailsListeners"
+                          method="addAllRelatedOrders"/>
+            </component>
+        </windowTab>
+
+        <windowTab name="ordersTab" reference="ordersTab">
+            <ribbon>
+                <group name="ordersTab">
+                    <bigButton name="addAllRelatedOrders" icon="newIcon24.png"
+                               state="disabled" action="#{form}.fireEvent(addAllRelatedOrders);"/>
+                </group>
+            </ribbon>
+            <component type="gridLayout" name="ordersGridLayout" columns="1"
+                       rows="1">
+                <layoutElement column="1" row="1">
+                    <component type="lookup" name="ordersLookup" reference="ordersLookup"
+                               model="orderPlanningListDto" plugin="orders" defaultVisible="false" persistent="false"
+                               hasLabel="false">
+                        <option type="column" name="product" fields="productNumber" link="true"/>
+                        <option type="column" name="state" fields="state"/>
+                        <option type="column" name="productName" fields="productName"/>
+                        <option type="column" name="startDate" fields="startDate"/>
+                        <option type="column" name="finishDate" fields="finishDate"/>
+                        <option type="column" name="productionLineNumber" fields="productionLineNumber"/>
+                        <option type="column" name="divisionNumber" fields="divisionNumber"/>
+                        <option type="searchable"
+                                value="number,product,state,productName,startDate,finishDate,divisionNumber,productionLineNumber"/>
+                        <option type="multiSearch"
+                                value="number,product,state,productName,startDate,finishDate,divisionNumber,productionLineNumber"/>
+                        <option type="orderable"
+                                value="number,product,state,productName,dateFrom,finishDate,divisionNumber,productionLineNumber"/>
+                        <option type="multiselect" value="true"/>
+                        <option type="expression"
+                                value="#number"/>
+                        <option type="fieldCode" value="number"/>
+
+                        <criteriaModifier
+                                class="com.qcadoo.mes.productionCounting.criteriaModifiers.OrderCriteriaModifiersPC"
+                                method="showOrdersForProductionBalance"/>
+                    </component>
+                    <component type="grid" name="orders" reference="orders"
+                               source="#{form}.orders">
+                        <option type="column" name="number" fields="number"/>
+                        <option type="column" name="product" fields="product" expression="#product['number']"/>
+                        <option type="column" name="productName" fields="product" expression="#product['name']"/>
+                        <option type="column" name="state" fields="state"/>
+                        <option type="column" name="startDate" fields="startDate"/>
+                        <option type="column" name="finishDate" fields="finishDate"/>
+
+                        <option type="searchable"
+                                value="number,product,productName,state,startDate,finishDate"/>
+                        <option type="orderable"
+                                value="number,product,productName,state,startDate,finishDate"/>
+
+                        <option type="order" column="number" direction="desc"/>
+
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+                        <option type="creatable" value="true"/>
+                        <option type="deletable" value="true"/>
+                        <option type="fixedHeight" value="true"/>
+
+
+                        <option type="weakRelation" value="true"/>
+                        <option type="correspondingLookup" value="ordersLookup"/>
+
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+        <windowTab name="inputDataForCostsTab" reference="inputDataForCostsTab">
+            <component type="gridLayout" name="inputDataForCostsGridLayout"
+                       reference="inputDataForCostsGridLayout" columns="3" rows="3">
+                <layoutElement column="1" row="1" height="2">
+                    <component type="borderLayout" name="parametersBorderLayout"
+                               reference="parametersBorderLayout">
+                        <component type="gridLayout" name="parametersGridLayout"
+                                   reference="parametersGridLayout" columns="1" rows="2">
+                            <layoutElement column="1" row="1">
+                                <component type="select" name="sourceOfMaterialCosts"
+                                           field="#{form}.sourceOfMaterialCosts" reference="sourceOfMaterialCosts"
+                                           hasDescription="true">
+                                    <listener event="onSelectedEntityChange"
+                                              class="com.qcadoo.mes.productionCounting.hooks.ProductionBalanceDetailsHooks"
+                                              method="onSourceOfMaterialCostsChange"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="1" row="2">
+                                <component type="select" name="calculateMaterialCostsMode"
+                                           field="#{form}.calculateMaterialCostsMode"
+                                           reference="calculateMaterialCostsMode">
+                                    <listener event="onSelectedEntityChange"
+                                              class="com.qcadoo.mes.productionCounting.hooks.ProductionBalanceDetailsHooks"
+                                              method="checkIfOptionsAreAvailable"/>
+                                </component>
+                            </layoutElement>
+                        </component>
+
+                        <option type="label" value="parameters"/>
+                    </component>
+                </layoutElement>
+                <layoutElement column="2" row="1" height="3">
+                    <component type="borderLayout" name="overheadsBorderLayout"
+                               reference="overheadsBorderLayout">
+                        <component type="gridLayout" name="overheadsGridLayout"
+                                   reference="overheadsGridLayout" columns="4" rows="5" hasBorders="false">
+                            <layoutElement column="1" row="1" width="3">
+                                <component type="input" name="productionCostMargin"
+                                           field="#{form}.productionCostMargin" reference="productionCostMargin">
+                                    <option type="labelWidth" value="60"/>
+                                    <option type="alignment" value="right"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="4" row="1">
+                                <component type="input" name="productionCostMarginProc"
+                                           reference="productionCostMarginProc" defaultEnabled="false"
+                                           hasLabel="false">
+                                    <option type="textRepresentationOnDisabled" value="true"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="1" row="2" width="3">
+                                <component type="input" name="materialCostMargin"
+                                           field="#{form}.materialCostMargin" reference="materialCostMargin">
+                                    <option type="labelWidth" value="60"/>
+                                    <option type="alignment" value="right"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="4" row="2">
+                                <component type="input" name="materialCostMarginProc"
+                                           reference="materialCostMarginProc" defaultEnabled="false"
+                                           hasLabel="false">
+                                    <option type="textRepresentationOnDisabled" value="true"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="1" row="3" width="3">
+                                <component type="input" name="additionalOverhead"
+                                           field="#{form}.additionalOverhead" reference="additionalOverhead"
+                                           hasDescription="true">
+                                    <option type="labelWidth" value="60"/>
+                                    <option type="alignment" value="right"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="4" row="3">
+                                <component type="input" name="additionalOverheadCurrency"
+                                           reference="additionalOverheadCurrency" defaultEnabled="false"
+                                           hasLabel="false">
+                                    <option type="textRepresentationOnDisabled" value="true"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="1" row="4" width="3">
+                                <component type="input" name="registrationPriceOverhead"
+                                           field="#{form}.registrationPriceOverhead"
+                                           reference="registrationPriceOverhead">
+                                    <option type="labelWidth" value="60"/>
+                                    <option type="alignment" value="right"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="4" row="4">
+                                <component type="input" name="registrationPriceOverheadProc"
+                                           defaultEnabled="false" hasLabel="false"
+                                           reference="registrationPriceOverheadProc">
+                                    <option type="textRepresentationOnDisabled" value="true"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="1" row="5" width="3">
+                                <component type="input" name="profit"
+                                           field="#{form}.profit" reference="profit">
+                                    <option type="labelWidth" value="60"/>
+                                    <option type="alignment" value="right"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="4" row="5">
+                                <component type="input" name="profitProc"
+                                           defaultEnabled="false" hasLabel="false" reference="profitProc">
+                                    <option type="textRepresentationOnDisabled" value="true"/>
+                                    <option type="labelWidth" value="40"/>
+                                </component>
+                                <component type="checkbox" name="isSetFieldsFromParameter"
+                                           defaultVisible="false" field="#{form}.isSetFieldsFromParameter"
+                                           reference="isSetFieldsFromParameter">
+                                </component>
+                            </layoutElement>
+                        </component>
+
+                        <option type="label" value="overheads"/>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+    </component>
+
+    <hooks>
+        <beforeRender
+                class="com.qcadoo.mes.productionCounting.hooks.ProductionBalanceDetailsHooks"
+                method="generateOrderNumber"/>
+        <beforeRender
+                class="com.qcadoo.mes.productionCounting.hooks.ProductionBalanceDetailsHooks"
+                method="disableFieldsAndGridsWhenGenerated"/>
+        <beforeRender
+                class="com.qcadoo.mes.productionCounting.hooks.ProductionBalanceDetailsHooks"
+                method="fillCurrencyAndUnitFields"/>
+        <beforeRender
+                class="com.qcadoo.mes.productionCounting.hooks.ProductionBalanceDetailsHooks"
+                method="setTheFieldBasedOnParameters"/>
+
+    </hooks>
+
+</view>

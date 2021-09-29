@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_REQUIREMENTS" name="deliveryDetails" modelName="delivery"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd">
+
+    <component type="window" name="window" reference="window">
+
+        <ribbon>
+            <group name="navigation">
+                <bigButton name="back" icon="backIcon24.png" state="enabled" action="#{window}.performBack"/>
+            </group>
+
+            <group name="actions">
+                <bigButton name="save" icon="saveIcon24.png" state="enabled" action="#{form}.performSave;"
+                           accesskey="s"/>
+                <smallButton name="saveBack" icon="saveBackIcon16.png" state="enabled"
+                             action="#{form}.performSave; #{window}.performBack;"/>
+                <smallButton name="saveNew" icon="saveNewIcon16.png" state="enabled"
+                             action="#{form}.performSaveAndClear;"/>
+                <smallButton name="copy" icon="copyIcon16.png" state="disabled" action="#{form}.performCopy;"
+                             accesskey="c">
+                    <script>
+                        <![CDATA[
+                            #{form}.addOnChangeListener({
+                                onSetValue: function(value) {
+                                    if (!value || !value.content)
+                                        return;
+                                    if (value.content.entityId) {
+                                        this.enable();
+                                    } else {
+                                        this.disable();
+                                    }
+                                }
+                            });
+                        ]]>
+                    </script>
+                </smallButton>
+                <smallButton name="delete" icon="deleteIcon16.png" state="disabled" action="#{form}.performDelete;"
+                             accesskey="d">
+                    <script>
+                        <![CDATA[
+                            #{form}.addOnChangeListener({
+                                onSetValue: function(value) {
+                                    if (!value || !value.content)
+                                        return;
+                                    if (value.content.entityId) {
+                                        this.enable();
+                                    } else {
+                                        this.disable();
+                                    }
+                                }
+                            });
+                        ]]>
+                    </script>
+                </smallButton>
+                <smallButton name="cancel" icon="cancelIcon16.png" state="enabled" action="#{form}.performCancel;"
+                             accesskey="x"/>
+                <smallButton name="refresh" icon="updateIcon16.png" state="enabled" action="#{form}.performRefresh;"
+                           accesskey="r"/>
+            </group>
+
+            <group name="states" if="#view.getComponentByReference('form').dataDefinition.activable"
+                   defaultAuthorizationRole="ROLE_DELIVERIES_EDIT">
+                <smallButton name="activate" icon="unactiveVisibleIcon.png" state="disabled"
+                             action="#{form}.performActivate;">
+                    <script>
+                        <![CDATA[
+                            #{form}.addOnChangeListener({
+                                onSetValue: function(value) {
+                                    if (!value || !value.content)
+                                        return;
+                                    if (value.content.entityId && !value.content.isActive) {
+                                        this.enable();
+                                    } else {
+                                        this.disable();
+                                    }
+                                }
+                            });
+                        ]]>
+                    </script>
+                </smallButton>
+                <smallButton name="deactivate" icon="unactiveNotVisibleIcon.png" state="disabled"
+                             action="#{form}.performDeactivate;">
+                    <script>
+                        <![CDATA[
+                            #{form}.addOnChangeListener({
+                                onSetValue: function(value) {
+                                    if (!value || !value.content)
+                                        return;
+                                    if (value.content.entityId && value.content.isActive) {
+                                        this.enable();
+                                    } else {
+                                        this.disable();
+                                    }
+                                }
+                            });
+                        ]]>
+                    </script>
+                </smallButton>
+            </group>
+
+            <group name="generate">
+                <bigButton name="generateOrder" icon="pdfIcon24.png"
+                           state="enabled">
+                    <script>
+                        <![CDATA[
+                            this.addOnChangeListener({
+                                onClick: function() {
+                                    if (window.canClose()) {
+                                        #{form}.performEvent({
+                                            name : 'validateColumnsWidthForOrder'
+                                        });
+                                        #{form}.performEvent({
+                                            name : 'printOrderReport',
+                                            args : ['pdf']
+                                        });
+                                    }
+                                }
+                            });
+                        ]]>
+                    </script>
+                </bigButton>
+                <bigButton name="generateDelivery" icon="pdfIcon24.png"
+                           state="enabled">
+                    <script>
+                        <![CDATA[
+                            this.addOnChangeListener({
+                                onClick: function() {
+                                    if (window.canClose()) {
+                                        #{form}.performEvent({
+                                            name : 'validateColumnsWidthForDelivery'
+                                        });
+                                        #{form}.performEvent({
+                                            name : 'printDeliveryReport',
+                                            args : ['pdf']
+                                        });
+                                    }
+                                }
+                            });
+                        ]]>
+                    </script>
+                </bigButton>
+            </group>
+
+            <group name="status">
+                <smallButton name="accept" icon="startIcon16.png" state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (this.state == "draft") {
+										if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.accept.confirm)}")) {
+											#{form}.performEvent('changeState', ['02prepared']);
+										};
+									} else if (this.state == "receive") {
+										if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery.confirm)}")) {
+											#{form}.performEvent('changeState', ['06received']);
+										};
+									}
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="declineDelivery" icon="deleteIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery.confirm)}")) {
+										#{form}.performEvent('changeState', ['04declined']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="approveDelivery" icon="acceptIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.approveDelivery.confirm)}")) {
+										#{form}.performEvent('changeState', ['05approved']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="correctOrder" icon="startIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+                                    if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.correctOrder.confirm)}")) {
+                                        #{form}.performEvent('changeState', ['03duringCorrection']);
+                                    };
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+            </group>
+
+            <group name="copyOrderedProductsToDelivered">
+                <bigButton name="copyProductsWithoutQuantityAndPrice"
+                           icon="copyIcon24.png" state="disabled"
+                           action="#{form}.fireEvent(copyProductsWithoutQuantityAndPrice);"/>
+                <bigButton name="copyProductsWithQuantityAndPrice" icon="copyIcon24.png"
+                           state="disabled" action="#{form}.fireEvent(copyProductsWithQuantityAndPrice);"/>
+            </group>
+
+            <group name="deliveryPositions">
+                <bigButton name="assignStorageLocations"
+                           icon="copyIcon24.png"
+                           action="#{form}.fireEvent(assignStorageLocations);"/>
+                <bigButton name="recalculateReservations"
+                           icon="generateIcon24.png"
+                           action="#{form}.fireEvent(recalculateReservations);"/>
+                <bigButton name="changeStorageLocations"
+                           icon="copyIcon24.png"
+                           action="#{form}.fireEvent(changeStorageLocations);"
+                           message="changeStorageLocations" enabled="false"/>
+            </group>
+
+            <group name="relatedDelivery">
+                <bigButton name="createRelatedDelivery" icon="genealogyIcon24.png"
+                           state="disabled" action="#{form}.fireEvent(createRelatedDelivery);"/>
+                <bigButton name="showRelatedDeliveries" icon="genealogyIcon24.png"
+                           state="disabled" action="#{form}.fireEvent(showRelatedDeliveries);"/>
+            </group>
+
+            <group name="product" defaultAuthorizationRole="ROLE_PRODUCTS">
+                <bigButton name="showProduct" icon="genealogyIcon24.png"
+                           state="disabled" action="#{form}.fireEvent(showProduct);"/>
+            </group>
+
+            <group name="atachments">
+                <bigButton name="downloadAtachment" icon="generateIcon24.png"
+                           state="enabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									#{form}.performEvent('downloadAttachment', []);
+								}
+							});
+						]]>
+                    </script>
+                </bigButton>
+                <bigButton name="downloadProductAttachment" icon="generateIcon24.png"
+                           state="enabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									#{form}.performEvent('downloadProductAttachment', []);
+								}
+							});
+						]]>
+                    </script>
+                </bigButton>
+            </group>
+
+        </ribbon>
+
+        <windowTab name="mainTab">
+            <component type="form" name="deliveriesDetails" reference="form">
+                <script>
+                    <![CDATA[
+						var saveBtn = #{window}.getRibbonItem("actions.save");
+						var saveBackBtn = #{window}.getRibbonItem("actions.saveBack");
+						var saveNewBtn = #{window}.getRibbonItem("actions.saveNew");
+						var cancelBtn = #{window}.getRibbonItem("actions.cancel");
+						var deleteBtn = #{window}.getRibbonItem("actions.delete");
+						
+						var acceptBtn = #{window}.getRibbonItem("status.accept");
+						var declineDeliveryBtn = #{window}.getRibbonItem("status.declineDelivery");
+						var approveDeliveryBtn = #{window}.getRibbonItem("status.approveDelivery");
+                        var correctDeliveryBtn = #{window}.getRibbonItem("status.correctOrder");
+						var copyProductsWithoutQuantityAndPriceBtn = #{window}.getRibbonItem("copyOrderedProductsToDelivered.copyProductsWithoutQuantityAndPrice");
+						var copyProductsWithQuantityAndPriceBtn = #{window}.getRibbonItem("copyOrderedProductsToDelivered.copyProductsWithQuantityAndPrice");
+						
+						var generateOrderBtn = #{window}.getRibbonItem("generate.generateOrder");
+						var generateDeliveryBtn = #{window}.getRibbonItem("generate.generateDelivery");
+						
+						var createRelatedDeliveryBtn = #{window}.getRibbonItem("relatedDelivery.createRelatedDelivery");
+						var showRelatedDeliveriesBtn = #{window}.getRibbonItem("relatedDelivery.showRelatedDeliveries");
+						
+						this.addOnChangeListener({
+							onSetValue: function(value) {
+								if (! value || ! value.content) {
+									return;
+								}
+								
+								saveBtn.enable();
+								saveBackBtn.enable();
+								saveNewBtn.enable();
+								
+								if (! value.content.entityId) {
+									cancelBtn.disable();
+									deleteBtn.disable();
+									acceptBtn.disable();
+									declineDeliveryBtn.disable();
+									approveDeliveryBtn.disable();
+									correctDeliveryBtn.disable();
+									generateOrderBtn.disable();
+									generateDeliveryBtn.disable();
+									return;
+								}
+								
+								cancelBtn.enable();
+								generateOrderBtn.enable();
+								generateDeliveryBtn.enable();
+								
+								var state = #{state}.getValue().content.value;
+								var externalSynchronized = #{externalSynchronized}.getValue().content.value;
+								
+								if (!state) {
+									return;
+								}
+								
+								if (state == "01draft") {
+									deleteBtn.enable();
+									acceptBtn.enable();
+									acceptBtn.state = "draft";
+									acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.accept)}");
+									acceptBtn.setIcon('startIcon16.png');
+									declineDeliveryBtn.enable();
+									declineDeliveryBtn.state = "decline";
+									declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+									declineDeliveryBtn.setIcon('deleteIcon16.png');
+									approveDeliveryBtn.enable();
+									correctDeliveryBtn.disable();
+									createRelatedDeliveryBtn.disable();
+									showRelatedDeliveriesBtn.disable();
+								} else if (state == "02prepared") {
+									deleteBtn.disable();
+									acceptBtn.disable();
+									acceptBtn.state = "prepare";
+									acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery)}");
+									acceptBtn.setIcon('acceptIcon16.png');
+									declineDeliveryBtn.enable();
+									declineDeliveryBtn.state = "decline";
+									declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+									declineDeliveryBtn.setIcon('deleteIcon16.png');
+									approveDeliveryBtn.enable();
+									correctDeliveryBtn.enable();
+									createRelatedDeliveryBtn.disable();
+									showRelatedDeliveriesBtn.disable();
+								} else if (state == "03duringCorrection") {
+									deleteBtn.disable();
+									acceptBtn.disable();
+									acceptBtn.state = "correct";
+									acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery)}");
+									acceptBtn.setIcon('acceptIcon16.png');
+									declineDeliveryBtn.enable();
+									declineDeliveryBtn.state = "decline";
+									declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+									declineDeliveryBtn.setIcon('deleteIcon16.png');
+									approveDeliveryBtn.enable();
+									correctDeliveryBtn.disable();
+									createRelatedDeliveryBtn.disable();
+									showRelatedDeliveriesBtn.disable();
+								} else if (state == "05approved") {
+									deleteBtn.disable();
+									acceptBtn.enable();
+									acceptBtn.state = "receive";
+									acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery)}");
+									acceptBtn.setIcon('acceptIcon16.png');
+									declineDeliveryBtn.enable();
+									declineDeliveryBtn.state = "decline";
+									declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+									declineDeliveryBtn.setIcon('deleteIcon16.png');
+									approveDeliveryBtn.disable();
+									correctDeliveryBtn.enable();
+									createRelatedDeliveryBtn.disable();
+									showRelatedDeliveriesBtn.disable();
+								} else if (state == "06received") {
+									saveBtn.disable();
+									saveBackBtn.disable();
+									saveNewBtn.disable();
+									cancelBtn.disable();
+									deleteBtn.disable();
+									acceptBtn.disable();
+									declineDeliveryBtn.disable();
+									approveDeliveryBtn.disable();
+									correctDeliveryBtn.disable();
+									copyProductsWithoutQuantityAndPriceBtn.disable();
+									copyProductsWithQuantityAndPriceBtn.disable();
+									createRelatedDeliveryBtn.enable();
+									showRelatedDeliveriesBtn.enable();
+								} else {
+									saveBtn.disable();
+									saveBackBtn.disable();
+									saveNewBtn.disable();
+									cancelBtn.disable();
+									deleteBtn.enable();
+									acceptBtn.disable();
+									declineDeliveryBtn.disable();
+									approveDeliveryBtn.disable();
+									correctDeliveryBtn.disable();
+									copyProductsWithoutQuantityAndPriceBtn.disable();
+									copyProductsWithQuantityAndPriceBtn.disable();
+									createRelatedDeliveryBtn.disable();
+									showRelatedDeliveriesBtn.disable();
+								}
+								if (externalSynchronized == '0') {
+									saveBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									saveBackBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									saveNewBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									cancelBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									deleteBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									acceptBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									declineDeliveryBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									approveDeliveryBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									correctDeliveryBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									copyProductsWithoutQuantityAndPriceBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									copyProductsWithQuantityAndPriceBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									generateOrderBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									generateDeliveryBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									createRelatedDeliveryBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+									showRelatedDeliveriesBtn.disable("#{translate(deliveries.delivery.ribbon.message.deliveryIsExternal)}");
+								}
+							}
+						});
+					]]>
+                </script>
+                <component type="gridLayout" name="gridLayout" columns="3"
+                           rows="6">
+                    <layoutElement column="1" row="1">
+                        <component type="input" name="number" field="number"
+                                   reference="number">
+                            <option type="alignment" value="right"/>
+                        </component>
+                        <component type="hidden" name="externalSynchronized"
+                                   field="externalSynchronized" reference="externalSynchronized"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="2" height="2">
+                        <component type="textarea" name="name" field="name"
+                                   reference="name"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="4" height="3">
+                        <component type="textarea" name="description" field="description"
+                                   reference="description"/>
+                    </layoutElement>
+                    <layoutElement column="2" row="1">
+                        <component type="lookup" name="supplier" reference="supplier"
+                                   field="supplier">
+                            <option type="column" name="name" fields="name" link="true"/>
+
+                            <option type="searchable" value="name,number"/>
+                            <option type="orderable" value="name,number"/>
+
+                            <option type="expression"
+                                    value="'&lt;b&gt;' + #number + '&lt;/b&gt; - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <listener event="onSelectedEntityChange"
+                                      class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                                      method="fillCompanyFieldsForSupplier"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="2">
+                        <component type="lookup" name="location" reference="location"
+                                   field="#{form}.location">
+                            <option type="column" name="name" fields="name" link="true"/>
+
+                            <option type="searchable" value="number,name"/>
+                            <option type="orderable" value="number,name"/>
+
+                            <option type="expression"
+                                    value="'&lt;b&gt;' + #number + '&lt;/b&gt; - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <criteriaModifier
+                                    class="com.qcadoo.mes.materialFlow.criteriaModifiers.LocationCriteriaModifiers"
+                                    method="showWarehousesOnly"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="3">
+                        <component type="calendar" name="deliveryDate" field="deliveryDate"
+                                   reference="deliveryDate" hasDescription="true">
+                            <option type="withTimePicker" value="true"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="4" height="2">
+                        <component type="textarea" name="deliveryAddress" field="deliveryAddress"
+                                   reference="deliveryAddress"/>
+                    </layoutElement>
+                    <layoutElement column="2" row="6">
+                        <component type="select" name="paymentForm" field="paymentForm"
+                                   reference="paymentForm" hasDescription="true" defaultEnabled="never"/>
+                    </layoutElement>
+                    <layoutElement column="3" row="1">
+                        <component type="select" name="state" field="state"
+                                   reference="state" defaultEnabled="never"/>
+                    </layoutElement>
+                    <layoutElement column="3" row="2">
+                        <component type="gridLayout" name="gridLayoutDeliveryDateBuffer"
+                                   hasBorders="false" columns="4" rows="1">
+                            <layoutElement column="1" row="1" width="3">
+                                <component type="input" name="deliveryDateBuffer"
+                                           field="deliveryDateBuffer" reference="deliveryDateBuffer"
+                                           defaultEnabled="never">
+                                    <option type="labelWidth" value="40"/>
+                                </component>
+                            </layoutElement>
+                            <layoutElement column="4" row="1">
+                                <component type="label" name="deliveryDateBufferDays"
+                                           reference="deliveryDateBufferDays" required="false">
+                                    <option type="labelStyle" value="label"/>
+                                </component>
+                            </layoutElement>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="3" row="4">
+                        <component type="lookup" name="relatedDelivery"
+                                   reference="relatedDelivery" field="relatedDelivery">
+                            <option type="column" name="name" fields="name" link="true"/>
+
+                            <option type="searchable" value="name,number"/>
+                            <option type="orderable" value="name,number"/>
+
+                            <option type="expression" value="#number"/>
+                            <option type="fieldCode" value="number"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="3" row="5">
+                        <component type="lookup" name="currency" reference="currency"
+                                   field="currency">
+                            <option type="column" name="currency" fields="currency"
+                                    link="true"/>
+                            <option type="column" name="exchangeRate" fields="exchangeRate"/>
+
+                            <option type="searchable" value="currency,alphabeticCode"/>
+                            <option type="orderable" value="currency,alphabeticCode"/>
+
+                            <option type="expression" value="#alphabeticCode + ' - ' + #currency"/>
+                            <option type="fieldCode" value="alphabeticCode"/>
+                        </component>
+                    </layoutElement>
+
+                </component>
+
+                <option type="header" value="true"/>
+                <option type="expression" value="#number"/>
+
+                <listener event="changeState"
+                          class="com.qcadoo.mes.deliveries.states.client.DeliveryStateChangeViewClient"
+                          method="changeState"/>
+                <listener event="printDeliveryReport"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="printDeliveryReport"/>
+                <listener event="printOrderReport"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="printOrderReport"/>
+                <listener event="copyProductsWithoutQuantityAndPrice"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="copyProductsWithoutQuantityAndPrice"/>
+                <listener event="copyProductsWithQuantityAndPrice"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="copyProductsWithQuantityAndPrice"/>
+                <listener event="assignStorageLocations"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="assignStorageLocations"/>
+                <listener event="changeStorageLocations"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="changeStorageLocations"/>
+                <listener event="recalculateReservations"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="recalculateReservations"/>
+                <listener event="createRelatedDelivery"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="createRelatedDelivery"/>
+                <listener event="showRelatedDeliveries"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="showRelatedDeliveries"/>
+                <listener event="showProduct"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="showProduct"/>
+                <listener event="validateColumnsWidthForOrder"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="validateColumnsWidthForOrder"/>
+                <listener event="validateColumnsWidthForDelivery"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"
+                          method="validateColumnsWidthForDelivery"/>
+
+                <listener event="downloadAttachment" method="downloadAttachment"
+                          class="com.qcadoo.mes.basic.listeners.AttachmentsListeners"/>
+                <listener event="downloadProductAttachment" method="downloadProductAttachment"
+                          class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"/>
+            </component>
+        </windowTab>
+
+        <windowTab name="orderedProductTab">
+            <component type="gridLayout" name="orderedProductsGridLayout"
+                       columns="4" rows="2">
+                <layoutElement column="1" row="1">
+                    <component type="input" name="orderedProductsCumulatedQuantity"
+                               field="#{form}.orderedProductsCumulatedQuantity"
+                               reference="orderedProductsCumulatedQuantity"
+                               defaultEnabled="never">
+                        <option type="alignment" value="right"/>
+                        <option type="boldTextRepresentationOnDisabled" value="true"/>
+                    </component>
+                </layoutElement>
+
+                <layoutElement column="1" row="2" width="4">
+
+                    <component type="grid" name="orderedProducts" useDto="true" source="#{form}.orderedProductDtos"
+                               model="orderedProductDto" reference="orderedProducts"
+                               defaultEnabled="false">
+
+                        <option type="column" name="succession" fields="succession"
+                                width="30"/>
+                        <option type="column" name="productNumber" fields="productNumber" link="true" width="80"/>
+                        <option type="column" name="productName" fields="productName" link="true" width="80"/>
+                        <option type="column" name="orderedQuantity" fields="orderedQuantity"
+                                width="80"/>
+                        <option type="column" name="deliveredQuantity" fields="deliveredQuantity"
+                                width="80"/>
+                        <option type="column" name="leftToReceiveQuantity" fields="leftToReceiveQuantity"
+                                width="80"/>
+                        <option type="column" name="productUnit" fields="productUnit"
+                                width="30"/>
+                        <option type="column" name="additionalQuantity"
+                                fields="additionalQuantity"
+                                width="80"/>
+                        <option type="column" name="additionalDeliveredQuantity"
+                                fields="additionalDeliveredQuantity"
+                                width="80"/>
+                        <option type="column" name="additionalLeftToReceiveQuantity"
+                                fields="additionalLeftToReceiveQuantity"
+                                width="80"/>
+                        <option type="column" name="pricePerUnit" fields="pricePerUnit"
+                                width="60"/>
+                        <option type="column" name="totalPrice" fields="totalPrice"
+                                width="80"/>
+                        <option type="column" name="description" fields="description"
+                                width="120"/>
+                        <option type="column" name="additionalCode" fields="additionalCode"
+                                width="80"/>
+
+                        <option type="column" name="hasAttachments" fields="hasAttachments"
+                                width="60"/>
+
+                        <option type="order" column="succession" direction="asc"/>
+
+                        <option type="searchable"
+                                value="productNumber,productName,orderedQuantity,additionalQuantity,additionalDeliveredQuantity,additionalLeftToReceiveQuantity,productUnit,additionalCode,deliveredQuantity,leftToReceiveQuantity,hasAttachments"/>
+                        <option type="orderable"
+                                value="succession,productNumber,productName,orderedQuantity,additionalQuantity,additionalDeliveredQuantity,additionalLeftToReceiveQuantity,productUnit,additionalCode,deliveredQuantity,leftToReceiveQuantity,hasAttachments"/>
+
+                        <option type="correspondingView" value="deliveries/orderedProductDetails"/>
+                        <option type="correspondingComponent" value="form"/>
+                        <option type="correspondingViewInModal" value="true"/>
+
+                        <option type="creatable" value="true"/>
+                        <option type="deletable" value="true"/>
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+                        <option type="fixedHeight" value="true"/>
+
+                        <listener event="select" method="disableShowProductButton"
+                                  class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"/>
+                    </component>
+                </layoutElement>
+                <layoutElement column="2" row="1">
+                    <component type="gridLayout"
+                               name="orderedProductsCumulatedTotalPriceGridLayout" hasBorders="false"
+                               columns="4" rows="1">
+                        <layoutElement column="1" row="1" width="3">
+                            <component type="input" name="orderedProductsCumulatedTotalPrice"
+                                       field="#{form}.orderedProductsCumulatedTotalPrice"
+                                       reference="orderedProductsCumulatedTotalPrice"
+                                       defaultEnabled="never">
+                                <option type="alignment" value="right"/>
+                                <option type="boldTextRepresentationOnDisabled" value="true"/>
+                            </component>
+                        </layoutElement>
+                        <layoutElement column="4" row="1">
+                            <component type="input"
+                                       name="orderedProductsCumulatedTotalPriceCurrency"
+                                       reference="orderedProductsCumulatedTotalPriceCurrency"
+                                       defaultEnabled="never" hasLabel="false">
+                                <option type="boldTextRepresentationOnDisabled" value="true"/>
+                            </component>
+                        </layoutElement>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+        <windowTab name="deliveredProductTab">
+            <component type="gridLayout" name="deliveredProductsGridLayout"
+                       columns="4" rows="2">
+                <layoutElement column="1" row="1">
+                    <component type="input" name="deliveredProductsCumulatedQuantity"
+                               field="#{form}.deliveredProductsCumulatedQuantity"
+                               reference="deliveredProductsCumulatedQuantity"
+                               defaultEnabled="never">
+                        <option type="alignment" value="right"/>
+                        <option type="boldTextRepresentationOnDisabled" value="true"/>
+                    </component>
+                </layoutElement>
+                <layoutElement column="1" row="2" width="4">
+                    <component type="grid" name="deliveredProducts" useDto="true"
+                               reference="deliveredProducts" source="#{form}.deliveredProductDtos"
+                               defaultEnabled="false">
+
+                        <option type="column" name="succession" fields="succession"
+                                width="30"/>
+                        <option type="column" name="productNumber" fields="productNumber" link="true" width="80"/>
+                        <option type="column" name="productName" fields="productName" link="true" width="80"/>
+                        <option type="column" name="deliveredQuantity" fields="deliveredQuantity"
+                                width="80"/>
+                        <option type="column" name="damagedQuantity" fields="damagedQuantity"
+                                width="80"/>
+                        <option type="column" name="productUnit" fields="productUnit"
+                                width="30"/>
+                        <option type="column" name="additionalQuantity" fields="additionalQuantity"
+                                width="80"/>
+                        <option type="column" name="additionalUnit" fields="additionalUnit"
+                                width="30"/>
+                        <option type="column" name="conversion" fields="conversion"
+                                width="30"/>
+                        <option type="column" name="pricePerUnit" fields="pricePerUnit"
+                                width="80"/>
+                        <option type="column" name="totalPrice" fields="totalPrice"
+                                width="80"/>
+                        <option type="column" name="additionalCode" fields="additionalCode"
+                                width="80"/>
+                        <option type="column" name="storageLocationNumber" fields="storageLocationNumber"
+                                width="80"/>
+                        <option type="column" name="palletNumber" fields="palletNumber"
+                                width="80"/>
+                        <option type="column" name="palletType" fields="palletType"
+                                width="45"/>
+                        <option type="column" name="isWaste" fields="isWaste"
+                                width="45"/>
+                        <option type="column" name="batch" fields="batch"
+                                width="45"/>
+
+                        <option type="order" column="succession" direction="asc"/>
+
+                        <option type="searchable"
+                                value="productNumber,productName,productUnit,deliveredQuantity,palletType,damagedQuantity,additionalQuantity,additionalUnit,conversion,additionalCode,storageLocationNumber,palletNumber,isWaste,batch"/>
+                        <option type="orderable"
+                                value="succession,productNumber,productName,productUnit,palletType,deliveredQuantity,additionalQuantity,additionalUnit,conversion,damagedQuantity,additionalCode,storageLocationNumber,palletNumber,isWaste,batch"/>
+
+                        <option type="correspondingView" value="deliveries/deliveredProductDetails"/>
+                        <option type="correspondingComponent" value="form"/>
+                        <option type="correspondingViewInModal" value="true"/>
+
+                        <option type="creatable" value="true"/>
+                        <option type="deletable" value="true"/>
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+                        <option type="fixedHeight" value="true"/>
+
+                        <listener event="select" method="disableShowProductButton"
+                                  class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"/>
+
+                        <listener event="select" method="updateChangeStorageLocationButton"
+                                  class="com.qcadoo.mes.deliveries.listeners.DeliveryDetailsListeners"/>
+                    </component>
+                </layoutElement>
+                <layoutElement column="2" row="1">
+                    <component type="gridLayout"
+                               name="orderedProductsCumulatedTotalPriceGridLayout" hasBorders="false"
+                               columns="4" rows="1">
+                        <layoutElement column="1" row="1" width="3">
+                            <component type="input" name="deliveredProductsCumulatedTotalPrice"
+                                       field="#{form}.deliveredProductsCumulatedTotalPrice"
+                                       reference="deliveredProductsCumulatedTotalPrice"
+                                       defaultEnabled="never">
+                                <option type="alignment" value="right"/>
+                                <option type="boldTextRepresentationOnDisabled" value="true"/>
+                            </component>
+                        </layoutElement>
+                        <layoutElement column="4" row="1">
+                            <component type="input"
+                                       name="deliveredProductsCumulatedTotalPriceCurrency"
+                                       reference="deliveredProductsCumulatedTotalPriceCurrency"
+                                       defaultEnabled="never" hasLabel="false">
+                                <option type="boldTextRepresentationOnDisabled" value="true"/>
+                            </component>
+                        </layoutElement>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+        <windowTab name="historyTab">
+            <component type="gridLayout" name="loggingsGridLayout"
+                       columns="2" rows="1">
+                <layoutElement column="1" row="1">
+                    <component type="grid" name="loggingsGrid" reference="loggingsGrid"
+                               source="#{form}.stateChanges">
+                        <option type="column" name="dateAndTime" fields="dateAndTime"/>
+                        <option type="column" name="currentState" fields="targetState"/>
+                        <option type="column" name="worker" fields="worker"/>
+
+                        <option type="order" column="dateAndTime" direction="asc"/>
+
+                        <option type="searchable" value="dateAndTime,targetState,worker"/>
+                        <option type="orderable" value="dateAndTime,targetState,worker"/>
+
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+
+        <windowTab name="atachments">
+            <component type="gridLayout" name="gridsLayout" columns="3"
+                       rows="6" hasBorders="false">
+                <layoutElement column="1" row="1" height="6">
+
+                    <component type="staticPage" name="multiUpload">
+                        <option type="page" value="deliveries/multiUpload.jsp"/>
+                    </component>
+                    <component type="input" name="deliveryIdForMultiUpload"
+                               reference="deliveryIdForMultiUpload" defaultVisible="false">
+                        <option type="alignment" value="right"/>
+                    </component>
+                    <component type="input" name="deliveryMultiUploadLocale"
+                               reference="deliveryMultiUploadLocale" defaultVisible="false">
+                    </component>
+                </layoutElement>
+                <layoutElement column="2" row="1" width="2" height="6">
+                    <component type="grid" name="attachments"
+                               reference="attachmentsGrid" source="#{form}.attachments">
+                        <option type="column" name="attachment" fields="name" correspondingField="attachmentLocation"
+                                link="true" attachment="true"/>
+                        <option type="column" name="attachmentLocation" fields="attachment" hidden="true"/>
+
+                        <option type="column" name="size" fields="size"/>
+                        <option type="order" column="attachment" direction="desc"/>
+
+                        <option type="deletable" value="true"/>
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+
+    </component>
+
+    <hooks>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="onBeforeRender"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="generateDeliveryNumber"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="fillCompanyFieldsForSupplier"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="fillDeliveryAddressDefaultValue"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="fillDescriptionDefaultValue"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="changeFieldsEnabledDependOnState"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="updateRelatedDeliveryButtonsState"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="filterStateChangeHistory"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="fillCurrencyFields"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="disableShowProductButton"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="fillLocationDefaultValue"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="changeLocationEnabledDependOnState"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="updateCopyOrderedProductButtonsState"/>
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="processRoles"/>
+
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="setDeliveryIdForMultiUploadField"/>
+    </hooks>
+
+</view>

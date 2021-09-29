@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.2.0
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.1.xsd 
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<util:properties id="plugin">
+		<prop key="restartCommand">cd</prop>
+		<prop key="pluginsPath">target/plugins</prop>
+		<prop key="pluginsTmpPath">target/tmpPlugins</prop>
+		<prop key="descriptors">com/qcadoo/plugin/integration/*/plugin.xml</prop>
+	</util:properties>
+
+	<context:component-scan base-package="com.qcadoo.tenant" />
+
+	<context:component-scan base-package="com.qcadoo.plugin" />
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="jdbc:hsqldb:mem:qcadoo" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
+
+	<bean id="pluginSessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<qualifier value="plugin" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>com.qcadoo.model.beans.qcadooPlugin.QcadooPluginPlugin
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="pluginTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<qualifier value="plugin" />
+		<property name="sessionFactory" ref="pluginSessionFactory" />
+	</bean>
+
+	<bean id="annotationTransactionAspect" factory-method="aspectOf" 
+		class="org.springframework.transaction.aspectj.AnnotationTransactionAspect">
+       	<property name="transactionManager" ref="pluginTransactionManager" />
+	</bean>
+
+	<bean class="com.qcadoo.plugin.internal.module.DefaultModuleFactoryAccessor">
+		<property name="moduleFactories">
+			<list>
+				<bean class="com.qcadoo.plugin.integration.MockModuleFactory" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.2.0
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="com.qcadoo.model.beans.full.FullFirstEntity" table="full_firstEntity">		
+		<id column="id" name="id" type="long">
+			<generator class="increment" />
+		</id>
+		
+		<property type="integer" name="fieldInteger" not-null="true"
+			unique="true">
+			<column name="fieldInteger" length="3" precision="4" />
+		</property>
+		<property type="string" name="fieldString" not-null="true">
+			<column name="fieldString" length="2" default="'ala'" />
+		</property>
+		<property type="text" name="fieldText" not-null="false">
+			<column name="fieldText" />
+		</property>
+		<property type="big_decimal" name="fieldDecimal" not-null="false">
+			<column name="fieldDecimal" precision="2" scale="4" />
+		</property>
+		<property type="timestamp" name="fieldDatetime" not-null="false">
+			<column name="fieldDatetime" />
+		</property>
+		<property type="date" name="fieldDate" not-null="false">
+			<column name="fieldDate" />
+		</property>
+		<property type="boolean" name="fieldBoolean" not-null="false">
+			<column name="fieldBoolean" />
+		</property>
+		<many-to-one entity-name="com.qcadoo.model.beans.full.FullThirdEntity" cascade="none"
+			lazy="false" name="fieldThirdEntity" not-null="false">
+			<column name="fieldThirdEntity" />
+		</many-to-one>
+		<many-to-one entity-name="com.qcadoo.model.beans.other.OtherSecondEntity" cascade="none"
+			lazy="false" name="fieldSecondEntity" not-null="false">
+			<column name="fieldSecondEntity" />
+		</many-to-one>
+		<many-to-one entity-name="com.qcadoo.model.beans.other.OtherSecondEntity" cascade="none"
+			lazy="proxy" name="fieldSecondEntity2" not-null="true">
+			<column name="fieldSecondEntity2" />
+		</many-to-one>
+		<set cascade="delete" lazy="true" name="fieldTree">
+			<key column="fieldFirstEntity" />
+			<one-to-many entity-name="com.qcadoo.model.beans.full.FullSecondEntity" />
+		</set>
+		<set cascade="none" lazy="true" name="fieldHasMany">
+			<key column="fieldFirstEntity" />
+			<one-to-many entity-name="com.qcadoo.model.beans.full.FullThirdEntity" />
+		</set>
+		<set cascade="none" lazy="true" name="fieldManyToMany"
+				table="joinTable_firstEntity_thirdEntity">
+			<key column="firstEntity_id" />
+			<many-to-many column="thirdEntity_id"
+				entity-name="com.qcadoo.model.beans.full.FullThirdEntity" />
+		</set>
+		<property type="string" name="fieldDictionary" not-null="false">
+			<column name="fieldDictionary" />
+		</property>
+		<property type="string" name="fieldOtherDictionary" not-null="false">
+			<column name="fieldOtherDictionary" />
+		</property>
+		<property type="string" name="fieldEnum" not-null="false">
+			<column name="fieldEnum" />
+		</property>
+		<property type="string" name="fieldPassword" not-null="false">
+			<column name="fieldPassword" />
+		</property>
+		<property type="integer" name="fieldPriority" not-null="true">
+			<column name="fieldPriority" />
+		</property>
+		<sql-insert>insert must not be executed on full_firstEntity</sql-insert>
+		<sql-delete>delete must not be executed on full_firstEntity</sql-delete>
+	</class>
+	<class entity-name="com.qcadoo.model.beans.full.FullSecondEntity" table="full_secondEntity">
+		<id column="id" name="id" type="long">
+			<generator class="increment" />
+		</id>
+		<many-to-one entity-name="com.qcadoo.model.beans.full.FullFirstEntity" cascade="none"
+			lazy="proxy" name="fieldFirstEntity" not-null="false">
+			<column name="fieldFirstEntity" />
+		</many-to-one>
+		<many-to-one entity-name="com.qcadoo.model.beans.full.FullSecondEntity" cascade="none"
+			lazy="proxy" name="parent" not-null="false">
+			<column name="parent" />
+		</many-to-one>
+		<set cascade="none" lazy="true" name="children">
+			<key column="parent" />
+			<one-to-many entity-name="com.qcadoo.model.beans.full.FullSecondEntity" />
+		</set>
+		<sql-update>update must not be executed on full_secondEntity</sql-update>
+	</class>
+	<class entity-name="com.qcadoo.model.beans.full.FullThirdEntity" table="full_thirdEntity">
+		<id column="id" name="id" type="long">
+			<generator class="increment" />
+		</id>
+		<property type="big_decimal" name="fieldDecimal" not-null="false">
+			<column name="fieldDecimal" />
+		</property>
+		<property type="string" name="fieldString" not-null="false">
+			<column name="fieldString" />
+		</property>
+		<many-to-one entity-name="com.qcadoo.model.beans.full.FullFirstEntity" cascade="none"
+			lazy="proxy" name="fieldFirstEntity" not-null="false">
+			<column name="fieldFirstEntity" />
+		</many-to-one>
+		<set cascade="none" lazy="true" name="fieldManyToMany"
+				table="joinTable_firstEntity_thirdEntity">
+			<key column="thirdEntity_id" />
+			<many-to-many column="firstEntity_id"
+				entity-name="com.qcadoo.model.beans.full.FullFirstEntity" />
+		</set>
+	</class>
+</hibernate-mapping>

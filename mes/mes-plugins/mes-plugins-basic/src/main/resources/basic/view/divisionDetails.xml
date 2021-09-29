@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+      name="divisionDetails" modelName="division">
+
+    <component type="window" name="window">
+
+        <ribbon>
+            <group name="navigation">
+                <bigButton name="back" icon="backIcon24.png" state="enabled" action="#{window}.performBack" />
+            </group>
+
+            <group name="actions" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE_EDIT">
+                <bigButton name="save" icon="saveIcon24.png" state="enabled" action="#{form}.performSave;" accesskey="s" />
+                <smallButton name="saveBack" icon="saveBackIcon16.png" state="enabled" action="#{form}.performSave; #{window}.performBack;" />
+                <smallButton name="saveNew" icon="saveNewIcon16.png" state="enabled" action="#{form}.performSaveAndClear;" />
+                <smallButton name="copy" icon="copyIcon16.png" state="disabled" action="#{form}.performCopy;" accesskey="c">
+                    <script><![CDATA[
+				#{form}.addOnChangeListener({
+					onSetValue: function(value) {
+						if (!value || !value.content)
+							return;
+						if (value.content.entityId) {
+							this.enable();
+						} else {
+							this.disable();
+						}
+					}
+				});
+			]]></script>
+                </smallButton>
+                <smallButton name="delete" icon="deleteIcon16.png" state="disabled" action="#{form}.performDelete;" accesskey="d">
+                    <script><![CDATA[
+                #{form}.addOnChangeListener({
+					onSetValue: function(value) {
+						if (!value || !value.content)
+							return;
+						if (value.content.entityId) {
+							this.enable();
+						} else {
+							this.disable();
+						}
+					}
+				});
+			]]></script>
+                </smallButton>
+                <smallButton name="cancel" icon="cancelIcon16.png" state="enabled" action="#{form}.performCancel;" accesskey="x" />
+            </group>
+
+            <group name="actions" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE">
+                <bigButton name="refresh" icon="updateIcon24.png" state="enabled" action="#{form}.performRefresh;" accesskey="r" />
+            </group>
+
+            <group name="states" if="#view.getComponentByReference('form').dataDefinition.activable" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE_EDIT">
+                <smallButton name="activate" icon="unactiveVisibleIcon.png" state="disabled" action="#{form}.performActivate;">
+                    <script><![CDATA[
+				#{form}.addOnChangeListener({
+					onSetValue: function(value) {
+						if (!value || !value.content)
+							return;
+						if (value.content.entityId && !value.content.isActive) {
+							this.enable();
+						} else {
+							this.disable();
+						}
+					}
+				});
+			]]></script>
+                </smallButton>
+                <smallButton name="deactivate" icon="unactiveNotVisibleIcon.png" state="disabled" action="#{form}.performDeactivate;">
+                    <script><![CDATA[
+                #{form}.addOnChangeListener({
+					onSetValue: function(value) {
+						if (!value || !value.content)
+							return;
+						if (value.content.entityId && value.content.isActive) {
+							this.enable();
+						} else {
+							this.disable();
+						}
+					}
+				});
+			]]></script>
+                </smallButton>
+            </group>
+        </ribbon>
+        <windowTab name="mainTab">
+
+            <component type="form" name="division" reference="form"  defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE_EDIT">
+                <component type="gridLayout" name="gridLayout" columns="3"
+                           rows="5">
+                    <layoutElement column="1" row="1">
+                        <component type="input" name="number" field="number">
+                            <option type="alignment" value="right"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="2" height="2">
+                        <component type="textarea" name="name" field="name"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="4" height="1">
+                        <component type="lookup" name="factory" field="factory"
+                                   reference="factory">
+                            <option type="column" name="name" fields="name"/>
+                            <option type="column" name="city" fields="city"/>
+
+                            <option type="searchable" value="name,city,number"/>
+                            <option type="orderable" value="name,city,number"/>
+
+                            <option type="expression" value="#number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="5" height="1">
+                        <component type="lookup" name="supervisor" field="supervisor"
+                                   reference="supervisor">
+                            <option type="column" name="name" fields="name"/>
+                            <option type="column" name="surname" fields="surname"/>
+                            <option type="column" name="post" fields="post"/>
+
+                            <option type="searchable" value="name,surname,post"/>
+                            <option type="orderable" value="name,surname,post"/>
+
+                            <option type="expression" value="#number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="1" height="4">
+                        <component type="textarea" name="comment" field="comment" reference="comment"/>
+                    </layoutElement>
+                </component>
+
+                <option type="header" value="true"/>
+                <option type="expression" value="#name"/>
+            </component>
+        </windowTab>
+        <!--
+        <windowTab name="workstations">
+            <component type="gridLayout" name="workstationsGridLayout" columns="2"
+                    rows="8">
+                <layoutElement column="1" row="1" height="8">
+                    <component type="lookup" name="workstationsLookup" reference="workstationsLookup"
+                        field="#{form}.workstations" defaultVisible="false" persistent="false"
+                        hasLabel="false">
+                        <option type="column" name="name" fields="name" link="true" />
+
+                        <option type="searchable" value="number,name" />
+                        <option type="orderable" value="number,name" />
+
+                        <option type="expression" value="#number + ' - ' + #name" />
+                        <option type="fieldCode" value="number" />
+
+                        <option type="multiselect" value="true" />
+                    </component>
+                    <component type="grid" name="workstations" reference="workstationsGrid"
+                            source="#{form}.workstations">
+                        <option type="column" name="number" fields="number" />
+                        <option type="column" name="name" fields="name" />
+
+                        <option type="order" column="number" direction="asc" />
+
+                        <option type="searchable" value="number,name" />
+                        <option type="orderable" value="number,name" />
+
+                        <option type="weakRelation" value="true" />
+                        <option type="correspondingLookup" value="workstationsLookup" />
+
+                        <option type="creatable" value="true" />
+                        <option type="deletable" value="true" />
+                        <option type="fullscreen" value="true" />
+                        <option type="multiselect" value="true" />
+                    </component>
+                </layoutElement>
+
+                <layoutElement column="2" row="1" height="8">
+                    <component type="lookup" name="workstationTypesLookup" reference="workstationTypesLookup"
+                        field="#{form}.workstationTypes" defaultVisible="false" persistent="false"
+                        hasLabel="false">
+                        <option type="column" name="name" fields="name" link="true" />
+
+                        <option type="searchable" value="number,name" />
+                        <option type="orderable" value="number,name" />
+
+                        <option type="expression" value="#number + ' - ' + #name" />
+                        <option type="fieldCode" value="number" />
+
+                        <option type="multiselect" value="true" />
+                    </component>
+                    <component type="grid" name="workstationTypes" reference="workstationTypesGrid"
+                            source="#{form}.workstationTypes">
+                        <option type="column" name="number" fields="number" />
+                        <option type="column" name="name" fields="name" />
+
+                        <option type="order" column="number" direction="asc" />
+
+                        <option type="searchable" value="number,name" />
+                        <option type="orderable" value="number,name" />
+
+                        <option type="weakRelation" value="true" />
+                        <option type="correspondingLookup" value="workstationTypesLookup" />
+
+                        <option type="creatable" value="true" />
+                        <option type="deletable" value="true" />
+                        <option type="fullscreen" value="true" />
+                        <option type="multiselect" value="true" />
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+  -->
+    </component>
+
+</view>

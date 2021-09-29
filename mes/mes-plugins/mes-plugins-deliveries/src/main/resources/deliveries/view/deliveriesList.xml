@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_REQUIREMENTS" name="deliveriesList" modelName="delivery" menuAccessible="true"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd">
+
+    <component type="window" name="window" reference="window">
+
+        <ribbon>
+            <group name="actions">
+                <bigButton name="new" icon="newIcon24.png" state="enabled" action="#{grid}.performNew;" accesskey="n"/>
+                <smallButton name="copy" icon="copyIcon16.png" state="disabled" action="#{grid}.performCopy;"
+                             accesskey="c">
+                    <script><![CDATA[
+                #{grid}.addOnChangeListener({
+                	onChange: function(selectedArray) {
+                		if (selectedArray.length == 0) {
+                			this.disable();
+                		} else {
+                			this.enable();
+                		}
+                	}
+                });
+			]]></script>
+                </smallButton>
+                <smallButton name="delete" icon="deleteIcon16.png" state="disabled" action="#{grid}.performDelete;"
+                             accesskey="d">
+                    <script><![CDATA[
+                #{grid}.addOnChangeListener({
+                	onChange: function(selectedArray) {
+                		if (selectedArray.length == 0) {
+                			this.disable();
+                		} else {
+                			this.enable();
+                		}
+                	}
+                });
+			]]></script>
+                </smallButton>
+            </group>
+            <group name="actions">
+                <bigButton name="refresh" icon="updateIcon24.png" state="enabled" action="#{grid}.performRefresh;"
+                           accesskey="r"
+                        />
+            </group>
+            <group name="states" if="#view.getComponentByReference('grid').dataDefinition.activable"
+                   defaultAuthorizationRole="ROLE_DELIVERIES_EDIT">
+                <smallButton name="activate" icon="unactiveVisibleIcon.png" state="disabled"
+                             action="#{grid}.performActivate;">
+                    <script><![CDATA[
+                #{grid}.addOnChangeListener({
+                	onChange: function(selectedArray) {
+                		if (selectedArray.length == 0) {
+                			this.disable();
+                		} else {
+                			this.enable();
+                		}
+                	}
+                });
+			]]></script>
+                </smallButton>
+                <smallButton name="deactivate" icon="unactiveNotVisibleIcon.png" state="disabled"
+                             action="#{grid}.performDeactivate;">
+                    <script><![CDATA[
+                #{grid}.addOnChangeListener({
+                	onChange: function(selectedArray) {
+                		if (selectedArray.length == 0) {
+                			this.disable();
+                		} else {
+                			this.enable();
+                		}
+                	}
+                });
+			]]></script>
+                </smallButton>
+            </group>
+            <group name="genericExport">
+                <smallButton name="csv" state="enabled" icon="exportToCsvIcon16.png">
+                    <script>
+                        <![CDATA[
+					this.addOnChangeListener({
+						onClick: function() {
+							#{grid}.performEvent('exportToCsv', [], 'exportToCsv');
+						}
+					});
+				]]>
+                    </script>
+                </smallButton>
+                <smallButton name="pdf" state="enabled" icon="pdfIcon16.png">
+                    <script>
+                        <![CDATA[
+					this.addOnChangeListener({
+						onClick: function() {
+							#{grid}.performEvent('exportToPdf', [], 'exportToPdf');
+						}
+					});
+				]]>
+                    </script>
+                </smallButton>
+            </group>
+            <group name="status">
+                <smallButton name="accept" icon="startIcon16.png" state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (this.state == "draft") {
+										if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.accept.confirm)}")) {
+											#{grid}.performEvent('changeState', ['02prepared']);
+										};
+									} else if (this.state == "receive") {
+										if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery.confirm)}")) {
+											#{grid}.performEvent('changeState', ['06received']);
+										};
+									}
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="declineDelivery" icon="deleteIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery.confirm)}")) {
+										#{grid}.performEvent('changeState', ['04declined']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="approveDelivery" icon="acceptIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.approveDelivery.confirm)}")) {
+										#{grid}.performEvent('changeState', ['05approved']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="correctOrder" icon="startIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+                                    if (window.confirm("#{translate(deliveries.deliveryDetails.window.ribbon.status.correctOrder.confirm)}")) {
+                                        #{grid}.performEvent('changeState', ['03duringCorrection']);
+                                    };
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+            </group>
+        </ribbon>
+
+        <windowTab name="mainTab" reference="mainTab">
+            <component type="form" name="delivery" reference="delivery"/>
+
+            <component type="grid" name="deliveriesList" reference="grid">
+                <script>
+                    <![CDATA[
+						var copyBtn = #{window}.getRibbonItem("actions.copy");
+						var deleteBtn = #{window}.getRibbonItem("actions.delete");
+						
+						var acceptBtn = #{window}.getRibbonItem("status.accept");
+						var declineDeliveryBtn = #{window}.getRibbonItem("status.declineDelivery");
+						var approveDeliveryBtn = #{window}.getRibbonItem("status.approveDelivery");
+						var correctDeliveryBtn = #{window}.getRibbonItem("status.correctOrder");
+
+						var listener = {
+							onChange: function(selectedEntitiesArray) {
+								if (!selectedEntitiesArray || selectedEntitiesArray.length == 0) {
+									copyBtn.disable();
+									deleteBtn.disable();
+									acceptBtn.disable();
+									declineDeliveryBtn.disable();
+									approveDeliveryBtn.disable();
+									correctDeliveryBtn.disable();
+								} else {
+									var noDifferentStates = true;
+	 								if(selectedEntitiesArray.length > 1)
+									{
+										for (var i = selectedEntitiesArray.length-1 ; i > 0 ; i--) {
+											if (selectedEntitiesArray[i-1].fields.state != selectedEntitiesArray[i].fields.state
+											|| selectedEntitiesArray[i-1].fields.externalSynchronized == '0'
+											|| selectedEntitiesArray[i].fields.externalSynchronized == '0') {
+												noDifferentStates = false;
+												break;
+											}
+										}
+									} 
+									if (selectedEntitiesArray.length == 1 || noDifferentStates) {
+										var state = selectedEntitiesArray[0].fields.state;
+										
+										if (state == "01draft") {
+											deleteBtn.enable();
+											acceptBtn.enable();
+											acceptBtn.state = "draft";
+											acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.accept)}");
+											acceptBtn.setIcon('startIcon16.png');
+											declineDeliveryBtn.enable();
+											declineDeliveryBtn.state = "decline";
+											declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+											declineDeliveryBtn.setIcon('deleteIcon16.png');
+											approveDeliveryBtn.enable();
+											correctDeliveryBtn.disable();
+										} else if (state == "02prepared") {
+											deleteBtn.disable();
+											acceptBtn.disable();
+											acceptBtn.state = "prepare";
+											acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery)}");
+											acceptBtn.setIcon('acceptIcon16.png');
+											declineDeliveryBtn.enable();
+											declineDeliveryBtn.state = "decline";
+											declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+											declineDeliveryBtn.setIcon('deleteIcon16.png');
+											approveDeliveryBtn.enable();
+											correctDeliveryBtn.enable();
+										} else if (state == "03duringCorrection") {
+											deleteBtn.disable();
+											acceptBtn.disable();
+											acceptBtn.state = "correct";
+											acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery)}");
+											acceptBtn.setIcon('acceptIcon16.png');
+											declineDeliveryBtn.enable();
+											declineDeliveryBtn.state = "decline";
+											declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+											declineDeliveryBtn.setIcon('deleteIcon16.png');
+											approveDeliveryBtn.enable();
+											correctDeliveryBtn.disable();
+										} else if (state == "05approved"){
+											deleteBtn.disable();
+											acceptBtn.enable();
+											acceptBtn.state = "receive";
+											acceptBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.receiveDelivery)}");
+											acceptBtn.setIcon('acceptIcon16.png');
+											declineDeliveryBtn.enable();
+											declineDeliveryBtn.state = "decline";
+											declineDeliveryBtn.setLabel("#{translate(deliveries.deliveryDetails.window.ribbon.status.declineDelivery)}");
+											declineDeliveryBtn.setIcon('deleteIcon16.png');
+											approveDeliveryBtn.disable();
+											correctDeliveryBtn.enable();
+										} else if (state == "06received"){
+											deleteBtn.disable();
+											acceptBtn.disable();
+											declineDeliveryBtn.disable();
+											approveDeliveryBtn.disable();
+											correctDeliveryBtn.disable();
+										} else {
+											deleteBtn.enable();
+											acceptBtn.disable();
+											declineDeliveryBtn.disable();
+											approveDeliveryBtn.disable();
+											correctDeliveryBtn.disable();
+										}
+									} else {
+										deleteBtn.disable("#{translate(deliveries.deliveriesList.ribbon.message.deliveriesWithDifferentStatesSelected)}");
+										acceptBtn.disable("#{translate(deliveries.deliveriesList.ribbon.message.deliveriesWithDifferentStatesSelected)}");
+										declineDeliveryBtn.disable("#{translate(deliveries.deliveriesList.ribbon.message.deliveriesWithDifferentStatesSelected)}");
+										approveDeliveryBtn.disable("#{translate(deliveries.deliveriesList.ribbon.message.deliveriesWithDifferentStatesSelected)}");
+										correctDeliveryBtn.disable("#{translate(deliveries.deliveriesList.ribbon.message.deliveriesWithDifferentStatesSelected)}");
+									}
+									copyBtn.enable();
+								}
+							}
+						}
+						
+						this.addOnChangeListener(listener);
+					]]>
+                </script>
+
+                <option type="column" name="number" fields="number" link="true" width="50"/>
+                <option type="column" name="name" fields="name" link="true" width="100"/>
+                <option type="column" name="supplierName" fields="supplier"
+                        expression="#supplier['name']"/>
+                <option type="column" name="deliveryDate" fields="deliveryDate" width="100"/>
+                <option type="column" name="state" fields="state"/>
+                <option type="column" name="createDate" fields="createDate" width="100"/>
+
+                <option type="order" column="number" direction="desc"/>
+
+                <option type="searchable" value="name,number,supplierName,deliveryDate,state,createDate"/>
+                <option type="orderable" value="name,number,supplierName,deliveryDate,state,createDate"/>
+
+                <option type="correspondingView" value="deliveries/deliveryDetails"/>
+                <option type="correspondingComponent" value="form"/>
+
+                <option type="fullscreen" value="true"/>
+                <option type="multiselect" value="true"/>
+
+                <criteriaModifier class="com.qcadoo.mes.deliveries.criteriaModifiers.DeliveriesCriteriaModifier"
+                                  method="restrictToUserLocations"/>
+
+                <option type="hasPredefinedFilters" value="true"/>
+
+                <predefinedFilters>
+                    <predefinedFilter name="all">
+                    </predefinedFilter>
+                    <predefinedFilter name="notReceived">
+                        <filterRestriction column="state"
+                                           value="[01draft,02prepared,03duringCorrection,04declined,05approved,07receiveConfirmWaiting]"/>
+                    </predefinedFilter>
+                    <predefinedFilter name="notDeclined">
+                        <filterRestriction column="state"
+                                           value="[01draft,02prepared,03duringCorrection,05approved,06received,07receiveConfirmWaiting]"/>
+                    </predefinedFilter>
+                </predefinedFilters>
+
+                <listener event="changeState"
+                          class="com.qcadoo.mes.deliveries.states.client.DeliveryStateChangeViewClient"
+                          method="changeState"/>
+            </component>
+        </windowTab>
+
+        <option type="fixedHeight" value="true"/>
+        <option type="header" value="false"/>
+    </component>
+
+    <hooks>
+        <beforeRender
+                class="com.qcadoo.mes.deliveries.hooks.DeliveriesListHooks"
+                method="fillGridWithRelatedDeliveries"/>
+
+        <beforeRender class="com.qcadoo.mes.deliveries.hooks.DeliveryDetailsHooks"
+                      method="processRoles"/>
+    </hooks>
+
+</view>

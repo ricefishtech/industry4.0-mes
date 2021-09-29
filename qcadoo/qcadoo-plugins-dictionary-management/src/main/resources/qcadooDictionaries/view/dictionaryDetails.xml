@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+	  xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd" name="dictionaryDetails"
+	  modelPlugin="qcadooModel" modelName="dictionary" defaultAuthorizationRole="ROLE_DICTIONARY_VIEW">
+
+	<component type="window" name="window" reference="window">
+
+		<ribbon>
+			<template name="standardFormTemplate" includeItems="navigation.back"/>
+			<template name="standardGridTemplate" excludeItems="actions.delete,actions.copy"/>
+		</ribbon>
+
+		<component type="form" reference="form" name="dictionary">
+			<option type="header" value="true"/>
+			<option type="expression" value="'@' + #pluginIdentifier + '.' + #name + '.dictionary'"/>
+		</component>
+
+		<component type="grid" name="dictionaryItems" reference="grid"
+				   source="#{form}.dictionaryItems">
+			<script>
+				<![CDATA[
+					var activateButton = #{window}.getRibbonItem("states.activate");
+					var deactivateButton = #{window}.getRibbonItem("states.deactivate");
+
+					var listener = {
+						onChange: function(selectedEntitiesArray) {
+							if (!selectedEntitiesArray || selectedEntitiesArray.length == 0) {
+								activateButton.disable();
+								deactivateButton.disable();
+							} else {
+								var hasExternal = false;
+								var hasTechnicalCode = false;
+
+								for (var i in selectedEntitiesArray) {
+									if (selectedEntitiesArray[i].fields.externalNumber != '' && selectedEntitiesArray[i].fields.externalNumber != undefined) {
+										hasExternal = true;
+										break;	
+									}
+									if (selectedEntitiesArray[i].fields.technicalCode != '' && selectedEntitiesArray[i].fields.technicalCode != undefined) {
+										hasTechnicalCode = true;
+										break;	
+									}
+								}
+								if (hasExternal) {
+									activateButton.disable("#{translate(qcadooDictionaries.dictionaryItems.ribbon.message.someDictionaryItemIsExternal)}");
+									deactivateButton.disable("#{translate(qcadooDictionaries.dictionaryItems.ribbon.message.someDictionaryItemIsExternal)}");
+									return;
+								} else {
+									activateButton.enable();
+									deactivateButton.enable();
+								}
+								if (hasTechnicalCode) {
+									activateButton.disable();
+									deactivateButton.disable();
+								} else {
+									activateButton.enable();
+									deactivateButton.enable();
+								}
+							}
+
+						}
+					}
+					this.addOnChangeListener(listener);
+				]]>
+			</script>
+
+			<option type="column" name="name" fields="name" link="true"
+					width="50"/>
+			<option type="column" name="description" fields="description"
+					width="100"/>
+			<option type="column" name="externalNumber" fields="externalNumber" hidden="true"/>
+			<option type="column" name="technicalCode" fields="technicalCode" hidden="true"/>
+
+			<option type="order" column="name" direction="asc"/>
+
+			<option type="searchable" value="name,description"/>
+			<option type="orderable" value="name,description"/>
+
+			<option type="correspondingView" value="qcadooDictionaries/dictionaryItemDetails"/>
+			<option type="correspondingComponent" value="form"/>
+
+			<option type="paginable" value="true"/>
+
+			<option type="deletable" value="false"/>
+			<option type="creatable" value="false"/>
+
+			<option type="multiselect" value="true"/>
+			<option type="fullscreen" value="true"/>
+			<option type="fixedHeight" value="true"/>
+
+			<option type="height" value="250"/>
+		</component>
+	</component>
+
+</view>

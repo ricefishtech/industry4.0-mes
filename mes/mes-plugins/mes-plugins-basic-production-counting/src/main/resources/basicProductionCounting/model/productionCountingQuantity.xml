@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<model name="productionCountingQuantity" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://schema.qcadoo.org/model"
+       xsi:schemaLocation="http://schema.qcadoo.org/model http://schema.qcadoo.org/model.xsd">
+    <fields>
+        <belongsTo name="order" model="order" plugin="orders"
+                           required="true" />
+        <belongsTo name="technologyOperationComponent" model="technologyOperationComponent"
+                           plugin="technologies" />
+        <belongsTo name="product" model="product" plugin="basic"
+                           required="true" />
+        <belongsTo name="replacementTo" model="product" plugin="basic"/>
+        <belongsTo name="basicProductionCounting" model="basicProductionCounting"
+                           plugin="basicProductionCounting" />
+        <enum name="role" values="01used,02produced" default="01used"
+                      required="true" />
+        <enum name="typeOfMaterial" values="01component,02intermediate,03finalProduct,04waste"
+                      default="01component" required="true" />
+        <boolean name="isNonComponent" default="false" required="true" />
+        <decimal name="plannedQuantity" required="true">
+            <validatesWith
+                class="com.qcadoo.mes.basicProductionCounting.validators.ProductionCountingQuantityValidators"
+                method="validatePlannedQuantity" />
+            <validatesUnscaledValue max="9" />
+            <validatesScale max="5" />
+            <validatesRange from="0" exclusively="false"/>
+        </decimal>
+        <decimal name="usedQuantity" persistent="false"/>
+        <decimal name="producedQuantity" persistent="false"/>
+
+        <boolean name="flowFilled" persistent="false" default="false"/>
+
+    </fields>
+
+    <hooks>
+        <validatesWith
+            class="com.qcadoo.mes.basicProductionCounting.validators.ProductionCountingQuantityValidators"
+            method="validatesWith" />
+        <onCreate
+            class="com.qcadoo.mes.basicProductionCounting.hooks.ProductionCountingQuantityHooks"
+            method="onCreate" />
+        <onDelete
+            class="com.qcadoo.mes.basicProductionCounting.hooks.ProductionCountingQuantityHooks"
+            method="onDelete" />
+    </hooks>
+</model>

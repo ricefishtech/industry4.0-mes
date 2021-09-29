@@ -1,0 +1,120 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.qcadoo</groupId>
+		<artifactId>qcadoo</artifactId>
+		<version>1.5-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>qcadoo-view</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Qcadoo Framework :: View</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.qcadoo</groupId>
+			<artifactId>qcadoo-localization</artifactId>
+			<version>1.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.qcadoo</groupId>
+			<artifactId>qcadoo-model</artifactId>
+			<version>1.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.qcadoo</groupId>
+			<artifactId>qcadoo-security</artifactId>
+			<version>1.5-SNAPSHOT</version>
+		</dependency>
+        <dependency>
+            <groupId>com.qcadoo</groupId>
+            <artifactId>qcadoo-testing</artifactId>
+            <version>1.5-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.2</version>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4</version>
+        </dependency>
+    </dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.qcadoo</groupId>
+				<artifactId>qcadoo-maven-plugin</artifactId>
+				<version>${qcadoo.maven.plugin.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>compressResources</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>net.alchim31.maven</groupId>
+						<artifactId>yuicompressor-maven-plugin</artifactId>
+						<version>1.5.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>compress</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<force>true</force>
+							<suffix>-qcadoo.min</suffix>
+							<outputDirectory>target/classes/</outputDirectory>
+							<excludes>
+								<exclude>**/*min.js</exclude>
+								<exclude>**/*min.css</exclude>
+								<exclude>**/ViewerJS/*</exclude>
+							</excludes>
+							<aggregations>
+								<aggregation>
+									<removeIncluded>true</removeIncluded>
+									<output>target/classes/qcadooView/public/qcadoo-min.css</output>
+									<includes>
+										<include>**/*qcadoo.min.css</include>
+									</includes>
+									<excludes>
+										<exclude>**/qcadoo-min.css</exclude>
+									</excludes>
+								</aggregation>
+								<aggregation>
+									<removeIncluded>true</removeIncluded>
+									<output>target/classes/qcadooView/public/qcadoo-min.js</output>
+									<includes>
+										<include>**/*qcadoo.min.js</include>
+									</includes>
+									<excludes>
+										<exclude>**/qcadoo-min.js</exclude>
+									</excludes>
+								</aggregation>
+							</aggregations>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

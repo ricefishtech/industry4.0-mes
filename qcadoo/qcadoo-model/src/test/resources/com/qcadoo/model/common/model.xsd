@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.2.0
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xs:include schemaLocation="http://schema.qcadoo.org/common/plugin.xsd" />
+
+	<xs:group name="hooksType">
+		<xs:choice>
+			<xs:element name="validatesWith" type="hookType" />
+			<xs:element name="onSave" type="hookType" />
+			<xs:element name="onUpdate" type="hookType" />
+			<xs:element name="onCreate" type="hookType" />
+			<xs:element name="onCopy" type="hookType" />
+			<xs:element name="onView" type="hookType" />
+		</xs:choice>
+	</xs:group>
+
+	<xs:group name="fieldsType">
+		<xs:choice>
+			<xs:element name="integer" type="integerFieldType" />
+			<xs:element name="string" type="stringFieldType" />
+			<xs:element name="text" type="characterFieldType" />
+			<xs:element name="decimal" type="decimalFieldType" />
+			<xs:element name="datetime" type="dateFieldType" />
+			<xs:element name="date" type="dateFieldType" />
+			<xs:element name="boolean" type="fieldType" />
+			<xs:element name="belongsTo" type="belongsToFieldType" />
+			<xs:element name="hasMany" type="hasManyFieldType" />
+			<xs:element name="manyToMany" type="manyToManyFieldType" />
+			<xs:element name="tree" type="treeFieldType" />
+			<xs:element name="enum" type="enumFieldType" />
+			<xs:element name="dictionary" type="dictionaryFieldType" />
+			<xs:element name="password" type="characterFieldType" />
+			<xs:element name="priority" type="priorityFieldType" minOccurs="0" maxOccurs="1" />
+			<xs:element name="file" type="fieldType" />
+		</xs:choice>
+	</xs:group>
+
+	<xs:complexType name="identifierExpressionType">
+		<xs:attribute name="expression" type="xs:string" />
+	</xs:complexType>
+	
+	<xs:complexType name="validatesType">
+		<xs:attribute name="message" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="validatesLengthType">
+		<xs:complexContent>
+			<xs:extension base="validatesType">
+				<xs:attribute name="min" type="xs:integer" />
+				<xs:attribute name="is" type="xs:integer" />
+				<xs:attribute name="max" type="xs:integer" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="validatesRangeType">
+		<xs:complexContent>
+			<xs:extension base="validatesType">
+				<xs:attribute name="from" type="xs:string" />
+				<xs:attribute name="to" type="xs:string" />
+				<xs:attribute name="exclusively" type="xs:boolean" default="false" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="validatesRegexType">
+		<xs:complexContent>
+			<xs:extension base="validatesType">
+				<xs:attribute name="pattern" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="hookType">
+		<xs:attribute name="class" type="classIdentifier" use="required" />
+		<xs:attribute name="method" type="identifier" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="fieldType">
+		<xs:attribute name="name" type="identifier" use="required" />
+		<xs:attribute name="default" type="xs:string" />
+		<xs:attribute name="readonly" type="xs:boolean" default="false" />
+		<xs:attribute name="persistent" type="xs:boolean" default="true" />
+		<xs:attribute name="required" type="xs:boolean" default="false" />
+		<xs:attribute name="unique" type="xs:boolean" default="false" />
+	</xs:complexType>
+
+	<xs:complexType name="dateFieldType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="validatesWith" type="hookType" />
+					<xs:element name="validatesRegex" type="validatesRegexType" />
+					
+					<xs:element name="validatesRange" type="validatesRangeType" />
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+		
+	<xs:complexType name="integerFieldType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="validatesWith" type="hookType" />
+					<xs:element name="validatesRegex" type="validatesRegexType" />
+					
+					<xs:element name="validatesUnscaledValue" type="validatesLengthType" />
+					<xs:element name="validatesRange" type="validatesRangeType" />
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="decimalFieldType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="validatesWith" type="hookType" />
+					<xs:element name="validatesRegex" type="validatesRegexType" />
+			
+					<xs:element name="validatesUnscaledValue" type="validatesLengthType" />
+					<xs:element name="validatesScale" type="validatesLengthType" />
+					<xs:element name="validatesRange" type="validatesRangeType" />
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="characterFieldType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="validatesWith" type="hookType" />
+					<xs:element name="validatesRegex" type="validatesRegexType" />
+			
+					<xs:element name="validatesLength" type="validatesLengthType" />
+					<xs:element name="validatesRange" type="validatesRangeType" />
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="stringFieldType">
+		<xs:complexContent>
+			<xs:extension base="characterFieldType">
+				<xs:attribute name="expression" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="belongsToFieldType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:attribute name="model" type="identifier" use="required" />
+				<xs:attribute name="plugin" type="identifier" />
+				<xs:attribute name="lazy" type="xs:boolean" default="true" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="masterModelType">
+		<xs:attribute name="model" type="identifier" use="required" />
+		<xs:attribute name="plugin" type="identifier" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="collectionValueFieldType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:attribute name="model" type="identifier" use="required" />
+				<xs:attribute name="plugin" type="identifier" />
+				<xs:attribute name="joinField" type="identifier"
+							  use="required" />
+				<xs:attribute name="cascade" type="cascadeType" default="nullify"
+							  use="required" />
+				<xs:attribute name="copyable" type="xs:boolean" default="false" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="hasManyFieldType">
+		<xs:complexContent>
+			<xs:extension base="collectionValueFieldType">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="manyToManyFieldType">
+		<xs:complexContent>
+			<xs:extension base="collectionValueFieldType">
+				<xs:attribute name="lazy" type="xs:boolean" default="false" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="treeFieldType">
+		<xs:complexContent>
+			<xs:extension base="collectionValueFieldType">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="dictionaryFieldType">
+		<xs:complexContent>
+			<xs:extension base="characterFieldType">
+				<xs:attribute name="dictionary" type="identifier"
+					use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="enumFieldType">
+		<xs:complexContent>
+			<xs:extension base="fieldType">
+				<xs:attribute name="values" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="[a-zA-Z0-9]*(,[a-zA-Z0-9]*)*" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="priorityFieldType">
+		<xs:attribute name="name" type="identifier" use="required" />
+		<xs:attribute name="scope" type="identifier" use="optional" />
+	</xs:complexType>
+
+	<xs:simpleType name="cascadeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="delete" />
+			<xs:enumeration value="nullify" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="deletableType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="false" />
+			<xs:enumeration value="true" />
+			<xs:enumeration value="soft" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

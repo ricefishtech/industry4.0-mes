@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<model name="user" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://schema.qcadoo.org/model"
+	xsi:schemaLocation="http://schema.qcadoo.org/model http://schema.qcadoo.org/model.xsd">
+	<fields>
+		<string name="userName" required="true" unique="true">
+			<validatesRegex pattern="^[a-zA-Z0-9\\.@_-]+$"
+				message="qcadooSecurity.validate.global.error.loginIllegalCharacters" />
+		</string>
+		<string name="email">
+			<validatesWith class="com.qcadoo.security.internal.validators.EmailValidationService" method="checkEmail"/>
+		</string>
+		<string name="firstName" required="true" />
+		<string name="lastName" required="true" />
+		<boolean name="enabled" default="true" />
+		<string name="description">
+			<validatesLength max="255" />
+		</string>
+		<password name="password" /><!-- TODO validatesPresenceOnCreate -->
+		<password name="passwordConfirmation" persistent="false" /><!-- 
+			TODO validatesPresenceOnCreate -->
+		<password name="oldPassword" persistent="false" />
+		<string name="viewIdentifier" persistent="false" />
+		<datetime name="lastActivity" />
+		<string name="ipAddress" />
+		<belongsTo name="group" model="group" required="true"/>
+	</fields>
+	<hooks>
+		<validatesWith class="com.qcadoo.security.internal.validators.PasswordValidationService"
+			method="checkPassword" />
+		<validatesWith class="com.qcadoo.security.internal.validators.UserRoleValidationService"
+			method="checkUserCreatingSuperadmin" />
+
+        <onCreate class="com.qcadoo.security.internal.hooks.UserModelHooks"
+            method="setDefaultNames" />
+
+		<onDelete class="com.qcadoo.security.internal.hooks.UserModelHooks" 
+			method="preventSelfDeletion" />
+	</hooks>
+	<identifier expression="#userName" />
+</model>

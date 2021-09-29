@@ -1,0 +1,16 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="${identifier}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://schema.qcadoo.org/model"
+	xsi:schemaLocation="http://schema.qcadoo.org/model http://schema.qcadoo.org/model.xsd">
+	<fields>
+		<string name="number" required="true" unique="true">
+			<validatesLength max="40" />
+		</string>
+		<string name="name" required="true" />
+	</fields>
+	<hooks />
+	<identifier expression="${symbol_pound}number + ' - ' + ${symbol_pound}name" />
+</model>

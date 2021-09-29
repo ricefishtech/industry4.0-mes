@@ -1,0 +1,144 @@
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_PLANNING" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+	xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+	name="orderStateChangeDetails" modelName="orderStateChange">
+
+	<component type="window" name="window" reference="window">
+
+		<ribbon>
+			<template name="standardFormTemplate" includeItems="navigation.back, actions.saveBack" />
+		</ribbon>
+		<windowTab name="mainTab">
+			<component type="form" name="logging" reference="form">
+				<component type="gridLayout" name="gridLayout" columns="3"
+					rows="10" hasBorders="false">
+					<layoutElement column="1" row="1">
+						<component type="input" name="dateAndTime" field="#{form}.dateAndTime"
+							reference="dateAndTime" defaultEnabled="false" />
+					</layoutElement>
+					<layoutElement column="1" row="2">
+						<component type="input" name="worker" field="#{form}.worker"
+							reference="worker" defaultEnabled="false" />
+					</layoutElement>
+					<layoutElement column="1" row="3">
+						<component type="select" name="previousState" field="#{form}.sourceState"
+							reference="previousState" defaultEnabled="false" />
+					</layoutElement>
+					<layoutElement column="1" row="4">
+						<component type="select" name="currentState" field="#{form}.targetState"
+							reference="currentState" defaultEnabled="false" />
+					</layoutElement>
+					<layoutElement column="1" row="5" height="2">
+						<component type="textarea" name="additionalInformation"
+							field="additionalInformation" reference="additionalInformation" defaultEnabled="false" />
+					</layoutElement>
+					<layoutElement column="2" row="1">
+						<component type="gridLayout" name="reasonTypesGridLayout" columns="3" rows="1">
+							<layoutElement column="1" row="1">
+								<component type="label" name="reasonTypesLabel">
+									<option type="labelStyle" value="label" />
+								</component>
+							</layoutElement>
+							<layoutElement column="2" row="1" width="2">
+								<component type="awesomeDynamicList" name="reasonTypes"
+									source="#{form}.reasonTypes" reference="reasonTypes">
+									<option type="hasBorder" value="false" />
+									<option type="hasButtons" value="true" />
+									<components>
+										<component type="gridLayout" name="reasonTypeOfChangingOrderStateGridLayout"
+											columns="1" rows="1">
+											<layoutElement column="1" row="1">
+												<component type="select" name="reasonTypeOfChangingOrderState"
+													field="reasonTypeOfChangingOrderState" hasLabel="false" />
+											</layoutElement>
+										</component>
+									</components>
+								</component>
+							</layoutElement>
+						</component>
+					</layoutElement>
+					<layoutElement column="2" row="2" height="2">
+						<component type="textarea" name="comment" field="#{form}.comment"
+							reference="comment" />
+						<component type="checkbox" name="reasonRequired" reference="reasonRequired"
+							field="#{form}.reasonRequired" defaultEnabled="false" defaultVisible="false" />
+					</layoutElement>
+					<layoutElement row="7" column="1" width="2" height="4">
+						<component type="gridLayout" name="datesGridLayout" reference="datesGridLayout" rows="4" columns="2"
+							hasBorders="false">
+							<layoutElement row="1" column="1">
+								<component type="input" name="sourceStartDate" field="#{form}.sourceStartDate"
+									reference="sourceStartDate" defaultEnabled="false" />
+							</layoutElement>
+							
+							<layoutElement row="1" column="2">
+								<component type="input" name="targetStartDate" field="#{form}.targetStartDate"
+									reference="targetStartDate" defaultEnabled="false" />
+							</layoutElement>
+							
+							<layoutElement row="2" column="1">
+								<component type="input" name="sourceFinishDate" field="#{form}.sourceFinishDate"
+									reference="sourceFinishDate" defaultEnabled="false" />
+							</layoutElement>
+							
+							<layoutElement row="2" column="2">
+								<component type="input" name="targetFinishDate" field="#{form}.targetFinishDate"
+									reference="targetFinishDate" defaultEnabled="false" />
+							</layoutElement>
+							
+							<layoutElement row="3" column="1">
+								<component type="input" name="sourceCorrectedDateFrom" field="#{form}.sourceCorrectedDateFrom"
+									reference="sourceCorrectedDateFrom" defaultEnabled="false" />
+							</layoutElement>
+							
+							<layoutElement row="3" column="2">
+								<component type="input" name="targetCorrectedDateFrom" field="#{form}.targetCorrectedDateFrom"
+									reference="targetCorrectedDateFrom" defaultEnabled="false" />
+							</layoutElement>
+							
+							<layoutElement row="4" column="1">
+								<component type="input" name="sourceCorrectedDateTo" field="#{form}.sourceCorrectedDateTo"
+									reference="sourceCorrectedDateTo" defaultEnabled="false" />
+							</layoutElement>
+							
+							<layoutElement row="4" column="2">
+								<component type="input" name="targetCorrectedDateTo" field="#{form}.targetCorrectedDateTo"
+									reference="targetCorrectedDateTo" defaultEnabled="false" />
+							</layoutElement>
+						</component>
+					
+					</layoutElement>
+				</component>
+				<option type="header" value="true" />
+				<option type="expression" value="" />
+			</component>
+		</windowTab>
+	</component>
+	<hooks>
+		<beforeRender class="com.qcadoo.mes.orders.listeners.OrderStateReasonViewListeners" method="beforeRenderDetails" />
+	</hooks>
+</view>

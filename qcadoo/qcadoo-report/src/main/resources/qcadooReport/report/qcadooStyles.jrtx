@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperTemplate PUBLIC "-//JasperReports//DTD Template//EN" "http://jasperreports.sourceforge.net/dtds/jaspertemplate.dtd">
+
+<jasperTemplate>
+	<style name="qcadooMainDataBox" mode="Opaque" backcolor="#E6E6E6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#464646"/>
+		</box>
+	</style>
+	<style name="qcadooLabel" fontSize="12" isBold="true"/>
+	<style name="qcadooLabel7" fontSize="7" isBold="true"/>
+	<style name="qcadooValue" fontSize="12"/>
+	<style name="qcadooValue9" fontSize="9"/>
+	<style name="qcadooLabelSmall" fontSize="9" isBold="false"/>
+	<style name="qcadooValueSmall" fontSize="9"/>
+	<style name="qcadooParagraph" fontSize="11" isBold="true"/>
+	<style name="qcadooPageNumber" forecolor="#464646" fontSize="8"/>
+	<style name="qcadooPageNumberLine" forecolor="#4D4D4D">
+		<pen lineStyle="Dashed"/>
+	</style>
+	<style name="qcadooHeaderTitle" markup="html" fontSize="18" isBold="true"/>
+	<style name="qcadooHeaderLine" forecolor="#464646">
+		<pen lineWidth="2.0"/>
+	</style>
+	<style name="qcadooHeaderDetails" markup="html" fontSize="9"/>
+</jasperTemplate>

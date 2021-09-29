@@ -1,0 +1,198 @@
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_PLANNING" name="masterOrdersList" modelName="masterOrderDto"
+      menuAccessible="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd">
+
+    <component type="window" name="window" reference="window">
+
+        <ribbon>
+            <group name="orderListActions" defaultAuthorizationRole="ROLE_PLANNING_MASTER_ORDERS">
+                <bigButton name="new" icon="newIcon24.png" state="enabled"
+                           action="#{grid}.performNew;"/>
+                <smallButton name="copy" icon="copyIcon16.png" state="disabled" action="#{grid}.performCopy;" accesskey="c">
+                    <script><![CDATA[
+                #{grid}.addOnChangeListener({
+                	onChange: function(selectedArray) {
+                		if (selectedArray.length == 0) {
+                			this.disable();
+                		} else {
+                			this.enable();
+                		}
+                	}
+                });
+			]]></script>
+                </smallButton>
+                <smallButton name="delete" icon="deleteIcon16.png" state="disabled" action="#{grid}.performDelete;" accesskey="d">
+                    <script><![CDATA[
+                #{grid}.addOnChangeListener({
+                	onChange: function(selectedArray) {
+                		if (selectedArray.length == 0) {
+                			this.disable();
+                		} else {
+                			this.enable();
+                		}
+                	}
+                });
+			]]></script>
+                </smallButton>
+            </group>
+
+            <group name="actions">
+                <bigButton name="refresh" icon="updateIcon24.png" state="enabled"
+                           action="#{window}.performRefresh;"/>
+            </group>
+            <template name="standardGridTemplate" excludeGroups="actions"/>
+            <group name="status">
+                <smallButton name="completeMasterOrder" icon="acceptIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(masterOrders.masterOrderDetails.window.ribbon.status.completeMasterOrder.confirm)}")) {
+										#{grid}.performEvent('changeState', ['03completed']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="declineMasterOrder" icon="deleteIcon16.png"
+                             state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(masterOrders.masterOrderDetails.window.ribbon.status.declineMasterOrder.confirm)}")) {
+										#{grid}.performEvent('changeState', ['04declined']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+            </group>
+        </ribbon>
+
+        <component type="grid" name="masterOrdersList" reference="grid">
+            <script>
+                <![CDATA[
+					var completeMasterOrder = #{window}.getRibbonItemOrNull("status.completeMasterOrder");
+    				var declineMasterOrder = #{window}.getRibbonItemOrNull("status.declineMasterOrder");
+
+					var listener = {
+						onChange: function(selectedEntitiesArray) {
+							if (!selectedEntitiesArray || selectedEntitiesArray.length == 0) {
+							    completeMasterOrder.disable();
+								declineMasterOrder.disable();
+							} else {
+							    var noDifferentStates = true;
+
+							    if(selectedEntitiesArray.length > 1) {
+									for (var i = selectedEntitiesArray.length-1 ; i > 0 ; i--) {
+										if (selectedEntitiesArray[i-1].fields.state != selectedEntitiesArray[i].fields.state) {
+											noDifferentStates = false;
+											break;
+										}
+									}
+								}
+								if (noDifferentStates) {
+									var selectedEntityStatus = selectedEntitiesArray[0].fields.state;
+									if (selectedEntityStatus == "01new") {
+                                        completeMasterOrder.enable();
+                                        declineMasterOrder.enable();
+							        } else if (selectedEntityStatus == "02inExecution") {
+                                        completeMasterOrder.enable();
+                                        declineMasterOrder.disable();
+							        } else if (selectedEntityStatus == "03completed") {
+                                        completeMasterOrder.disable();
+                                        declineMasterOrder.disable();
+							        } else if (selectedEntityStatus == "04declined") {
+                                        completeMasterOrder.disable();
+                                        declineMasterOrder.disable();
+							        }
+								} else {
+									completeMasterOrder.disable("#{translate(masterOrders.masterOrders.ribbon.message.ordersWithDifferentStatesSelected)}");
+									declineMasterOrder.disable("#{translate(masterOrders.masterOrders.ribbon.message.ordersWithDifferentStatesSelected)}");
+								}
+							}
+						}
+					}
+
+					this.addOnChangeListener(listener);
+				]]>
+            </script>
+            <option type="column" name="masterOrderDefinitionNumber" fields="masterOrderDefinitionNumber" link="true" width="50"/>
+            <option type="column" name="number" fields="number" link="true"
+                    width="150"/>
+            <option type="column" name="name" fields="name" link="true"
+                    width="250"/>
+            <option type="column" name="externalNumber" fields="externalNumber" link="true"
+                    width="100"/>
+            <option type="column" name="deadline" fields="deadline" classesNames="wrap-date"/>
+            <option type="column" name="company" fields="company" width="150"/>
+
+            <option type="column" name="companyPayer" fields="companyPayer" width="150"/>
+
+            <option type="column" name="description" fields="description" width="150"/>
+
+            <option type="column" name="masterOrderState" fields="masterOrderState" width="100"/>
+
+            <option type="column" name="state" fields="state" width="70"/>
+
+            <option type="column" name="orderedPositionQuantity" fields="orderedPositionQuantity" width="100"/>
+
+            <option type="column" name="commissionedPositionQuantity" fields="commissionedPositionQuantity" width="100"/>
+
+            <option type="column" name="quantityForCommission" fields="quantityForCommission" width="100"/>
+
+            <option type="order" column="name" direction="asc"/>
+
+            <option type="searchable"
+                    value="masterOrderDefinitionNumber,number,name,externalNumber,deadline,company,description,companyPayer,masterOrderState,orderedPositionQuantity,commissionedPositionQuantity,quantityForCommission,state"/>
+            <option type="orderable"
+                    value="masterOrderDefinitionNumber,number,name,externalNumber,deadline,company,description,companyPayer,masterOrderState,state"/>
+
+            <option type="footerRow" value="true"/>
+            <option type="columnsToSummary"
+                    value="orderedPositionQuantity,commissionedPositionQuantity,quantityForCommission"/>
+
+            <option type="correspondingView" value="masterOrders/masterOrderDetails"/>
+            <option type="correspondingComponent" value="form"/>
+
+            <option type="fullscreen" value="true"/>
+            <option type="multiselect" value="true"/>
+            <listener event="changeState" class="com.qcadoo.mes.masterOrders.listeners.MasterOrdersListListeners" method="changeState"/>
+
+        </component>
+
+        <option type="fixedHeight" value="true"/>
+        <option type="header" value="false"/>
+    </component>
+
+</view>

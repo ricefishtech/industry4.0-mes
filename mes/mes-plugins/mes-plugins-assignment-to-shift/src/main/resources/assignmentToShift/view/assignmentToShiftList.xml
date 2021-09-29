@@ -1,0 +1,223 @@
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_ASSIGNMENT_TO_SHIFT" name="assignmentToShiftList" modelName="assignmentToShift"
+      menuAccessible="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd">
+
+    <component type="window" name="window" reference="window">
+
+        <ribbon>
+            <template name="standardGridTemplate"/>
+            <group name="status">
+                <smallButton name="acceptAssignmentToShift" icon="startIcon16.png" state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.status.accepted.confirm)}")) {
+										#{grid}.performEvent('changeState', ['02accepted']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="correctAssignmentToShift" icon="deleteIcon16.png" state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.status.duringCorrection.confirm)}")) {
+										#{grid}.performEvent('changeState', ['03duringCorrection']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+                <smallButton name="acceptCorrectedAssignmentToShift" icon="deleteIcon16.png" state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.status.corrected.confirm)}")) {
+										#{grid}.performEvent('changeState', ['04corrected']);
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+            </group>
+        </ribbon>
+
+        <component type="grid" name="assignmentToShiftList"
+                   reference="grid">
+            <script>
+                <![CDATA[
+					var buttonsStatus = ["status.acceptAssignmentToShift", "status.correctAssignmentToShift", "status.acceptCorrectedAssignmentToShift"];
+
+					var deleteButton = #{window}.getRibbonItem("actions.delete");
+
+					var acceptAssignmentToShiftButton = #{window}.getRibbonItem("status.acceptAssignmentToShift");
+					var correctAssignmentToShiftButton = #{window}.getRibbonItem("status.correctAssignmentToShift");
+					var acceptCorrecedAssignmentToShiftButton = #{window}.getRibbonItem("status.acceptCorrectedAssignmentToShift");
+
+					var listener = {
+						onChange: function(selectedEntitiesArray) {
+							if (!selectedEntitiesArray || selectedEntitiesArray.length == 0) {
+								deleteButton.disable();
+								disableButtons(buttonsStatus);
+							} else {
+								var differentStates = statesAreDifferent(selectedEntitiesArray);
+								var acceptedOrCorrectedStates = statesAreAccepctedOrCorrected(selectedEntitiesArray);
+
+								var state = selectedEntitiesArray[0].fields.state;
+
+								var isDraft = (state == "01draft");
+								var isAccepted = (state == "02accepted");
+                                var isDuringCorrection = (state == "03duringCorrection");
+ 								var isCorrected = (state == "04corrected");
+
+ 								if (differentStates) {
+ 									deleteButton.disable("#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.message.differentStates)}");
+									if (acceptedOrCorrectedStates) {
+										acceptAssignmentToShiftButton.disable("#{translate(goodFood.confectionProtocolsList.window.ribbon.message.differentStates)}");
+										correctAssignmentToShiftButton.enable();
+										acceptCorrecedAssignmentToShiftButton.disable("#{translate(goodFood.confectionProtocolsList.window.ribbon.message.differentStates)}");
+									} else {
+										disableButtons(buttonsStatus, "#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.message.differentStates)}");
+									}
+								} else {
+									if (isDraft) {
+										deleteButton.enable();
+										acceptAssignmentToShiftButton.enable();
+										correctAssignmentToShiftButton.disable();
+										acceptCorrecedAssignmentToShiftButton.disable();
+									} else if (isAccepted) {
+										deleteButton.disable("#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.message.canNotDeleteAssignment)}");
+										acceptAssignmentToShiftButton.disable();
+										correctAssignmentToShiftButton.enable();
+										acceptCorrecedAssignmentToShiftButton.disable();
+									} else if (isDuringCorrection) {
+										deleteButton.disable("#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.message.canNotDeleteAssignment)}");
+										acceptAssignmentToShiftButton.disable();
+										correctAssignmentToShiftButton.disable();
+										acceptCorrecedAssignmentToShiftButton.enable();
+									} else if (isCorrected) {
+										deleteButton.disable("#{translate(assignmentToShift.assignmentToShiftList.window.ribbon.message.canNotDeleteAssignment)}");
+										acceptAssignmentToShiftButton.disable();
+										correctAssignmentToShiftButton.enable();
+										acceptCorrecedAssignmentToShiftButton.disable();
+									}
+								}
+							}
+						}
+					}
+
+					function statesAreDifferent(selectedEntitiesArray) {
+						if (selectedEntitiesArray.length < 2) {
+							return false;
+						}
+
+						for (var i = 1; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i-1].fields.state != selectedEntitiesArray[i].fields.state) {
+								return true;
+							}
+						}
+
+						return false;
+					}
+
+					function statesAreAccepctedOrCorrected(selectedEntitiesArray) {
+						if (selectedEntitiesArray.length < 2) {
+							return false;
+						}
+
+						for (var i = 0; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i].fields.state == "01draft" || selectedEntitiesArray[i].fields.state == "03duringCorrection") {
+								return false;
+							}
+						}
+
+						return true;
+					}
+
+					function enableButtons(buttonNames, message) {
+						for (var buttonName in buttonNames) {
+							if (message == '') {
+								#{window}.getRibbonItem(buttonNames[buttonName]).enable();
+							} else {
+								#{window}.getRibbonItem(buttonNames[buttonName]).enable(message);
+							}
+						}
+					}
+
+					function disableButtons(buttonNames, message) {
+						for (var buttonName in buttonNames) {
+							if (message == '') {
+								#{window}.getRibbonItem(buttonNames[buttonName]).disable();
+							} else {
+								#{window}.getRibbonItem(buttonNames[buttonName]).disable(message);
+							}
+						}
+					}
+
+					#{grid}.addOnChangeListener(listener);
+				]]>
+            </script>
+
+            <option type="column" name="startDate" fields="startDate"
+                    link="true"/>
+            <option type="column" name="shift" fields="shift" link="true"
+                    expression="#shift['name']"/>
+            <option type="column" name="factory" fields="factory" link="true"
+                    expression="#factory['name']"/>
+            <option type="column" name="crew" fields="crew" expression="#crew?.get('number')"/>
+            <option type="column" name="state" fields="state"/>
+
+            <option type="order" column="startDate" direction="desc"/>
+
+            <option type="correspondingView" value="assignmentToShift/assignmentToShiftDetails"/>
+            <option type="correspondingComponent" value="form"/>
+
+            <option type="searchable" value="startDate,shift,factory,state,crew"/>
+            <option type="orderable" value="startDate,shift,factory,state,crew"/>
+
+            <option type="fullscreen" value="true"/>
+            <option type="multiselect" value="true"/>
+
+            <listener event="changeState"
+                      class="com.qcadoo.mes.assignmentToShift.states.client.AssignmentToShiftStateChangeViewClient"
+                      method="changeState"/>
+        </component>
+
+        <option type="fixedHeight" value="true"/>
+        <option type="header" value="false"/>
+    </component>
+
+</view>

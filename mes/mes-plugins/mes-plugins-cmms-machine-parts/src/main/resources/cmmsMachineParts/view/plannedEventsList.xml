@@ -1,0 +1,574 @@
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_PLANNED_EVENTS_ACTIONS_VIEW" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+      name="plannedEventsList" modelName="plannedEventContext" modelPlugin="cmmsMachineParts" menuAccessible="true">
+
+    <component type="window" name="window" reference="window">
+
+        <ribbon>
+            <group name="contextActions">
+                <bigButton name="confirmContext" icon="startIcon24.png" state="enabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									#{form}.performEvent('confirmContext', ['plannedEvent']);
+								}
+							});
+						]]>
+                    </script>
+                </bigButton>
+            </group>
+
+            <group name="customActions" defaultAuthorizationRole="ROLE_PLANNED_EVENTS_ACTIONS_ADD">
+                <bigButton name="addPlannedEvent" icon="newIcon24.png" action="#{window}.fireEvent(addPlannedEvent);"
+                           state="disabled"/>
+            </group>
+            <template name="standardGridTemplate" excludeItems="actions.copy,actions.new"/>
+            <group name="status">
+                <smallButton name="planEvent" icon="startIcon16.png"
+                             state="disabled" action="#{grid}.changeState(planEvent);"/>
+                <smallButton name="plannedEvent" icon="startIcon16.png"
+                             state="disabled" action="#{grid}.changeState(plannedEvent);"/>
+                <smallButton name="startEvent" icon="startIcon16.png"
+                             state="disabled" action="#{grid}.changeState(startEvent);"/>
+                <smallButton name="stopEvent" icon="deleteIcon16.png"
+                             state="disabled" action="#{grid}.changeState(stopEvent);"/>
+                <smallButton name="realizedEvent" icon="acceptIcon16.png"
+                             state="disabled" action="#{grid}.changeState(realizedEvent);"/>
+                <smallButton name="cancelEvent" icon="deleteIcon16.png"
+                             state="disabled" action="#{grid}.changeState(cancelEvent);"/>
+            </group>
+
+            <group name="maintenanceEvents">
+                <bigButton name="showMaintenanceEvent" icon="genealogyIcon24.png"
+                           action="#{grid}.fireEvent(showMaintenanceEvent);" state="disabled">
+                </bigButton>
+            </group>
+            <group name="export">
+                <bigButton name="xls" icon="xlsIcon24.png"
+                           action="#{window}.fireEvent(printXlsReport);"
+                           state="disabled"/>
+            </group>
+
+            <group name="workTime">
+                <bigButton name="showWorkTime" icon="genealogyIcon24.png"
+                           action="#{window}.fireEvent(showWorkTime);"
+                           state="enabled"/>
+            </group>
+        </ribbon>
+
+        <windowTab name="contextTab" reference="contextTab">
+            <component type="form" name="eventContextForm" reference="form">
+                <script>
+                    <![CDATA[
+						this.addOnChangeListener({
+							onSetValue: function(value) {
+								if (! value || ! value.content) {
+									return;
+								}
+								updateRibbon();
+							}
+						});
+
+						function updateRibbon() {
+						    var xlsButton = #{window}.getRibbonItem("export.xls");
+							var confirmed = #{confirmed}.getValue().content.value,
+							    confirmContextButton = #{window}.getRibbonItem("contextActions.confirmContext"),
+							    confirmContextButtonLabel;
+
+							if (confirmed == 'true' || confirmed == '1') {
+							    xlsButton.enable();
+								confirmContextButtonLabel = "#{translate(cmmsMachineParts.eventsList.window.ribbon.contextActions.changeContext)}";
+							} else {
+							    xlsButton.disable();
+							    confirmContextButtonLabel = "#{translate(cmmsMachineParts.eventsList.window.ribbon.contextActions.confirmContext)}";
+							}
+
+							confirmContextButton.setLabel(confirmContextButtonLabel);
+						}
+					]]>
+                </script>
+
+                <component type="gridLayout" name="gridLayout" columns="3" rows="2" hasBorders="false">
+                    <layoutElement column="1" row="1">
+                        <component type="lookup" name="factory" field="factory" reference="factory">
+                            <option type="column" name="name" fields="name"/>
+                            <option type="column" name="city" fields="city"/>
+
+                            <option type="searchable" value="name,city,number"/>
+                            <option type="orderable" value="name,city,number"/>
+
+                            <option type="expression" value="#number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <listener event="onSelectedEntityChange"
+                                      method="factoryChanged"
+                                      class="com.qcadoo.mes.cmmsMachineParts.listeners.ContextEventListeners"/>
+                        </component>
+                    </layoutElement>
+
+                    <layoutElement column="1" row="2">
+                        <component type="lookup" name="division" field="division" reference="division"
+                                   source="#{factory}.divisions">
+                            <option type="column" name="name" fields="name"/>
+
+                            <option type="searchable" value="name,number"/>
+                            <option type="orderable" value="name,number"/>
+
+                            <option type="expression" value="#number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <listener event="onSelectedEntityChange"
+                                      method="divisionChanged"
+                                      class="com.qcadoo.mes.cmmsMachineParts.listeners.EventListeners"/>
+
+                            <criteriaModifier
+                                    class="com.qcadoo.mes.cmmsMachineParts.criteriaModifiers.EventCriteriaModifiersCMP"
+                                    method="selectDivision"/>
+                        </component>
+                    </layoutElement>
+
+                    <layoutElement column="2" row="1">
+                        <component type="hidden" name="confirmed" field="confirmed"
+                                   reference="confirmed"/>
+                        <component type="hidden" name="generated" field="generated"
+                                   reference="generated"/>
+                        <component type="hidden" name="acceptanceEvents" field="acceptanceEvents"
+                                   reference="acceptanceEvents"/>
+                    </layoutElement>
+                </component>
+                <listener event="confirmContext" method="confirmContext"
+                          class="com.qcadoo.mes.cmmsMachineParts.listeners.EventsListListeners"/>
+            </component>
+        </windowTab>
+
+        <windowTab name="mainTab" reference="mainTab">
+            <component type="grid" name="grid" reference="grid" field="#{form}.plannedEventsDtos">
+                <script>
+                    <![CDATA[
+					var toggleRibbonItems = ["actions.delete"];
+
+					this.addOnChangeListener({
+						onChange: function(selectedEntitiesArray) {
+							if (selectedEntitiesArray && selectedEntitiesArray.length > 0) {
+								updateRibbon(selectedEntitiesArray);
+							} else {
+								resetRibbon();
+							}
+						}
+					});
+
+					this.changeState = function(eventPerformer, ribbonItemName, entityId) {
+						var ribbonItem = #{window}.getRibbonItem("status." + ribbonItemName);
+						var newState = ribbonItem.forState;
+						if (window.confirm(ribbonItem.confirmMessage)) {
+							if (window.canClose()) {
+								#{grid}.fireEvent(eventPerformer, 'changeState', [newState]);
+							}
+						}
+					}
+
+					function resetRibbon() {
+						for (var elementKey in toggleRibbonItems) {
+							getRibbonItem(toggleRibbonItems[elementKey]).disable();
+						}
+						getRibbonItem("status.planEvent").disable();
+						getRibbonItem("status.cancelEvent").disable();
+						getRibbonItem("status.plannedEvent").disable();
+						getRibbonItem("status.realizedEvent").disable();
+						getRibbonItem("status.startEvent").disable();
+                        getRibbonItem("status.stopEvent").disable();
+						getRibbonItem("maintenanceEvents.showMaintenanceEvent").disable();
+					}
+
+					function updateRibbon(selectedEntitiesArray) {
+						var locked = shouldLockStatusRibbonItems(selectedEntitiesArray);
+						var lockedMessage = "#{translate(cmmsMachineParts.eventsList.window.ribbon.status.cantModifyEvent)}";
+						var differentStatesMessage = "#{translate(cmmsMachineParts.eventsList.window.ribbon.status.differentStates)}";
+						var differentStates = statesAreDifferent(selectedEntitiesArray);
+                        var showMaintenanceEvent = #{window}.getRibbonItem("maintenanceEvents.showMaintenanceEvent");
+                        var shouldShowAccept = shouldShowAcceptButton(selectedEntitiesArray);
+                        var differentTypes = typesAreDifferent(selectedEntitiesArray);
+
+                        var acceptanceEvents = #{acceptanceEvents}.getValue().content.value;
+						for (var elementKey in toggleRibbonItems) {
+							var ribbonItem = getRibbonItem(toggleRibbonItems[elementKey]);
+							if (!ribbonItem) {
+								continue;
+							}
+
+							if (locked && differentStates) {
+								ribbonItem.disable(differentStatesMessage);
+							} else if (locked) {
+								ribbonItem.disable(lockedMessage);
+							} else {
+								ribbonItem.enable();
+							}
+						}
+
+						if (!differentStates) {
+							var state = selectedEntitiesArray[0].fields.state;
+						}
+
+						if (state && (state == "01new" || state == "02inPlan")) {
+							getRibbonItem("actions.delete").enable();
+						}
+						else {
+						    getRibbonItem("actions.delete").disable();
+						}
+
+                        var noDifferentStates = true;
+					    if(selectedEntitiesArray.length > 1) {
+						    for (var i = selectedEntitiesArray.length-1 ; i > 0 ; i--) {
+							    if (selectedEntitiesArray[i-1].fields.state != selectedEntitiesArray[i].fields.state) {
+									noDifferentStates = false;
+									break;
+								}
+							}
+						}
+
+                        var inEditingState = false;
+					    if(selectedEntitiesArray.length > 1) {
+						    for (var i = selectedEntitiesArray.length-1 ; i > 0 ; i--) {
+							    if (selectedEntitiesArray[i].fields.state == "08inEditing") {
+									inEditingState = true;
+									break;
+								}
+							}
+						}
+
+                        var planEvent = #{window}.getRibbonItem("status.planEvent");
+                        var cancelEvent = #{window}.getRibbonItem("status.cancelEvent");
+                        var plannedEvent = #{window}.getRibbonItem("status.plannedEvent");
+                        var realizedEvent = #{window}.getRibbonItem("status.realizedEvent");
+                        var startEvent = #{window}.getRibbonItem("status.startEvent");
+                        var stopEvent = #{window}.getRibbonItem("status.stopEvent");
+                        var deleteButton = #{window}.getRibbonItem("actions.delete");
+
+						if (noDifferentStates) {
+
+                            planEvent.forState="02inPlan";
+                            planEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.inPlan)}";
+
+                            cancelEvent.forState="06canceled";
+                            cancelEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.canceled)}";
+
+                            plannedEvent.forState="03planned";
+                            plannedEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.planned)}";
+                            
+                            startEvent.forState="04inRealization";
+                            startEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.startEvent)}";
+
+                            stopEvent.forState="08inEditing";
+                            stopEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.stopEvent)}";
+                            
+                            realizedEvent.forState="05realized";
+                            realizedEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.realized)}";
+
+                            if (state == "01new") {
+                                planEvent.enable();
+                                planEvent.forState="02inPlan";
+                                planEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.inPlan)}";
+                                planEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.planEvent)}");
+                                plannedEvent.enable();
+                                cancelEvent.enable();
+                                realizedEvent.disable();
+                                plannedEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.plannedEvent)}");
+                                plannedEvent.forState="03planned";
+                                startEvent.disable();
+                                stopEvent.disable();
+                            } else if (state == "02inPlan") {
+                                planEvent.disable();
+                                cancelEvent.enable();
+                                plannedEvent.enable();
+                                realizedEvent.disable();
+                                plannedEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.plannedEvent)}");
+                                plannedEvent.forState="03planned";
+                                startEvent.disable();
+                                stopEvent.disable();
+                            } else if (state == "03planned") {
+                                planEvent.enable();
+                                planEvent.forState="02inPlan";
+                                planEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.inPlan)}";
+                                planEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.planEvent)}");
+                                cancelEvent.enable();
+                                plannedEvent.disable();
+                                realizedEvent.disable();
+                               	startEvent.enable();
+                                stopEvent.disable();
+                                deleteButton.disable();
+                            } else if (state == "04inRealization") {
+                                planEvent.disable();
+                                planEvent.forState="07accepted";
+                                planEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.accepted)}";
+                                planEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.acceptEvent)}");
+                                cancelEvent.enable();
+                                plannedEvent.disable();
+                                if (!shouldShowAccept && differentTypes) {
+                                    realizedEvent.disable();
+                                } else {
+                                    realizedEvent.enable();
+                                }
+                                plannedEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.dontAcceptEvent)}");
+                                plannedEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.notAccept)}";
+                                plannedEvent.forState="04inRealization";
+                                realizedEvent.disable();
+                                startEvent.disable();
+                            	stopEvent.enable();
+                                deleteButton.disable();
+                            } else if (state == "05realized" || state == "06canceled") {
+                                planEvent.disable();
+                                planEvent.forState="07accepted";
+                                planEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.accepted)}";
+                                planEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.acceptEvent)}");
+                                cancelEvent.disable();
+                                plannedEvent.disable();
+                                realizedEvent.disable();
+                               	plannedEvent.disable();
+                               	plannedEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.dontAcceptEvent)}");
+                                plannedEvent.forState="04inRealization";
+                                plannedEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.notAccept)}";
+                                startEvent.disable();
+                           		stopEvent.disable();
+                                deleteButton.disable();
+                            } else if (state =="07accepted") {
+                                planEvent.disable();
+                                planEvent.forState="07accepted";
+                                planEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.accepted)}";
+                                planEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.acceptEvent)}");
+                                cancelEvent.disable();
+                                plannedEvent.disable();
+                                plannedEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.dontAcceptEvent)}");
+	                            plannedEvent.forState="04inRealization";
+	                            plannedEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.notAccept)}";
+                                if (shouldShowAccept) {
+                                	realizedEvent.enable();
+                                } else {
+                                	realizedEvent.disable();
+                                }
+                                startEvent.disable();
+                             	stopEvent.disable();
+                             	
+                                deleteButton.disable();
+                            }else if (state =="08inEditing") {
+                                if(acceptanceEvents == "true"){
+                                    planEvent.enable();
+                                    planEvent.forState="07accepted";
+                                    planEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.accepted)}";
+                                    planEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.acceptEvent)}");
+                                    cancelEvent.disable();
+                                    plannedEvent.enable();
+                                    plannedEvent.setLabel("#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.dontAcceptEvent)}");
+                             	    plannedEvent.forState="04inRealization";
+                             	    plannedEvent.confirmMessage = "#{translate(cmmsMachineParts.plannedEventDetails.window.ribbon.status.confirm.notAccept)}";
+                                    if (!shouldShowAccept && !differentTypes) {
+                                	    realizedEvent.enable();
+                                	    planEvent.disable();
+                                   	    plannedEvent.disable();
+                                    } else {
+                                	realizedEvent.disable();
+                                    }
+                                    startEvent.disable();
+                             	    stopEvent.disable();
+                                    deleteButton.disable();
+                                } else {
+                                     realizedEvent.enable();
+                                     planEvent.disable();
+                                     plannedEvent.disable();
+                                     startEvent.disable();
+	                                 stopEvent.disable();
+	                                 cancelEvent.disable();
+                                     deleteButton.disable();
+                                }
+                             }
+
+                             if(inEditingState && isMeterReading(selectedEntitiesArray) && differentTypes){
+                                resetRibbon();
+                             }
+
+                        } else {
+                            resetRibbon();
+                        }
+                        if (selectedEntitiesArray.length == 1) {
+                            showMaintenanceEvent.enable();
+                        }
+                        else {
+                            cancelEvent.disable();
+                           showMaintenanceEvent.disable();
+                           plannedEvent.disable();
+                        }
+					}
+
+					function getRibbonItem(ribbonPath) {
+						return #{window}.getRibbonItem(ribbonPath);
+					}
+
+					function shouldLockStatusRibbonItems(selectedEntitiesArray) {
+						return selectedEntitiesArray[0].fields.state == '05realized' || selectedEntitiesArray[0].fields.state == '06canceled'
+								statesAreDifferent(selectedEntitiesArray);
+					}
+
+					function statesAreDifferent(selectedEntitiesArray) {
+						if (selectedEntitiesArray.length < 2) {
+							return false;
+						}
+						for (var i = 1; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i-1].fields.state != selectedEntitiesArray[i].fields.state) {
+								return true;
+							}
+						}
+						return false;
+					}
+					function typesAreDifferent(selectedEntitiesArray) {
+						if (selectedEntitiesArray.length < 2) {
+							return false;
+						}
+						for (var i = 1; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i-1].fields.type != selectedEntitiesArray[i].fields.type) {
+								return true;
+							}
+						}
+						return false;
+					}
+					function shouldShowAcceptButton(selectedEntitiesArray) {
+						if (selectedEntitiesArray.length < 2) {
+							return selectedEntitiesArray[0].fields.type !== "05meterReading";
+						}
+						for (var i = 1; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i].fields.type == "05meterReading") {
+								return false;
+							}
+						}
+						return true;
+					}
+
+					function isMeterReading(selectedEntitiesArray) {
+						for (var i = 0; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i].fields.type == "05meterReading") {
+								return true;
+							}
+						}
+						return false;
+					}
+
+				]]>
+                </script>
+                <option type="column" name="number" fields="number" link="true" width="75"/>
+                <option type="column" name="type" fields="type" link="true"/>
+                <option type="column" name="ownerName" fields="ownerName" link="true"/>
+                <option type="column" name="description" fields="description" link="true"/>
+                <option type="column" name="factory" fields="factoryNumber" link="true"
+                        width="80"/>
+                <option type="column" name="division" fields="divisionNumber"
+                        link="true"/>
+                <option type="column" name="productionLine" fields="productionLineNumber"
+                        link="true"/>
+                <option type="column" name="workstation" fields="workstationNumber"
+                        link="true" width="90"/>
+                <option type="column" name="subassembly" fields="subassemblyNumber"
+                        link="true" width="85"/>
+                <option type="column" name="date" fields="date" link="false"/>
+                <option type="column" name="counter" fields="counter" link="false"/>
+                <option type="column" name="createUser" fields="createUser" link="false"/>
+                <option type="column" name="createDate" fields="createDate" link="false"/>
+
+                <option type="column" name="state" fields="state" link="false"/>
+
+
+                <option type="searchable"
+                        value="number,type,ownerName,factory,division,productionLine,workstation,subassembly,description,date,counter,createDate,createUser,state"/>
+                <option type="orderable"
+                        value="number,type,ownerName,factory,division,productionLine,workstation,subassembly,description,date,counter,createDate,createUser,state"/>
+                <option type="multiselect" value="true"/>
+                <option type="fullscreen" value="true"/>
+
+                <option type="correspondingView" value="cmmsMachineParts/plannedEventDetails"/>
+                <option type="correspondingComponent" value="form"/>
+
+                <option type="order" column="number" direction="desc"/>
+                <option type="fullscreen" value="true"/>
+                <option type="hasPredefinedFilters" value="true"/>
+                <option type="defaultPredefinedFilterName" value="open"/>
+
+                <predefinedFilters>
+
+                    <predefinedFilter name="all">
+                    </predefinedFilter>
+
+                    <predefinedFilter name="open">
+                        <filterRestriction column="state"
+                                           value="[01new,02inPlan,03planned,04inRealization,07accepted,08inEditing]"/>
+                    </predefinedFilter>
+
+                    <predefinedFilter name="finished">
+                        <filterRestriction column="state"
+                                           value="[05realized,06canceled]"/>
+                    </predefinedFilter>
+
+
+                </predefinedFilters>
+
+                <listener event="changeState"
+                          class="com.qcadoo.mes.cmmsMachineParts.states.PlannedEventStateChangeViewClient"
+                          method="changeState"/>
+
+                <listener event="onSelectedEntityChange"
+                          class="com.qcadoo.mes.cmmsMachineParts.listeners.EventsListListeners"
+                          method="onSelectedEventChange"/>
+
+                <listener event="showMaintenanceEvent" method="showMaintenanceEvent"
+                          class="com.qcadoo.mes.cmmsMachineParts.listeners.EventsListListeners"/>
+
+                <criteriaModifier class="com.qcadoo.mes.cmmsMachineParts.criteriaModifiers.EventCriteriaModifiersCMP"
+                                  method="showPlannedEventsFromContext"/>
+            </component>
+        </windowTab>
+
+        <option type="fixedHeight" value="true"/>
+        <option type="header" value="false"/>
+
+        <listener event="addPlannedEvent" method="addPlannedEvent"
+                  class="com.qcadoo.mes.cmmsMachineParts.listeners.EventsListListeners"/>
+
+        <listener event="printXlsReport" method="printXlsReport"
+                  class="com.qcadoo.mes.cmmsMachineParts.listeners.EventsListListeners"/>
+
+        <listener event="showWorkTime" method="showWorkTime"
+                  class="com.qcadoo.mes.cmmsMachineParts.listeners.WorkTimeForUserListeners"/>
+
+    </component>
+
+    <hooks>
+        <beforeRender
+                class="com.qcadoo.mes.cmmsMachineParts.hooks.EventHooks"
+                method="onBeforeRenderPlannedListView"/>
+        <beforeRender class="com.qcadoo.mes.cmmsMachineParts.hooks.PlannedEventDetailsHooks"
+                      method="processRoles"/>
+    </hooks>
+</view>

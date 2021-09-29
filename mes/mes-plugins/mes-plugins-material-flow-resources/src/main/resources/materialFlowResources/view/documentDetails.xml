@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_DOCUMENTS_CORRECTIONS_MIN_STATES"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+      name="documentDetails" modelName="document">
+
+    <component type="window" name="window" reference="window">
+        <ribbon>
+            <template name="standardFormTemplate"/>
+            <group name="print">
+                <bigButton name="printPdf" icon="pdfIcon24.png" action="#{form}.fireEvent(printDocument,pdf);"
+                           state="enabled"/>
+                <bigButton name="printDispositionOrderPdf" icon="pdfIcon24.png" state="enabled">
+                    <script>
+                        <![CDATA[
+                            this.addOnChangeListener({
+                                onClick: function() {
+                                    #{form}.performEvent({
+                                        name    : 'printDispositionOrder',
+                                        args    : ['pdf'],
+                                        type    : undefined,
+                                        callback : function(){
+                                            setTimeout(function(){#{form}.performRefresh();}, 2000);
+                                        }
+                                    });
+                                }
+                            });
+                        ]]>
+                    </script>
+                </bigButton>
+            </group>
+            <group name="state">
+                <smallButton name="accept" icon="startIcon16.png" state="enabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									if (window.confirm("#{translate(materialFlowResources.documentsList.window.ribbon.status.accept.confirm)}")) {
+										#{form}.performEvent('createResourcesForDocuments',undefined );
+									};
+								}
+							});
+						]]>
+                    </script>
+                </smallButton>
+            </group>
+            <group name="resourcesStock">
+                <bigButton name="checkResourcesStock" icon="generateIcon24.png" action="#{form}.fireEvent(checkResourcesStock);"
+                           state="enabled"
+                           message="materialFlowResources.documentDetails.window.ribbon.resourcesStock.checkResourcesStock.message"/>
+            </group>
+            <group name="resources">
+                <bigButton name="addMultipleResources" icon="newIcon24.png" action="#{form}.fireEvent(addMultipleResources);"
+                           state="enabled"/>
+                <bigButton name="fillResources" icon="generateIcon24.png" action="#{form}.fireEvent(fillResources);"
+                           state="enabled"
+                           message="materialFlowResources.documentDetails.window.ribbon.resources.fillResources.message"/>
+            </group>
+        </ribbon>
+        <windowTab name="generalTab" reference="generalTab">
+            <component type="form" name="form" reference="form">
+                <script>
+                    <![CDATA[
+                        this.addOnChangeListener({
+                            onSetValue: function(value) {
+                                if (!value || !value.content)
+                                    return;
+
+                                if (value.content.entityId) {
+                                    documentIdChanged(value.content.entityId);
+                                }
+                            }
+                        });
+
+                        var isCanClose;
+                        var controllerCanClose = controller.canClose;
+                        controller.canClose = function(){
+                            isCanClose = controllerCanClose();
+                            return isCanClose;
+                        }
+
+                        var formComponent = window.mainController.getComponentByReferenceName("form");
+                        var formPerformRefresh = formComponent.performRefresh;
+                        formComponent.performRefresh = function(){
+                            formPerformRefresh();
+                            if(isCanClose){
+                                viewRefresh();
+                            }
+                        }
+                    ]]>
+                </script>
+                <component type="gridLayout" name="gridLayout" columns="3"
+                           rows="7">
+                    <layoutElement column="1" row="1">
+                        <component type="hidden" name="inBuffer" field="inBuffer" reference="inBuffer"/>
+                        <component type="input" name="number" reference="number" field="number"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="2">
+                        <component type="input" name="name" reference="name"
+                                   field="name"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="3">
+                        <component type="calendar" name="time" reference="time"
+                                   field="time">
+                            <option type="withTimePicker" value="true"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="4">
+                        <component type="select" name="type" field="type"
+                                   reference="type">
+
+                            <listener event="onSelectedEntityChange"
+                                      class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                                      method="clearWarehouseFields"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="5">
+                        <component type="lookup" name="user" field="user"
+                                   reference="user" defaultEnabled="false">
+
+                            <option type="searchable" value="firstName"/>
+                            <option type="orderable" value="firstName"/>
+
+                            <option type="expression" value="#firstName + '  ' + #lastName"/>
+                            <option type="fieldCode" value="firstName"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="6" height="2">
+                        <component type="textarea" name="description" field="description"/>
+                    </layoutElement>
+                    <layoutElement column="2" row="1">
+                        <component type="lookup" name="locationFrom" field="locationFrom"
+                                   reference="locationFrom">
+                            <option type="column" name="name" fields="name"/>
+
+                            <option type="searchable" value="number,name"/>
+                            <option type="orderable" value="number,name"/>
+
+                            <option type="expression" value="#number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <criteriaModifier
+                                    class="com.qcadoo.mes.materialFlowResources.criteriaModifiers.LocationCriteriaModifiersMFR"
+                                    method="showWarehousesOnly"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="2">
+                        <component type="lookup" name="locationTo" field="locationTo"
+                                   reference="locationTo">
+                            <option type="column" name="name" fields="name"/>
+
+                            <option type="searchable" value="number,name"/>
+                            <option type="orderable" value="number,name"/>
+
+                            <option type="expression" value="#number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <criteriaModifier
+                                    class="com.qcadoo.mes.materialFlowResources.criteriaModifiers.LocationCriteriaModifiersMFR"
+                                    method="showWarehousesOnly"/>
+
+                            <listener event="onSelectedEntityChange"
+                                      class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                                      method="setCriteriaModifiersParameters"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="3">
+                        <component type="lookup" name="company" field="company"
+                                   reference="company">
+                            <option type="column" fields="name" name="name" link="true"/>
+
+                            <option type="searchable" value="number,name"/>
+                            <option type="orderable" value="number,name"/>
+
+                            <option type="expression" value="#number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <listener event="onSelectedEntityChange"
+                                      class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                                      method="setCriteriaModifiersParameters"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="4">
+                        <component type="lookup" name="address" field="address"
+                                   reference="address">
+                            <option type="column" fields="name" name="name" link="true"/>
+                            <option type="column" fields="addressType" name="addressType" link="true"/>
+
+                            <option type="searchable" value="number,name,addressType"/>
+                            <option type="orderable" value="number,name,addressType"/>
+
+                            <option type="expression" value="(#name == null) ? #number : #number + ' - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <criteriaModifier
+                                    class="com.qcadoo.mes.basic.criteriaModifiers.AddressCriteriaModifiers"
+                                    method="showOnlyCompanyAddresses"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="5">
+                        <component type="file" name="fileName" field="fileName"/>
+                    </layoutElement>
+                    <layoutElement column="2" row="6">
+                        <component type="select" name="state" field="state"
+                                   reference="state" defaultEnabled="false">
+                        </component>
+                    </layoutElement>
+                </component>
+
+                <option type="header" value="true"/>
+                <option type="expression"
+                        value="#inBuffer ? #number + ' - ' + '@materialFlowResources.document.state.value.'+#state + ' - '  + '@materialFlowResources.document.inBuffer' : #number + ' - ' + '@materialFlowResources.document.state.value.'+#state"/>
+
+                <listener event="createResourcesForDocuments"
+                          class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                          method="createResourcesForDocuments"/>
+
+                <listener event="printDocument"
+                          class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                          method="printDocument"/>
+
+                <listener event="printDispositionOrder"
+                          class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                          method="printDispositionOrder"/>
+
+                <listener event="save"
+                          class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                          method="onSave"/>
+
+                <listener event="fillResources"
+                          class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                          method="fillResources"/>
+
+                <listener event="checkResourcesStock"
+                          class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                          method="checkResourcesStock"/>
+
+                <listener event="addMultipleResources"
+                          class="com.qcadoo.mes.materialFlowResources.listeners.DocumentDetailsListeners"
+                          method="addMultipleResources"/>
+            </component>
+        </windowTab>
+
+        <windowTab name="positionsGridTab" reference="positionsGridTab">
+            <component type="flowGridLayout" name="flowGridLayout" columns="1" rows="6">
+                <layoutElement column="1" row="1" minHeight="6">
+                    <component type="staticPage" name="positionsGrid" reference="positionsGrid">
+                        <option type="page" value="materialFlowResources/positionsGrid.jsp"/>
+                        <option type="messagesGroup" value="documentGrid"/>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+        <windowTab name="auditTab">
+            <component type="gridLayout" name="gridLayout" columns="3"
+                       rows="4">
+                <layoutElement column="1" row="1" height="4">
+                    <component type="borderLayout" name="auditBorderLayout"
+                               reference="auditBorderLayout">
+                        <option type="label" value="auditLayoutLabel"/>
+                        <component type="gridLayout" name="gridLayout" columns="1"
+                                   rows="4">
+                            <layoutElement column="1" row="1">
+                                <component type="input" name="createDate" field="#{form}.createDate"
+                                           defaultEnabled="false"/>
+                            </layoutElement>
+                            <layoutElement column="1" row="2">
+                                <component type="input" name="createUser" field="#{form}.createUser"
+                                           defaultEnabled="false"/>
+                            </layoutElement>
+                            <layoutElement column="1" row="3">
+                                <component type="input" name="updateDate" field="#{form}.updateDate"
+                                           defaultEnabled="false"/>
+                            </layoutElement>
+                            <layoutElement column="1" row="4">
+                                <component type="input" name="updateUser" field="#{form}.updateUser"
+                                           defaultEnabled="false"/>
+                            </layoutElement>
+                        </component>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+    </component>
+
+    <hooks>
+        <beforeRender
+                class="com.qcadoo.mes.materialFlowResources.hooks.DocumentDetailsHooks"
+                method="onBeforeRender"/>
+    </hooks>
+
+</view>

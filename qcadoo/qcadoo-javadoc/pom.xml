@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.qcadoo</groupId>
+		<artifactId>qcadoo</artifactId>
+		<version>1.5-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>qcadoo-javadoc</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Qcadoo Framework :: Javadoc</name>
+
+
+	<profiles>
+		<profile>
+			<id>deployJavadoc</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>${maven.javadoc.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>buildJavadoc</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>aggregate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<author>false</author>
+							<bottom><![CDATA[Copyright &#169; ${project.inceptionYear}-{currentYear} <a href="${project.organization.url}">${project.organization.name}<a>]]></bottom>
+							<nohelp>true</nohelp>
+							<nodeprecated>true</nodeprecated>
+							<nodeprecatedlist>true</nodeprecatedlist>
+							<show>public</show>
+							<useStandardDocletOptions>true</useStandardDocletOptions>
+							<charset>UTF-8</charset>
+							<encoding>UTF-8</encoding>
+							<docencoding>UTF-8</docencoding>
+							<breakiterator>true</breakiterator>
+							<version>false</version>
+							<failOnError>false</failOnError>
+							<use>false</use>
+							<notree>true</notree>
+							<sourcepath>${basedir}/../qcadoo-localization/src/main/java;${basedir}/../qcadoo-model/src/main/java;${basedir}/../qcadoo-plugin/src/main/java;${basedir}/../qcadoo-report/src/main/java;${basedir}/../qcadoo-security/src/main/java;${basedir}/../qcadoo-tenant/src/main/java;${basedir}/../qcadoo-view/src/main/java</sourcepath>
+							<excludePackageNames>*.internal.*:*.constants:com.qcadoo.plugins.*:com.qcadoo.maven.plugins:com.qcadoo.maven.plugins.*:com.qcadoo.tenant.*:com.qcadoo.model.beans.*:*.api.errorhandler.*:com.qcadoo.report.*</excludePackageNames>
+							<groups>
+								<group>
+									<title>Localization</title>
+									<packages>com.qcadoo.localization.*</packages>
+								</group>
+								<group>
+									<title>Model</title>
+									<packages>com.qcadoo.model.*</packages>
+								</group>
+								<group>
+									<title>Plugin</title>
+									<packages>com.qcadoo.plugin.*</packages>
+								</group>
+								<!-- group> <title>Report</title> <packages>com.qcadoo.report.*</packages> 
+									</group -->
+								<group>
+									<title>Security</title>
+									<packages>com.qcadoo.security.*</packages>
+								</group>
+								<group>
+									<title>View</title>
+									<packages>com.qcadoo.view.*</packages>
+								</group>
+							</groups>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>${maven.assembly.plugin.version}</version>
+						<configuration>
+							<descriptors>
+								<descriptor>javadoc.xml</descriptor>
+							</descriptors>
+							<finalName>${project.artifactId}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+						<executions>
+							<execution>
+								<id>packageJavadoc</id>
+								<phase>package</phase>
+								<goals>
+									<goal>assembly</goal>
+								</goals>
+							</execution>
+						</executions>
+						<inherited>false</inherited>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>${maven.antrun.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>deployJavadoc</id>
+								<phase>deploy</phase>
+								<configuration>
+									<target>
+										<copy file="${basedir}/target/${project.artifactId}.zip" tofile="/home/javadoc/${project.artifactId}.zip" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

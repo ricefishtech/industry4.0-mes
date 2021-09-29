@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_TECHNOLOGIES" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+      name="technologyDetails" modelName="technology">
+
+    <component type="window" name="window" reference="window">
+
+        <ribbon>
+            <template name="standardFormTemplate"/>
+            <group name="status">
+                <smallButton name="acceptTechnology" icon="startIcon16.png"
+                             state="disabled" action="#{form}.changeState(acceptTechnology);"/>
+                <smallButton name="cancelTechnology" icon="deleteIcon16.png"
+                             state="disabled" action="#{form}.changeState(cancelTechnology);"/>
+                <smallButton name="checkTechnology" icon="startIcon16.png"
+                             state="disabled" action="#{form}.changeState(checkTechnology);"/>
+            </group>
+            <group name="reports">
+                <smallButton name="pdf" icon="pdfIcon16.png"
+                             action="#{form}.fireEvent(printTechnologyDetailsReport,pdf);"
+                             state="enabled"/>
+                <smallButton name="xls" icon="xlsIcon16.png"
+                             action="#{form}.fireEvent(printTechnologyDetailsReport,xls);"
+                             state="enabled"/>
+            </group>
+            <group name="atachments">
+                <bigButton name="downloadAtachment" icon="generateIcon24.png"
+                           state="enabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									#{form}.performEvent('downloadAttachment', []);
+								}
+							});
+						]]>
+                    </script>
+                </bigButton>
+            </group>
+            <group name="productStructure">
+                <bigButton name="generateProductStructure" icon="generateIcon24.png"
+                           action="#{productStructureForm}.fireEvent(generateProductStructure);" state="disabled"/>
+            </group>
+            <group name="fillProducts">
+                <bigButton name="fillProducts" icon="generateIcon24.png"
+                           action="#{form}.fireEvent(fillProducts);" state="disabled"/>
+            </group>
+        </ribbon>
+
+        <windowTab name="mainTab">
+            <component type="form" name="technology" reference="form">
+                <script>
+                    <![CDATA[
+						this.changeState = function(eventPerformer, ribbonItemName) {
+							var ribbonItem = #{window}.getRibbonItem("status." + ribbonItemName);
+							var newState = ribbonItem.forState;
+
+							if (window.confirm(ribbonItem.confirmMessage)) {
+								#{form}.fireEvent(eventPerformer, 'changeState', [newState]);
+							}
+						}
+
+						this.addOnChangeListener({
+							onSetValue: function(value) {
+								if (! value || ! value.content) {
+									return;
+								}
+								var state = #{state}.getValue().content.value;
+								if (!state) {
+									return;
+								}
+
+								if (! value.content.entityId) {
+									var acceptState = #{window}.getRibbonItem("status.acceptTechnology");
+									var cancelState = #{window}.getRibbonItem("status.cancelTechnology");
+									var checkState = #{window}.getRibbonItem("status.checkTechnology");
+									acceptState.disable();
+									cancelState.disable();
+									checkState.disable();
+									return;
+								}
+								updateRibbon(state);
+							}
+						});
+
+						function toggleEditable(enabled, message) {
+							var toggleRibbonItems = ["actions.save", "actions.saveBack", "actions.saveNew", "actions.cancel", "actions.delete"];
+							for (var elementKey in toggleRibbonItems) {
+								var ribbonItemName = toggleRibbonItems[elementKey];
+								var ribbonItem = #{window}.getRibbonItem(ribbonItemName);
+
+								if (!ribbonItem) {
+									continue;
+								}
+
+								if (enabled) {
+									ribbonItem.enable();
+								} else {
+									if (message) {
+										ribbonItem.disable(message);
+									}else{
+										ribbonItem.disable();
+									}
+								}
+							}
+						}
+						
+
+						function updateRibbon(state) {
+							var externalSynchronized = #{externalSynchronized}.getValue().content.value;
+							var acceptState = #{window}.getRibbonItem("status.acceptTechnology");
+							var cancelState = #{window}.getRibbonItem("status.cancelTechnology");
+							var checkState = #{window}.getRibbonItem("status.checkTechnology");
+							var deleteItem = #{window}.getRibbonItem("actions.delete");
+							
+							var generateProductStructure = #{window}.getRibbonItem("productStructure.generateProductStructure");
+							var fillProducts = #{window}.getRibbonItem("fillProducts.fillProducts");
+
+							acceptState.forState="02accepted";
+							acceptState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.accepted)}";
+
+							cancelState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.declined)}";
+							cancelState.forState="03declined";
+							cancelState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.declineTechnology)}");
+
+							checkState.forState="05checked";
+							checkState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.checked)}";
+							checkState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.checkTechnology)}");
+
+							if (state == "01draft") {
+								acceptState.enable();
+								cancelState.enable();
+								checkState.enable();
+								generateProductStructure.disable();
+								toggleEditable(true, "");
+								fillProducts.enable();
+							} else if (state == "02accepted") {
+								acceptState.disable();
+								checkState.disable();
+								cancelState.enable();
+								generateProductStructure.enable();
+								cancelState.forState="04outdated";
+								cancelState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.outdated)}";
+								cancelState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.outdateTechnology)}");
+								toggleEditable(true, "");
+								deleteItem.disable();
+								fillProducts.disable();
+							} else if (state == "03declined" || state == "04outdated") {
+								acceptState.disable();
+								checkState.disable();
+								cancelState.disable();
+								generateProductStructure.disable();
+								toggleEditable(false);
+								deleteItem.enable();
+								fillProducts.disable();
+							} else if ( state == "05checked"){
+								cancelState.enable();
+								checkState.enable();
+								generateProductStructure.enable();
+								checkState.forState="01draft"
+								checkState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.draft)}";
+								checkState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.draftTechnology)}");
+								acceptState.enable();
+								toggleEditable(true, "");
+                                deleteItem.disable();
+                                fillProducts.disable();
+							}
+							if (externalSynchronized == '0') {
+								toggleEditable(false, "#{translate(technologies.technology.ribbon.message.technologyIsSynchronized)}");
+								acceptState.disable();
+								cancelState.disable();
+								checkState.disable();
+
+								generateProductStructure.enable();
+							}					
+						}
+
+					]]>
+                </script>
+
+                <component type="gridLayout" name="gridsLayout" columns="3"
+                           rows="5" hasBorders="false">
+                    <layoutElement column="1" row="1">
+                        <component type="checkbox" name="master" field="master"
+                                   reference="master" hasDescription="true"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="2">
+                        <component type="input" name="number" field="number"
+                                   reference="number" hasDescription="true">
+                            <option type="alignment" value="right"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="1" row="3" height="2">
+                        <component type="textarea" name="name" field="name"
+                                   reference="name" hasDescription="true"/>
+                    </layoutElement>
+                    <layoutElement column="1" row="5">
+                        <component type="checkbox" name="template" field="template"
+                                   reference="template" hasDescription="true"/>
+                    </layoutElement>
+                    <layoutElement column="2" row="1">
+                        <component type="lookup" name="product" field="product"
+                                   reference="product">
+                            <option type="column" name="name" fields="name" link="true"
+                                    width="200"/>
+                            <option type="column" name="globalTypeOfMaterial" fields="globalTypeOfMaterial"
+                                    link="true"/>
+                            <option type="column" name="ean" fields="ean"/>
+
+                            <option type="searchable" value="name,globalTypeOfMaterial,ean"/>
+                            <option type="orderable" value="name,globalTypeOfMaterial,ean"/>
+
+                            <option type="expression"
+                                    value="'&lt;b&gt;' + #number + '&lt;/b&gt; - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+
+                            <listener event="onSelectedEntityChange"
+                                      class="com.qcadoo.mes.technologies.TechnologyService"
+                                      method="generateTechnologyNumber"/>
+                            <listener event="onSelectedEntityChange"
+                                      class="com.qcadoo.mes.technologies.TechnologyService"
+                                      method="generateTechnologyName"/>
+                        </component>
+                    </layoutElement>
+                    <layoutElement column="2" row="2" height="2">
+                        <component type="textarea" name="description" field="description"/>
+                    </layoutElement>
+                    <layoutElement column="2" row="4">
+                        <component type="lookup" name="technologyGroup" field="technologyGroup"
+                                   reference="technologyGroup">
+                            <option type="column" name="name" fields="name" link="true"
+                                    width="200"/>
+
+                            <option type="searchable" value="name,number"/>
+                            <option type="orderable" value="name,number"/>
+
+                            <option type="expression"
+                                    value="'&lt;b&gt;' + #number + '&lt;/b&gt; - ' + #name"/>
+                            <option type="fieldCode" value="number"/>
+                        </component>
+                        <component type="hidden" name="externalSynchronized"
+                                   field="externalSynchronized" reference="externalSynchronized"/>
+                    </layoutElement>
+                    <layoutElement column="3" row="1">
+                        <component type="input" name="standardPerformanceTechnology"
+                                   field="standardPerformanceTechnology" reference="standardPerformanceTechnology"
+                                   hasDescription="true">
+                            <option type="alignment" value="right"/>
+                            <option type="labelWidth" value="40"/>
+                        </component>
+                    </layoutElement>
+
+                    <layoutElement column="3" row="2">
+                        <component type="checkbox" name="additionalActions" field="additionalActions"
+                                   reference="additionalActions" hasDescription="true">
+                            <option type="labelWidth" value="40"/>
+                        </component>
+                    </layoutElement>
+                </component>
+
+                <component type="select" name="state" field="state"
+                           reference="state" hasLabel="false" defaultVisible="false"/>
+
+                <option type="header" value="true"/>
+                <option type="expression"
+                        value="#name + ' - ' + #number + ' - ' + '@technologies.technology.state.value.' + #state"/>
+                <listener event="changeState"
+                          class="com.qcadoo.mes.technologies.states.TechnologyStateChangeViewClient"
+                          method="changeState"/>
+                <listener event="printTechnologyDetailsReport"
+                          class="com.qcadoo.mes.technologies.print.TechnologiesReportService"
+                          method="printTechnologyDetailsReport"/>
+                <listener event="downloadAttachment" method="downloadAttachment"
+                          class="com.qcadoo.mes.basic.listeners.AttachmentsListeners"/>
+                <listener event="fillProducts"
+                          class="com.qcadoo.mes.technologies.listeners.TechnologyDetailsListeners"
+                          method="fillProducts"/>
+            </component>
+        </windowTab>
+
+        <windowTab name="treeTab">
+            <component type="flowGridLayout" name="gridsLayout" columns="2" rows="7">
+                <layoutElement column="1" row="1" height="1">
+                    <component type="label" name="description">
+                        <option type="labelStyle" value="text"/>
+                    </component>
+                </layoutElement>
+                <layoutElement column="1" row="2" minHeight="6">
+                    <component type="tree" name="technologyTree" reference="technologyTree"
+                               field="#{form}.operationComponents">
+                        <dataType name="operation">
+                            <option type="nodeLabelExpression"
+                                    value="#nodeNumber + ' &lt;span class=&quot;grey&quot;&gt;' + #operation['number'] + ' &lt;/span&gt;' + #operation['name']
+                                    + ' - ('
+                                    + (#tpz != null ? (T(com.qcadoo.view.api.utils.TimeConverterService).convertTimeToString(#tpz) + '/') : '')
+                                    + (#tj != null ? (T(com.qcadoo.view.api.utils.TimeConverterService).convertTimeToString(#tj)) : '')
+                                    + ')'
+                                    + (#operationProductOutComponents.size() > 0 ? ' - &lt;b&gt;' +
+                                        #operationProductOutComponents.get(0).getBelongsToField('product').getStringField('name') + ' &lt;span style=&quot;color: #68bb25&quot;&gt;(' + #operationProductOutComponents.get(0).getBelongsToField('product').getStringField('number') + ')&lt;/span&gt; - '
+                                        + '&lt;/b&gt;'
+                                        + #operationProductOutComponents.get(0).getDecimalField('quantity').stripTrailingZeros().toPlainString() + ' ' + #operationProductOutComponents.get(0).getBelongsToField('product').getStringField('unit')
+                                        : ''
+                                    )"/>
+                            <option type="correspondingView"
+                                    value="technologies/technologyOperationComponentDetails"/>
+                            <option type="correspondingComponent" value="form"/>
+                            <option type="correspondingViewInModal" value="false"/>
+                            <option type="nodeIcon"
+                                    value="/technologies/public/css/icons/operationIcon16.png"/>
+                            <option type="newIcon"
+                                    value="/technologies/public/css/icons/newOperationIcon16.png"/>
+                        </dataType>
+                        <dataType name="referenceTechnology">
+                            <option type="nodeLabelExpression"
+                                    value="#nodeNumber"/>
+                            <option type="correspondingView"
+                                    value="technologies/technologyReferenceTechnologyComponentDetails"/>
+                            <option type="correspondingComponent" value="form"/>
+                            <option type="correspondingViewInModal" value="true"/>
+                            <option type="nodeIcon"
+                                    value="/technologies/public/css/icons/technologyIcon16.png"/>
+                            <option type="newIcon"
+                                    value="/technologies/public/css/icons/newTechnologyIcon16.png"/>
+                            <option type="canHaveChildren" value="false"/>
+                        </dataType>
+                        <option type="selectableWhenDisabled" value="true"/>
+                        <option type="hasCustomActionButton" value="true"/>
+                        <option type="customActionIcon" value="clearIcon16_dis.png"/>
+
+                        <listener event="select"
+                                  class="com.qcadoo.mes.technologies.listeners.TechnologyDetailsListeners"
+                                  method="setGridEditable"/>
+
+                        <listener event="customAction"
+                                  class="com.qcadoo.mes.technologies.listeners.TechnologyDetailsListeners"
+                                  method="removeOnlySelectedOperation"/>
+                    </component>
+                </layoutElement>
+                <layoutElement column="2" row="1" height="3">
+                    <component type="grid" name="outProducts" reference="outProducts"
+                               source="#{technologyTree}.operationProductOutComponents"
+                               defaultEnabled="false">
+                        <option type="column" name="number" fields="product"
+                                expression="#product['number']" link="true" width="100"/>
+                        <option type="column" name="name" fields="product"
+                                expression="#product['name']" link="true" width="200"/>
+                        <option type="column" name="quantity" fields="quantity"
+                                width="100"/>
+                        <option type="column" name="unit" fields="product"
+                                expression="#product['unit']" link="false" width="70"/>
+
+                        <option type="order" column="number" direction="desc"/>
+
+                        <option type="searchable" value="number,name,quantity,unit"/>
+                        <option type="orderable" value="number,name,quantity,unit"/>
+
+                        <option type="correspondingView"
+                                value="technologies/operationProductOutComponentDetails"/>
+                        <option type="correspondingComponent" value="form"/>
+                        <option type="correspondingViewInModal" value="true"/>
+
+                        <option type="paginable" value="false"/>
+                        <option type="creatable" value="true"/>
+                        <option type="deletable" value="true"/>
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+
+                        <option type="filtersDefaultVisible" value="false"/>
+                    </component>
+                </layoutElement>
+                <layoutElement column="2" row="4" minHeight="3">
+                    <component type="grid" name="inProducts" reference="inProducts"
+                               useDto="true"
+                               source="#{technologyTree}.operationProductInComponentDtos"
+                               model="operationProductInComponentDto"
+                               defaultEnabled="false">
+                        <option type="column" name="number" fields="productNumber"
+                                link="true" width="100"/>
+                        <option type="column" name="name" fields="productName"
+                                width="200"/>
+                        <option type="column" name="quantity" fields="quantity"
+                                width="100"/>
+                        <option type="column" name="unit" fields="productUnit"
+                                link="false" width="70"/>
+
+                        <option type="order" column="priority" direction="asc"/>
+
+                        <option type="searchable" value="number,name,quantity,unit"/>
+                        <option type="orderable" value="number,name,quantity,unit"/>
+
+                        <option type="correspondingView"
+                                value="technologies/operationProductInComponentDetails"/>
+                        <option type="correspondingComponent" value="form"/>
+                        <option type="correspondingViewInModal" value="true"/>
+
+                        <option type="paginable" value="false"/>
+                        <option type="creatable" value="true"/>
+                        <option type="deletable" value="true"/>
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+
+                        <option type="filtersDefaultVisible" value="false"/>
+                        <rowStyleResolver
+                                class="com.qcadoo.mes.technologies.rowStyleResolvers.OperationProductInComponentsListResolver"
+                                method="fillRowStyles"/>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+        <windowTab name="history">
+            <component type="flowGridLayout" name="loggingsLayout" columns="1" rows="3">
+                <layoutElement column="1" row="1" minHeight="3">
+                    <component type="grid" name="loggings" reference="grid" source="#{form}.stateChanges">
+                        <option type="column" name="dateAndTime" fields="dateAndTime"/>
+                        <option type="column" name="previousState" fields="sourceState"/>
+                        <option type="column" name="currentState" fields="targetState"/>
+                        <option type="column" name="shift" fields="shift"
+                                expression="#shift != null ? #shift['name'] : ''"/>
+                        <option type="column" name="worker" fields="worker"/>
+
+                        <option type="order" column="dateAndTime" direction="asc"/>
+
+                        <option type="searchable" value="dateAndTime,sourceState,targetState"/>
+                        <option type="orderable" value="dateAndTime,sourceState,targetState"/>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+
+        <windowTab name="atachments">
+            <component type="gridLayout" name="gridsLayout" columns="3"
+                       rows="6" hasBorders="false">
+                <layoutElement column="1" row="1" height="6">
+
+                    <component type="staticPage" name="multiUpload">
+                        <option type="page" value="technologies/multiUpload.jsp"/>
+                    </component>
+                    <component type="input" name="technologyIdForMultiUpload"
+                               reference="technologyIdForMultiUpload" defaultVisible="false">
+                        <option type="alignment" value="right"/>
+                    </component>
+                    <component type="input" name="technologyMultiUploadLocale"
+                               reference="technologyMultiUploadLocale" defaultVisible="false">
+                    </component>
+                </layoutElement>
+                <layoutElement column="2" row="1" width="2" height="6">
+                    <component type="grid" name="technologyAttachments"
+                               reference="attachmentsGrid" source="#{form}.technologyAttachments">
+                        <option type="column" name="attachment" fields="name" correspondingField="attachmentLocation"
+                                link="true" attachment="true"/>
+                        <option type="column" name="attachmentLocation" fields="attachment" hidden="true"/>
+
+                        <option type="column" name="size" fields="size"/>
+                        <option type="order" column="attachment" direction="desc"/>
+
+                        <option type="deletable" value="true"/>
+                        <option type="fullscreen" value="true"/>
+                        <option type="multiselect" value="true"/>
+                    </component>
+                </layoutElement>
+            </component>
+        </windowTab>
+        <windowTab name="productStructure">
+            <component type="form" name="productStructureForm" reference="productStructureForm">
+                <component type="flowGridLayout" name="gridsLayout" rows="6" columns="1">
+                    <layoutElement row="1" column="1" minHeight="6">
+                        <component type="tree" name="productStructureTree" reference="productStructureTree"
+                                   field="productStructureTree">
+                            <dataType name="finalProduct">
+                                <option type="nodeLabelExpression"
+                                        value="
+                                        (#division != null ? '&lt;i&gt;' + #division.get('name') + '&lt;/i&gt;' +' - ' : '') + (#operation.get('tj') != null ? (T(com.qcadoo.view.api.utils.TimeConverterService).convertTimeToString(#operation.get('tj')) + ' - ') : '') + (#standardPerformanceTechnology != null ?  #standardPerformanceTechnology  +' - ' : '') +
+                                        '&lt;span class=&quot;grey&quot;&gt;' + #product.get('number') + '&lt;/span&gt;' + ' - &lt;b&gt;' + #product.get('name') + '&lt;/b&gt; - ' + #quantity + ' ' + #product.get('unit') + ' - &lt;b&gt;' + '&lt;span style=&quot;color: #FFA319&quot;&gt;' + #operation.get('operation').get('name') + '&lt;/span&gt;' + '&lt;/b&gt;' +  (#technologyGroup != null ? ' - ' + #technologyGroup.get('number') : '')"/>
+                                <option type="nodeIcon" value="/technologies/public/css/icons/finalProductIcon16.png"/>
+                                <option type="newIcon" value="/technologies/public/css/icons/finalProductIcon16.png"/>
+
+                            </dataType>
+                            <dataType name="intermediate">
+                                <option type="nodeLabelExpression"
+                                        value="
+                                        (#division != null ? '&lt;i&gt;' + #division.get('name') + '&lt;/i&gt;' +' - ' : '') + (#operation.get('tj') != null ? (T(com.qcadoo.view.api.utils.TimeConverterService).convertTimeToString(#operation.get('tj')) + ' - ') : '')  +
+                                        '&lt;span class=&quot;grey&quot;&gt;' + #product.get('number') + '&lt;/span&gt;' + ' - &lt;b&gt;' + #product.get('name') + '&lt;/b&gt; - ' + #quantity + ' ' + #product.get('unit') + ' - &lt;b&gt;' + '&lt;span style=&quot;color: #FFA319&quot;&gt;' +  #operation.get('operation').get('name') + '&lt;/span&gt;' + '&lt;/b&gt;' "/>
+                                <option type="nodeIcon" value="/technologies/public/css/icons/intermediateIcon16.png"/>
+                                <option type="newIcon" value="/technologies/public/css/icons/intermediateIcon16.png"/>
+
+                            </dataType>
+                            <dataType name="component">
+                                <option type="nodeLabelExpression"
+                                        value="
+                                        (#division != null ? '&lt;i&gt;' + #division.get('name') + '&lt;/i&gt;' +' - ' : '') + (#operation.get('tj') != null ? (T(com.qcadoo.view.api.utils.TimeConverterService).convertTimeToString(#operation.get('tj')) + ' - ') : '') + (#standardPerformanceTechnology != null ?  #standardPerformanceTechnology +' - ' : '') +
+                                        '&lt;span class=&quot;grey&quot;&gt;' + #product.get('number') + '&lt;/span&gt;' + ' - &lt;span style=&quot;color: #68bb25&quot;&gt;&lt;b&gt;' + #product.get('name') + '&lt;/b&gt; - ' + #quantity + ' ' + #product.get('unit') + ' - &lt;b&gt;' + '&lt;span style=&quot;color: #FFA319&quot;&gt;' + #operation.get('operation').get('name') + '&lt;/span&gt;' + ' (' + #technology.get('number') + ')' + '&lt;/b&gt;&lt;/span&gt;'  +  (#technologyGroup != null ? ' - ' + #technologyGroup.get('number')  : '')"/>
+                                <option type="nodeIcon" value="/technologies/public/css/icons/technologyIcon16.png"/>
+                                <option type="newIcon" value="/technologies/public/css/icons/technologyIcon16.png"/>
+
+                            </dataType>
+                            <dataType name="material">
+                                <option type="nodeLabelExpression"
+                                        value="'&lt;span class=&quot;grey&quot;&gt;' + #product.get('number') + '&lt;/span&gt;' + ' - ' + #product.get('name') + ' - ' + #quantity + ' ' + #product.get('unit')"/>
+                                <option type="nodeIcon" value="/technologies/public/css/icons/materialIcon16.png"/>
+                                <option type="newIcon" value="/technologies/public/css/icons/materialIcon16.png"/>
+
+                            </dataType>
+
+                            <option type="hasNewButtons" value="false"/>
+                            <option type="hasDeleteButton" value="false"/>
+                            <option type="hasEditButton" value="false"/>
+                            <option type="hasMoveButton" value="false"/>
+                        </component>
+                    </layoutElement>
+                </component>
+                <listener event="generateProductStructure"
+                          class="com.qcadoo.mes.technologies.listeners.TechnologyDetailsListeners"
+                          method="generateProductStructure"/>
+            </component>
+
+        </windowTab>
+    </component>
+
+    <hooks>
+        <beforeRender
+                class="com.qcadoo.mes.technologies.hooks.TechnologyDetailsViewHooks"
+                method="setTechnologyIdForMultiUploadField"/>
+        <beforeRender
+                class="com.qcadoo.mes.technologies.hooks.TechnologyDetailsViewHooks"
+                method="disableFieldTechnologyFormAndEnabledMaster"/>
+        <beforeRender
+                class="com.qcadoo.mes.technologies.hooks.TechnologyDetailsViewHooks"
+                method="filterStateChangeHistory"/>
+        <beforeRender
+                class="com.qcadoo.mes.technologies.hooks.TechnologyDetailsViewHooks"
+                method="setTreeTabEditable"/>
+
+        <!-- TODO hotfix for issue-1901 with restoring previous active tab state,
+            requires fixes in framework 
+        <beforeRender
+                class="com.qcadoo.mes.technologies.hooks.TechnologyDetailsViewHooks"
+                method="navigateToActiveTab"/>
+		-->
+        <beforeRender
+                class="com.qcadoo.mes.technologies.listeners.TechnologyDetailsListeners"
+                method="setGridEditable"/>
+    </hooks>
+
+</view>

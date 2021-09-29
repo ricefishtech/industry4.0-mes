@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://schema.qcadoo.org/model" xmlns="http://schema.qcadoo.org/model" elementFormDefault="qualified">
+
+	<xs:include schemaLocation="http://schema.qcadoo.org/common/model.xsd" />
+
+	<xs:element name="model">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="fields" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="fieldsType" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="hooks" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence minOccurs="0" maxOccurs="unbounded">
+							<xs:group ref="hooksType" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="identifier" type="identifierExpressionType" minOccurs="0" maxOccurs="1" />
+				<xs:element name="masterModel" type="masterModelType" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="name" type="identifier" use="required" />
+			<xs:attribute name="plugin" type="identifier" use="optional" />
+			<xs:attribute name="deletable" type="xs:boolean" />
+			<xs:attribute name="insertable" type="xs:boolean" />
+			<xs:attribute name="updatable" type="xs:boolean" />
+			<xs:attribute name="activable" type="xs:boolean" />
+			<xs:attribute name="auditable" type="xs:boolean" />
+			<xs:attribute name="cacheable" type="xs:boolean" />
+			<xs:attribute name="versionable" type="xs:boolean" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="hooksdType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="validatesWith" type="hookType" />
+			<xs:element name="onSave" type="hookType" />
+			<xs:element name="onUpdate" type="hookType" />
+			<xs:element name="onCreate" type="hookType" />
+			<xs:element name="onCopy" type="hookType" />
+			<xs:element name="onView" type="hookType" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="fieldsdType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="integer" type="integerFieldType" />
+			<xs:element name="string" type="stringFieldType" />
+			<xs:element name="text" type="characterFieldType" />
+			<xs:element name="decimal" type="decimalFieldType" />
+			<xs:element name="datetime" type="dateFieldType" />
+			<xs:element name="date" type="dateFieldType" />
+			<xs:element name="boolean" type="fieldType" />
+			<xs:element name="belongsTo" type="belongsToFieldType" />
+			<xs:element name="hasMany" type="hasManyFieldType" />
+			<xs:element name="manyToMany" type="manyToManyFieldType" />
+			<xs:element name="tree" type="treeFieldType" />
+			<xs:element name="enum" type="enumFieldType" />
+			<xs:element name="dictionary" type="dictionaryFieldType" />
+			<xs:element name="password" type="characterFieldType" />
+			<xs:element name="priority" type="priorityFieldType" minOccurs="0" maxOccurs="1" />
+		</xs:choice>
+	</xs:complexType>
+
+</xs:schema>

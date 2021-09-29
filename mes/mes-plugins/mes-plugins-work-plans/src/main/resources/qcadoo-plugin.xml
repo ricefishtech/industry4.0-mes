@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+ <plugin plugin="workPlans" group="planning" version="${qcadoo.plugin.version}"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/plugin"
+        xmlns:model="http://schema.qcadoo.org/modules/model" xmlns:view="http://schema.qcadoo.org/modules/view"
+        xmlns:menu="http://schema.qcadoo.org/modules/menu"
+        xmlns:localization="http://schema.qcadoo.org/modules/localization"
+        xmlns:custom="http://schema.qcadoo.org/modules/custom"
+        xsi:schemaLocation="
+		http://schema.qcadoo.org/plugin 
+		http://schema.qcadoo.org/plugin.xsd 
+		http://schema.qcadoo.org/modules/model 
+		http://schema.qcadoo.org/modules/model.xsd 
+		http://schema.qcadoo.org/modules/view 
+		http://schema.qcadoo.org/modules/view.xsd 
+		http://schema.qcadoo.org/modules/localization 
+		http://schema.qcadoo.org/modules/localization.xsd 
+		http://schema.qcadoo.org/modules/menu 
+		http://schema.qcadoo.org/modules/menu.xsd 
+		http://schema.qcadoo.org/modules/custom 
+		http://schema.qcadoo.org/modules/custom.xsd">
+
+    <information>
+        <name>MES - Work Plans</name>
+        <vendor>
+            <name>Qcadoo Limited</name>
+            <url>http://www.qcadoo.com/</url>
+        </vendor>
+        <description>Print work plan which will give your workers a detailed instruction that operations are to be
+            executed on the
+            specified orders.
+        </description>
+        <license>AGPL</license>
+    </information>
+
+    <dependencies>
+        <dependency>
+            <plugin>orders</plugin>
+            <version>[1.2.1</version>
+        </dependency>
+        <dependency>
+            <plugin>columnExtension</plugin>
+            <version>[1.1.8</version>
+        </dependency>
+        <dependency>
+            <plugin>productionCounting</plugin>
+            <version>[3.0.0</version>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <localization:translation path="locales"/>
+
+        <model:model model="workPlan" resource="model/workPlan.xml"/>
+
+        <model:model model="columnForOrders" resource="model/columnForOrders.xml"/>
+        <model:model model="parameterOrderColumn" resource="model/parameterOrderColumn.xml"/>
+        <model:model model="workPlanOrderColumn" resource="model/workPlanOrderColumn.xml"/>
+
+        <model:model model="columnForInputProducts" resource="model/columnForInputProducts.xml"/>
+        <model:model model="columnForOutputProducts" resource="model/columnForOutputProducts.xml"/>
+        <model:model model="parameterInputColumn" resource="model/parameterInputColumn.xml"/>
+        <model:model model="parameterOutputColumn" resource="model/parameterOutputColumn.xml"/>
+
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="takeActualProgressInWorkPlans"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="dontPrintOrdersInWorkPlans"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="printOperationAtFirstPageInWorkPlans"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="hideDescriptionInWorkPlans"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="hideTechnologyAndOrderInWorkPlans"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="generateEachOnSeparatePage"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:file name="imageUrlInWorkPlan">
+                <model:validatesWith
+                        class="com.qcadoo.mes.workPlans.validators.ParameterValidatorsWP"
+                        method="validatesWith"/>
+            </model:file>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="dontPrintInputProductsInWorkPlans"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="dontPrintOutputProductsInWorkPlans"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="parameter">
+            <model:hasMany name="parameterOrderColumns" plugin="workPlans"
+                           model="parameterOrderColumn" joinField="parameter" cascade="delete"
+                           copyable="true"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:hasMany name="parameterInputColumns" plugin="workPlans"
+                           model="parameterInputColumn" joinField="parameter" cascade="delete"
+                           copyable="true"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:hasMany name="parameterOutputColumns" plugin="workPlans"
+                           model="parameterOutputColumn" joinField="parameter" cascade="delete"
+                           copyable="true"/>
+        </model:model-field>
+
+        <model:model-field model="parameter" plugin="basic">
+            <model:integer name="additionalInputRows">
+                <model:validatesRange from="0"/>
+            </model:integer>
+        </model:model-field>
+
+        <model:model-field model="parameter" plugin="basic">
+            <model:integer name="additionalOutputRows">
+                <model:validatesRange from="0"/>
+            </model:integer>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="hideBarcodeOperationComponentInWorkPlans"/>
+        </model:model-field>
+
+        <model:model-field plugin="technologies" model="operation">
+            <model:file name="imageUrlInWorkPlan">
+                <model:validatesWith
+                        class="com.qcadoo.mes.workPlans.validators.OperationValidatorsWP"
+                        method="validatesWith"/>
+            </model:file>
+        </model:model-field>
+
+        <model:model-field plugin="technologies"
+                           model="operationProductInComponent">
+            <model:boolean name="showMaterialComponent"/>
+        </model:model-field>
+
+        <model:model-field plugin="orders" model="order">
+            <model:manyToMany name="workPlans" joinField="orders"
+                              model="workPlan" plugin="workPlans"/>
+        </model:model-field>
+        <model:model-field plugin="orders" model="order">
+            <model:boolean name="workPlanDelivered" default="false" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="workPlans" model="columnForInputProducts">
+            <model:hasMany name="workPlan" plugin="workPlans" model="workPlan"
+                           joinField="inputProductColumnToSortBy" cascade="nullify"/>
+        </model:model-field>
+
+        <view:view-grid-column view="ordersList" component="grid" plugin="orders">
+            <view:column name="workPlanDelivered" fields="workPlanDelivered"
+                         orderable="true" searchable="true" width="40"/>
+        </view:view-grid-column>
+
+        <view:view-grid-column view="ordersPlanningList" component="grid" plugin="orders">
+            <view:column name="workPlanDelivered" fields="workPlanDelivered"
+                         orderable="true" searchable="true" width="15"/>
+        </view:view-grid-column>
+
+        <model:model-hook plugin="orders" model="order">
+            <model:onCreate class="com.qcadoo.mes.workPlans.hooks.OrderHooksWP" method="onCreate"/>
+        </model:model-hook>
+
+        <model:model-hook plugin="orders" model="order">
+            <model:onCopy class="com.qcadoo.mes.workPlans.hooks.OrderHooksWP" method="onCopy"/>
+        </model:model-hook>
+
+        <model:model-hook plugin="workPlans" model="workPlan">
+            <model:onCreate class="com.qcadoo.mes.workPlans.hooks.WorkPlanHooks"
+                            method="onCreate"/>
+        </model:model-hook>
+
+        <menu:menu-item name="workPlans" category="orders"
+                        view="workPlansList" defaultAuthorizationRole="ROLE_PLANNING"/>
+
+        <view:view-ribbon-group resource="view/ribbonExtensions/ordersPlanningList.xml"/>
+        <view:view-ribbon-group resource="view/ribbonExtensions/ordersList.xml"/>
+        <view:view-ribbon-group resource="view/ribbonExtensions/parameters.xml"/>
+
+        <view:view resource="view/workPlansList.xml"/>
+        <view:view resource="view/workPlanDetails.xml"/>
+
+        <view:view resource="view/parameterOrderColumnDetails.xml"/>
+        <view:view resource="view/workPlanOrderColumnDetails.xml"/>
+
+        <view:view resource="view/parameterInputColumnDetails.xml"/>
+        <view:view resource="view/parameterOutputColumnDetails.xml"/>
+        <view:view resource="view/workPlanParameters.xml"/>
+
+        <view:view-tab resource="view/tabExtensions/operationDetailsBasicTab.xml"/>
+        <view:view-tab
+                resource="view/tabExtensions/operationProductInComponentDetailsTab.xml"/>
+
+        <view:view-listener plugin="basic" view="parameters"
+                            component="form" event="redirectToWorkPlanParameters"
+                            class="com.qcadoo.mes.workPlans.listeners.ParametersListenersWP"
+                            method="redirectToWorkPlanParameters"/>
+
+        <view:view-hook plugin="technologies" view="operationDetails"
+                        type="beforeRender" class="com.qcadoo.mes.workPlans.hooks.OperationDetailsHooksWP"
+                        method="setOperationDefaultValues"/>
+
+        <view:view-listener plugin="orders" view="ordersList"
+                            component="grid" event="addSelectedOrdersToWorkPlan"
+                            class="com.qcadoo.mes.workPlans.listeners.OrdersListListenersWP"
+                            method="addSelectedOrdersToWorkPlan"/>
+
+        <view:view-listener plugin="orders" view="ordersPlanningList"
+                            component="grid" event="addSelectedOrdersToWorkPlan"
+                            class="com.qcadoo.mes.workPlans.listeners.OrdersPlanningListListenersWP"
+                            method="addSelectedOrdersToWorkPlan"/>
+
+        <view:view-listener plugin="orders" view="ordersList"
+                            component="grid" event="workPlanDelivered"
+                            class="com.qcadoo.mes.workPlans.listeners.OrdersListListenersWP"
+                            method="workPlanDelivered"/>
+
+        <view:view-listener plugin="orders" view="ordersPlanningList"
+                            component="grid" event="workPlanDelivered"
+                            class="com.qcadoo.mes.workPlans.listeners.OrdersPlanningListListenersWP"
+                            method="workPlanDelivered"/>
+
+        <custom:custom class="com.qcadoo.mes.workPlans.WorkPlansOnStartupService"/>
+    </modules>
+
+    <features>
+        <end-user/>
+    </features>
+
+</plugin>

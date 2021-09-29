@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<plugin plugin="basic" group="basic" system="false"
+        version="${qcadoo.plugin.version}"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/plugin"
+        xmlns:model="http://schema.qcadoo.org/modules/model" xmlns:view="http://schema.qcadoo.org/modules/view"
+        xmlns:menu="http://schema.qcadoo.org/modules/menu"
+        xmlns:security="http://schema.qcadoo.org/modules/security"
+        xmlns:localization="http://schema.qcadoo.org/modules/localization"
+        xmlns:custom="http://schema.qcadoo.org/modules/custom"
+        xsi:schemaLocation="http://schema.qcadoo.org/plugin
+            http://schema.qcadoo.org/plugin.xsd
+            http://schema.qcadoo.org/modules/security
+            http://schema.qcadoo.org/modules/security.xsd
+            http://schema.qcadoo.org/modules/model
+            http://schema.qcadoo.org/modules/model.xsd
+            http://schema.qcadoo.org/modules/view
+            http://schema.qcadoo.org/modules/view.xsd
+            http://schema.qcadoo.org/modules/localization
+            http://schema.qcadoo.org/modules/localization.xsd
+            http://schema.qcadoo.org/modules/menu
+            http://schema.qcadoo.org/modules/menu.xsd
+            http://schema.qcadoo.org/modules/custom
+            http://schema.qcadoo.org/modules/custom.xsd">
+
+    <information>
+        <name>MES - Basic</name>
+        <vendor>
+            <name>Qcadoo Limited</name>
+            <url>http://www.qcadoo.com/</url>
+        </vendor>
+        <description>Basic data like products, people, shifts, companies, etc.</description>
+        <license>AGPL</license>
+    </information>
+
+    <dependencies>
+        <dependency>
+            <plugin>qcadooDictionaries</plugin>
+            <version>[1.1.8</version>
+        </dependency>
+        <dependency>
+            <plugin>qcadooUnitConversions</plugin>
+            <version>[1.1.8</version>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <localization:translation-group name="dashboard" prefix="basic.dashboard"/>
+        <localization:translation-group name="documentGrid" prefix="documentGrid"/>
+
+        <localization:translation path="locales"
+                                  basename="basic"/>
+
+        <security:role identifier="ROLE_PRODUCTS"/>
+        <security:role identifier="ROLE_PRODUCT_FAMILIES"/>
+
+        <security:role identifier="ROLE_COMPANY"/>
+        <security:role identifier="ROLE_COMPANY_STRUCTURE"/>
+        <security:role identifier="ROLE_COMPANY_STRUCTURE_EDIT"/>
+
+        <security:role identifier="ROLE_BASE_FUNCTIONALITY"/>
+        <security:role identifier="ROLE_REQUIREMENTS"/>
+        <security:role identifier="ROLE_STAFF_WAGES"/>
+
+        <security:role identifier="ROLE_MAINTENANCE"/>
+        <security:role identifier="ROLE_MAINTENANCE_MENU"/>
+
+        <security:role identifier="ROLE_MACHINE_PARTS"/>
+        <security:role identifier="ROLE_COUNTRIES"/>
+        <security:role identifier="ROLE_PARAMETERS"/>
+        <security:role identifier="ROLE_BASIC"/>
+
+        <security:role identifier="ROLE_TECHNOLOGIES"/>
+        <security:role identifier="ROLE_TECHNOLOGIES_ADVANCED"/>
+
+        <security:role identifier="ROLE_PLANNING"/>
+        <security:role identifier="ROLE_PLANNING_ORDERS"/>
+        <security:role identifier="ROLE_PLANNING_MASTER_ORDERS"/>
+
+        <security:role identifier="ROLE_PLANNING_ON_LINE_VIEW"/>
+        <security:role identifier="ROLE_PLANNING_ON_LINE_ACTIONS"/>
+
+        <security:role identifier="ROLE_PRODUCTION_COUNTING"/>
+        <security:role identifier="ROLE_PRODUCTION_TRACKING"/>
+
+        <security:role identifier="ROLE_ANALYSIS_VIEWER"/>
+
+        <security:role identifier="ROLE_ORDERS_TRACKING"/>
+
+        <security:role identifier="ROLE_GENEALOGY"/>
+        <security:role identifier="ROLE_ADVANCED_GENEALOGY"/>
+        <security:role identifier="ROLE_BATCHES"/>
+        <security:role identifier="ROLE_PALLET_NUMBERS"/>
+
+        <!--RicefishDev 质检-->
+        <security:role identifier="ROLE_QUALITY_CONTROLS"/>
+
+        <!-- Event roles -->
+
+        <security:role identifier="ROLE_EVENTS"/>
+        <security:role identifier="ROLE_EVENTS_DELETE"/>
+        <security:role identifier="ROLE_EVENTS_START"/>
+        <security:role identifier="ROLE_EVENTS_STOP"/>
+        <security:role identifier="ROLE_EVENTS_REVOKE"/>
+        <security:role identifier="ROLE_EVENTS_CLOSE"/>
+        <security:role identifier="ROLE_EVENTS_PLAN"/>
+        <security:role identifier="ROLE_EVENTS_ACCEPT"/>
+
+        <security:role identifier="ROLE_EVENTS_ADD_FAILURE"/>
+        <security:role identifier="ROLE_EVENTS_ADD_ISSUE"/>
+        <security:role identifier="ROLE_EVENTS_ADD_PROPOSAL"/>
+
+        <security:role identifier="ROLE_EVENTS_TAB_DOCUMENTS"/>
+        <security:role identifier="ROLE_EVENTS_TAB_HISTORY"/>
+        <security:role identifier="ROLE_EVENTS_TAB_ATTACHMENTS"/>
+
+        <security:role identifier="ROLE_EVENTS_SOURCE_COST_CHANGE"/>
+        <security:role identifier="ROLE_EVENTS_DELETE_ATTACHMENT"/>
+        <security:role identifier="ROLE_EVENTS_EDIT_AFTER_SAVE"/>
+        <security:role identifier="ROLE_EVENTS_VIEW_PARTS_TIME_DESCRIPTION"/>
+        <security:role identifier="ROLE_EVENTS_LIST_EXPORT"/>
+
+        <security:role identifier="ROLE_EVENTS_NOTIFICATION"/>
+
+        <!-- end -->
+
+        <!-- roles for planned events -->
+
+        <security:role identifier="ROLE_PLANNED_EVENTS_ACTIONS_ADD"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_ACTIONS_REMOVE"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_ACTIONS_EDIT"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_ACTIONS_VIEW"/>
+
+        <security:role identifier="ROLE_PLANNED_EVENTS_BASIC_EDIT"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_ADVANCED_EDIT"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_DATES_EDIT"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_DOCUMENTS"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_HISTORY"/>
+
+        <security:role identifier="ROLE_PLANNED_EVENTS_STATES_OTHER"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_STATES_ACCEPT"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_STATES_START_STOP"/>
+
+        <security:role identifier="ROLE_PLANNED_EVENTS_ATTACHMENTS"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_EDIT_RELATED"/>
+        <security:role identifier="ROLE_PLANNED_EVENTS_ATTACHMENTS_REMOVE"/>
+
+        <!-- end -->
+
+        <security:role identifier="ROLE_SHIFTS"/>
+        <security:role identifier="ROLE_CREW"/>
+        <security:role identifier="ROLE_FAULT_TYPES"/>
+        <security:role identifier="ROLE_DOCUMENT_POSITIONS"/>
+        <security:role identifier="ROLE_WAREHOUSE_STATES"/>
+        <security:role identifier="ROLE_ASSIGNMENT_TO_SHIFT"/>
+        <security:role identifier="ROLE_SOURCE_COST"/>
+
+        <security:role identifier="ROLE_CMMS_SCHEDULER_PREVIEW"/>
+        <security:role identifier="ROLE_CMMS_SCHEDULER_PART_EDIT"/>
+        <security:role identifier="ROLE_CMMS_SCHEDULER_FULL_EDIT"/>
+
+        <security:role identifier="ROLE_RECURRING_EVENTS"/>
+        <security:role identifier="ROLE_CALCULATIONS"/>
+
+        <security:role identifier="ROLE_DELIVERIES_EDIT"/>
+        <security:role identifier="ROLE_DELIVERIES_STATES_DECLINE"/>
+        <security:role identifier="ROLE_DELIVERIES_STATES_OTHER"/>
+
+        <security:role identifier="ROLE_TIME_GAPS"/>
+        <security:role identifier="ROLE_LINE_CHANGEOVER_NORMS_IN_ORDERS"/>
+        <security:role identifier="ROLE_PRODUCTION_PER_SHIFT"/>
+        <security:role identifier="ROLE_ACTIONS"/>
+        <security:role identifier="ROLE_PRODUCTION_REGISTRATION_TERMINAL"/>
+        <security:role identifier="ROLE_REPAIR_ORDERS"/>
+
+        <security:role identifier="ROLE_DOCUMENTS_CORRECTIONS_MIN_STATES"/>
+
+        <security:role identifier="ROLE_TERMINAL_USER"/>
+        <security:role identifier="ROLE_TERMINAL_CONFECTION_USER"/>
+        <security:role identifier="ROLE_TERMINAL_EXTRUSION_USER"/>
+        <security:role identifier="ROLE_TERMINAL_EXTRUSION_PRINT"/>
+        <security:role identifier="ROLE_EXTRUSION_PROTOCOLS_LIST"/>
+        <security:role identifier="ROLE_TERMINAL_PALLET_USER"/>
+        <security:role identifier="ROLE_PALLET_LIST"/>
+        <security:role identifier="ROLE_PALLET_LIST_EDIT"/>
+        <security:role identifier="ROLE_TERMINAL_PALLET_PRINT_MULTIPLE"/>
+        <security:role identifier="ROLE_TERMINAL_CONFECTION_PRINT_MULTIPLE"/>
+        <security:role identifier="ROLE_TERMINAL_CARTON_LABELS"/>
+        <security:role identifier="ROLE_TERMINAL_PALLET_PRINT_MULTIPLE"/>
+        <security:role identifier="ROLE_PALLET_DETAILS_FIX_STATE"/>
+        <security:role identifier="ROLE_PRINTED_LABEL_DETAILS_REPRINT"/>
+
+        <security:role identifier="ROLE_SUBCONTRACTOR"/>
+        <security:role identifier="ROLE_LOGS"/>
+
+        <security:role identifier="ROLE_ZMBAK"/>
+
+        <security:role identifier="ROLE_PRODUCTION_COUNTING_FROM_PRODUCTION_TRACKING"/>
+
+        <security:role identifier="ROLE_DOCUMENTS_NOTIFICATION"/>
+
+        <security:role identifier="ROLE_PRINTERS"/>
+
+        <security:role identifier="ROLE_SKILLS"/>
+        <security:role identifier="ROLE_STANDARDS"/>
+
+        <model:model model="company" resource="model/company.xml"/>
+        <model:model model="staff" resource="model/staff.xml"/>
+        <model:model model="crew" resource="model/crew.xml"/>
+        <model:model model="shift" resource="model/shift.xml"/>
+        <model:model model="shiftTimetableException" resource="model/shiftTimetableException.xml"/>
+        <model:model model="product" resource="model/product.xml"/>
+        <model:model model="substitute" resource="model/substitute.xml"/>
+        <model:model model="substituteComponent" resource="model/substituteComponent.xml"/>
+        <model:model model="workstationType" resource="model/workstationType.xml"/>
+        <model:model model="division" resource="model/division.xml"/>
+
+        <model:model model="parameter" resource="model/parameter.xml"/>
+        <model:model model="log" resource="model/log.xml"/>
+        <model:model model="viewedActivity" resource="model/viewedActivity.xml"/>
+
+        <model:model model="country" resource="model/country.xml"/>
+        <model:model model="address" resource="model/address.xml"/>
+        <model:model model="currency" resource="model/currency.xml"/>
+
+        <model:model model="reportColumnWidth" resource="model/reportColumnWidth.xml"/>
+
+        <model:model model="workstation" resource="model/workstation.xml"/>
+        <model:model model="workstationAttachment" resource="model/workstationAttachment.xml"/>
+
+        <model:model model="factory" resource="model/factory.xml"/>
+        <model:model model="subassembly" resource="model/subassembly.xml"/>
+        <model:model model="subassemblyListDto" resource="model/subassemblyListDto.xml"/>
+        <model:model model="subassemblyAttachment" resource="model/subassemblyAttachment.xml"/>
+        <model:model model="subassemblyToWorkstationHelper" resource="model/subassemblyToWorkstationHelper.xml"/>
+
+        <model:model model="additionalCode" resource="model/additionalCode.xml"/>
+
+        <model:model model="palletNumber" resource="model/palletNumber.xml"/>
+        <model:model model="palletNumberHelper" resource="model/palletNumberHelper.xml"/>
+
+        <model:model model="faultType" resource="model/faultType.xml"/>
+
+        <model:model model="assortment" resource="model/assortment.xml"/>
+        <model:model model="assortmentElement" resource="model/assortmentElement.xml"/>
+
+        <model:model model="timetableExceptionDto" resource="model/timetableExceptionDto.xml"/>
+        <model:model model="timetableExceptionPerShiftDto" resource="model/timetableExceptionPerShiftDto.xml"/>
+
+        <model:model model="productAttachment" resource="model/productAttachment.xml"/>
+        <model:model model="productDto" resource="model/productDto.xml"/>
+        <model:model model="attachmentDto" resource="model/attachmentDto.xml"/>
+
+		<model:model model="skill" resource="model/skill.xml"/>
+		<model:model model="staffSkill" resource="model/staffSkill.xml"/>
+        <model:model model="standard" resource="model/standard.xml"/>
+
+        <model:dictionary name="categories"/>
+        <model:dictionary name="posts"/>
+        <model:dictionary name="reasonTypeOfChangingOrderState"/>
+
+        <model:dictionary name="typeOfSubassembly"/>
+
+        <model:dictionary name="typeOfPallet"/>
+        <model:dictionary name="addressType"/>
+
+        <model:dictionary name="descriptionTypes"/>
+
+        <model:dictionary name="color"/>
+
+        <menu:menu-category name="basic"/>
+        <menu:menu-category name="companyStructure" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE"/>
+
+        <menu:menu-item-url name="home" category="home"
+                            url="/dashboard.html"/>
+
+        <menu:menu-item name="companies" category="basic"
+                        view="companiesList" defaultAuthorizationRole="ROLE_COMPANY"/>
+
+        <menu:menu-item name="countries" category="administration"
+                        view="countriesList" defaultAuthorizationRole="ROLE_COUNTRIES"/>
+
+        <menu:menu-item name="staff" category="basic" view="staffsList" defaultAuthorizationRole="ROLE_STAFF_WAGES"/>
+        <menu:menu-item name="crews" category="basic" view="crewsList" defaultAuthorizationRole="ROLE_CREW"/>
+        <menu:menu-item name="shifts" category="basic" view="shiftsList" defaultAuthorizationRole="ROLE_SHIFTS"/>
+        <menu:menu-item name="products" category="basic" view="productsList" defaultAuthorizationRole="ROLE_PRODUCTS"/>
+        <menu:menu-item name="productsFamilies" category="basic"
+                        view="productsFamilies" defaultAuthorizationRole="ROLE_PRODUCT_FAMILIES"/>
+
+        <menu:menu-item name="assortments" category="basic" view="assortmentsList"
+                        defaultAuthorizationRole="ROLE_PRODUCTS"/>
+
+        <menu:menu-item name="palletNumbers" category="basic" view="palletNumbersList"
+                        defaultAuthorizationRole="ROLE_PALLET_NUMBERS"/>
+        <menu:menu-item name="palletNumberHelpers" category="basic" view="palletNumberHelpersList"
+                        defaultAuthorizationRole="ROLE_PALLET_NUMBERS"/>
+
+        <menu:menu-item name="faultTypes" category="basic" view="faultTypesList"
+                        defaultAuthorizationRole="ROLE_FAULT_TYPES"/>
+
+
+        <menu:menu-item name="exceptionsForLineList" category="basic" view="exceptionsForLineList"
+                        defaultAuthorizationRole="ROLE_SHIFTS"/>
+
+        <menu:menu-item-url name="dictionariesInBasic"
+                            category="basic" url="/page/qcadooDictionaries/dictionariesList.html"
+                            defaultAuthorizationRole="ROLE_DICTIONARY_VIEW"/>
+
+        <menu:menu-item-url name="systemParameters"
+                            category="administration" url="/parameters.html"
+                            defaultAuthorizationRole="ROLE_PARAMETERS"/>
+
+        <menu:menu-item-url name="conversion" category="basic"
+                            url="/unitConversions.html" defaultAuthorizationRole="ROLE_BASE_FUNCTIONALITY"/>
+
+        <menu:menu-item name="subassemblies" category="companyStructure"
+                        view="subassembliesList" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE"/>
+
+        <menu:menu-item name="workstationTypes" category="companyStructure"
+                        view="workstationTypesList" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE"/>
+
+        <menu:menu-item name="workstations" category="companyStructure"
+                        view="workstationsList" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE"/>
+
+        <menu:menu-item name="divisions" category="companyStructure"
+                        view="divisionsList" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE"/>
+
+        <menu:menu-item name="factories" category="companyStructure"
+                        view="factoriesList" defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE"/>
+
+        <menu:menu-item name="logsList" category="administration"
+                        view="logsList" defaultAuthorizationRole="ROLE_LOGS"/>
+
+        <menu:menu-item name="attachmentsList" category="basic"
+                        view="attachmentsList" defaultAuthorizationRole="ROLE_BASIC"/>
+
+		<menu:menu-item name="skillsList" category="basic"
+						view="skillsList" defaultAuthorizationRole="ROLE_SKILLS"/>
+        <menu:menu-item name="standardsList" category="basic"
+                        view="standardsList" defaultAuthorizationRole="ROLE_STANDARDS"/>
+
+        <view:view resource="view/reportColumnWidthDetails.xml"/>
+        <view:view resource="view/companiesList.xml"/>
+        <view:view resource="view/companyDetails.xml"/>
+        <view:view resource="view/addressDetails.xml"/>
+        <view:view resource="view/countriesList.xml"/>
+        <view:view resource="view/countryDetails.xml"/>
+        <view:view resource="view/staffsList.xml"/>
+        <view:view resource="view/staffDetails.xml"/>
+        <view:view resource="view/crewsList.xml"/>
+        <view:view resource="view/crewDetails.xml"/>
+        <view:view resource="view/shiftsList.xml"/>
+        <view:view resource="view/shiftDetails.xml"/>
+        <view:view resource="view/shiftTimetableExceptionDetails.xml"/>
+        <view:view resource="view/productsList.xml"/>
+        <view:view resource="view/productsImport.xml"/>
+        <view:view resource="view/productDetails.xml"/>
+        <view:view resource="view/productSubstituteDetails.xml"/>
+        <view:view resource="view/productSubstituteComponentDetails.xml"/>
+        <view:view resource="view/productsFamilies.xml"/>
+        <view:view resource="view/productFamiliesAddProduct.xml"/>
+
+        <view:view resource="view/workstationTypesList.xml"/>
+        <view:view resource="view/workstationTypeDetails.xml"/>
+
+        <view:view resource="view/divisionsList.xml"/>
+        <view:view resource="view/divisionDetails.xml"/>
+
+        <view:view resource="view/parameters.xml"/>
+
+        <view:view resource="view/workstationsList.xml"/>
+        <view:view resource="view/workstationDetails.xml"/>
+        <view:view resource="view/workstationDetailsAddSubassembly.xml"/>
+
+        <view:view resource="view/factoriesList.xml"/>
+        <view:view resource="view/factoryDetails.xml"/>
+
+        <view:view resource="view/subassembliesList.xml"/>
+        <view:view resource="view/subassemblyDetails.xml"/>
+
+        <view:view resource="view/palletNumbersList.xml"/>
+        <view:view resource="view/palletNumberDetails.xml"/>
+
+        <view:view resource="view/palletNumberHelpersList.xml"/>
+        <view:view resource="view/palletNumberHelperDetails.xml"/>
+
+        <view:view resource="view/faultTypesList.xml"/>
+        <view:view resource="view/faultTypeDetails.xml"/>
+
+        <view:view resource="view/assortmentsList.xml"/>
+        <view:view resource="view/assortmentDetails.xml"/>
+        <view:view resource="view/logsList.xml"/>
+        <view:view resource="view/logDetails.xml"/>
+
+        <view:view resource="view/exceptionsForLineList.xml"/>
+        <view:view resource="view/attachmentsList.xml"/>
+
+		<view:view resource="view/skillsList.xml"/>
+		<view:view resource="view/skillDetails.xml"/>
+        <view:view resource="view/standardsList.xml"/>
+        <view:view resource="view/standardDetails.xml"/>
+
+		<view:view resource="view/staffSkillDetails.xml"/>
+
+		<view:view resource="view/skillStaffDetails.xml"/>
+
+		<view:view resource="view/productReplacements.xml"/>
+
+        <view:view-tab resource="view/tabExtensions/userDetailsStaffTab.xml"/>
+        <view:view-tab resource="view/tabExtensions/userProfile.xml"/>
+
+        <model:model-field plugin="qcadooSecurity" model="user">
+            <model:belongsTo model="staff" plugin="basic" name="staff"/>
+        </model:model-field>
+        <!-- For constraints sake -->
+        <model:model-field plugin="basic" model="staff">
+            <model:hasMany plugin="qcadooSecurity" model="user"
+                           joinField="staff" name="users" cascade="nullify"/>
+        </model:model-field>
+
+        <model:model-field plugin="qcadooSecurity" model="user">
+            <model:belongsTo model="factory" plugin="basic" name="factory"/>
+        </model:model-field>
+        <!-- For constraints sake -->
+        <model:model-field plugin="basic" model="factory">
+            <model:hasMany plugin="qcadooSecurity" model="user"
+                           joinField="factory" name="users" cascade="nullify"/>
+        </model:model-field>
+
+        <model:model-field plugin="productionLines" model="productionLine">
+            <model:manyToMany name="shiftTimetableExceptions" plugin="basic" model="shiftTimetableException"
+                              joinField="productionLines" cascade="nullify" lazy="true"/>
+        </model:model-field>
+
+        <model:model-hook plugin="qcadooSecurity" model="user">
+            <model:validatesWith
+                    class="com.qcadoo.mes.basic.validators.UserValidators" method="onValidate"/>
+        </model:model-hook>
+
+        <model:model-field model="unitConversionItem"
+                           plugin="qcadooModel">
+            <model:belongsTo name="product" model="product"
+                             plugin="basic"/>
+        </model:model-field>
+
+        <model:model-hook model="unitConversionItem" plugin="qcadooModel">
+            <model:validatesWith
+                    class="com.qcadoo.mes.basic.hooks.UnitConversionItemValidatorsB"
+                    method="validateUnitOnConversionWithProduct"/>
+        </model:model-hook>
+
+        <custom:custom class="com.qcadoo.mes.basic.BasicOnStartupService"/>
+
+        <view:resource uri="public/**/*"/>
+
+    </modules>
+
+    <features>
+        <end-user/>
+    </features>
+
+</plugin>

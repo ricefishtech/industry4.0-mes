@@ -1,0 +1,60 @@
+/**
+ * ***************************************************************************
+ * Copyright (c) 2010 Qcadoo Limited
+ * Project: Qcadoo Framework
+ * Version: 1.4
+ *
+ * This file is part of Qcadoo.
+ *
+ * Qcadoo is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * ***************************************************************************
+ */
+.pluginInfoPage {
+	text-align: left;
+	margin: 10px 10px 0px 10px;
+}
+
+.pluginInfoPage .dependencies {
+	margin-top: 15px;
+	color: #464646;
+}
+.pluginInfoPage .dependencies .dependency {
+	margin-left: 20px;
+}
+.pluginInfoPage .dependencies .dependency .dependencyIdentifier {
+	
+}
+.pluginInfoPage .dependencies .dependency .dependencyVersion {
+	color: #888888;
+}
+
+.pluginInfoPage .confirmButtons {
+	margin-top: 15px;
+	text-align: center;
+}
+.pluginInfoPage .confirmButtons .confirmButton {
+	width: 200px;
+	display: inline-block;	
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.successHeader {
+	color: green;
+}
+
+.errorHeader {
+	color: red;
+}

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<plugin plugin="productionLines" group="basic" version="${qcadoo.plugin.version}"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/plugin"
+        xmlns:model="http://schema.qcadoo.org/modules/model" xmlns:view="http://schema.qcadoo.org/modules/view"
+        xmlns:menu="http://schema.qcadoo.org/modules/menu"
+        xmlns:localization="http://schema.qcadoo.org/modules/localization"
+        xsi:schemaLocation="http://schema.qcadoo.org/plugin
+       http://schema.qcadoo.org/plugin.xsd
+       http://schema.qcadoo.org/modules/model
+       http://schema.qcadoo.org/modules/model.xsd
+       http://schema.qcadoo.org/modules/view
+       http://schema.qcadoo.org/modules/view.xsd
+       http://schema.qcadoo.org/modules/localization
+       http://schema.qcadoo.org/modules/localization.xsd
+
+
+       http://schema.qcadoo.org/modules/menu
+       http://schema.qcadoo.org/modules/menu.xsd">
+    <information>
+        <name>MES - Production lines</name>
+        <vendor>
+            <name>Qcadoo Limited</name>
+            <url>http://www.qcadoo.com/</url>
+        </vendor>
+        <description>Lets you define production lines.</description>
+        <license>AGPL</license>
+    </information>
+
+    <dependencies>
+        <dependency>
+            <plugin>basic</plugin>
+            <version>[1.1.7</version>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <localization:translation path="locales"/>
+
+        <model:dictionary name="productionLinePlaces"/>
+        <model:dictionary name="productionLinePlacesForSCADA"/>
+
+        <model:model model="productionLine" resource="model/productionLine.xml"/>
+        <model:model model="factoryStructureElement" resource="model/factoryStructureElement.xml"/>
+        <model:model model="workstationTypeComponent" resource="model/workstationTypeComponent.xml"/>
+
+        <model:model-field plugin="basic" model="parameter">
+            <model:belongsTo name="defaultProductionLine" plugin="productionLines"
+                             model="productionLine" required="true"/>
+        </model:model-field>
+
+        <model:model-field model="division" plugin="basic">
+            <!--<model:hasMany name="productionLines" joinField="division" model="productionLine" cascade="nullify"-->
+            <!--plugin="productionLines"/>-->
+            <model:manyToMany name="productionLines" joinField="divisions" model="productionLine"
+                              plugin="productionLines" cascade="nullify"/>
+        </model:model-field>
+
+        <model:model-field model="workstation" plugin="basic">
+            <model:belongsTo name="productionLine" model="productionLine" plugin="productionLines"/>
+        </model:model-field>
+
+        <model:model-field model="workstation" plugin="basic">
+            <model:tree name="factoryStructure" model="factoryStructureElement"
+                        joinField="workstation" cascade="delete" plugin="productionLines"/>
+        </model:model-field>
+
+
+        <model:model-field model="subassembly" plugin="basic">
+            <model:tree name="factoryStructure" model="factoryStructureElement"
+                        joinField="subassembly" cascade="delete" plugin="productionLines"/>
+        </model:model-field>
+
+        <model:model-hook model="parameter" plugin="basic">
+            <model:onCreate
+                    class="com.qcadoo.mes.productionLines.hooks.ParameterHooksPL" method="addFieldsForParameter"/>
+        </model:model-hook>
+
+        <model:model-hook model="workstation" plugin="basic">
+            <model:onDelete class="com.qcadoo.mes.productionLines.hooks.WorkstationHooksPL" method="onDelete"/>
+        </model:model-hook>
+
+        <model:model-hook model="division" plugin="basic">
+            <model:onDelete class="com.qcadoo.mes.productionLines.hooks.DivisionModelHooksPL" method="onDelete"/>
+        </model:model-hook>
+
+        <menu:menu-item name="productionLines" category="companyStructure"
+                        view="productionLinesList"  defaultAuthorizationRole="ROLE_COMPANY_STRUCTURE"/>
+
+        <view:view resource="view/productionLinesList.xml"/>
+        <view:view resource="view/productionLineDetails.xml"/>
+
+        <view:view resource="view/workstationTypeComponentDetails.xml"/>
+
+        <view:view-tab resource="view/tabExtensions/divisionDetails.xml"/>
+        <view:view-tab resource="view/tabExtensions/workstationDetails.xml"/>
+        <view:view-tab resource="view/tabExtensions/subassemblyDetails.xml"/>
+
+        <view:view-ribbon-group resource="view/ribbonExtensions/workstationDetails.xml"/>
+        <view:view-ribbon-group resource="view/ribbonExtensions/subassemblyDetails.xml"/>
+
+        <view:view-grid-column view="workstationsList" component="grid" plugin="basic">
+            <view:column name="productionLine" fields="productionLine" expression="#productionLine['name']"
+                         orderable="true"
+                         searchable="true"/>
+        </view:view-grid-column>
+
+        <view:view-hook plugin="basic" view="divisionDetails" type="beforeRender"
+                        class="com.qcadoo.mes.productionLines.hooks.DivisionDetailsHooksPL"
+                        method="fillCriteriaModifiers"/>
+
+        <view:view-listener plugin="basic" view="workstationDetails" component="form" event="generateFactoryStructure"
+                            class="com.qcadoo.mes.productionLines.listeners.WorkstationDetailsListenersPL"
+                            method="generateFactoryStructure"/>
+
+        <view:view-listener plugin="basic" view="subassemblyDetails" component="form" event="generateFactoryStructure"
+                            class="com.qcadoo.mes.productionLines.listeners.SubassemblyDetailsListenersPL"
+                            method="generateFactoryStructure"/>
+
+        <view:resource uri="public/**/*"/>
+
+    </modules>
+    <features>
+        <end-user/>
+    </features>
+</plugin>

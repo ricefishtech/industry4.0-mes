@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<plugin plugin="cmmsMachineParts" xmlns:view="http://schema.qcadoo.org/modules/view"
+        xmlns:menu="http://schema.qcadoo.org/modules/menu"
+        group="other"
+        version="${qcadoo.plugin.version}"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/plugin"
+        xmlns:model="http://schema.qcadoo.org/modules/model"
+        xmlns:localization="http://schema.qcadoo.org/modules/localization"
+        xmlns:custom="http://schema.qcadoo.org/modules/custom"
+        xsi:schemaLocation="http://schema.qcadoo.org/plugin
+       http://schema.qcadoo.org/plugin.xsd
+       http://schema.qcadoo.org/modules/model
+       http://schema.qcadoo.org/modules/model.xsd
+       http://schema.qcadoo.org/modules/view
+       http://schema.qcadoo.org/modules/view.xsd
+       http://schema.qcadoo.org/modules/localization
+       http://schema.qcadoo.org/modules/localization.xsd">
+
+    <information>
+        <name>MES - CMMS Machine Parts</name>
+        <vendor>
+            <name>Qcadoo Limited</name>
+            <url>http://www.qcadoo.com</url>
+        </vendor>
+        <license>AGPL</license>
+        <description>Computerised Maintenance Management Systems - provides machine parts and events management
+        </description>
+    </information>
+
+    <dependencies>
+        <dependency>
+            <plugin>deliveries</plugin>
+            <version>[1.4.0</version>
+        </dependency>
+        <dependency>
+            <plugin>materialFlowResources</plugin>
+            <version>[1.4.0</version>
+        </dependency>
+        <dependency>
+            <plugin>warehouseMinimalState</plugin>
+            <version>[1.4.0</version>
+        </dependency>
+        <dependency>
+            <plugin>productionLines</plugin>
+            <version>[1.4.0</version>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <localization:translation path="locales"/>
+        <localization:translation-group name="actionsGrid" prefix="actionsGrid"/>
+        <localization:translation-group name="documentGrid" prefix="documentGrid"/>
+
+        <!-- view -->
+        <view:view resource="view/machinePartsList.xml"/>
+        <view:view resource="view/machinePartDetails.xml"/>
+
+        <view:view resource="view/productSubstituteComponentDetails.xml"/>
+
+        <view:view resource="view/actionsList.xml"/>
+        <view:view resource="view/actionDetails.xml"/>
+
+        <view:view resource="view/eventsList.xml"/>
+        <view:view resource="view/maintenanceEventDetails.xml"/>
+        <view:view resource="view/addNewEvent.xml"/>
+
+        <view:view resource="view/staffWorkTimeDetails.xml"/>
+        <view:view resource="view/machinePartForEventDetails.xml"/>
+
+        <view:view resource="view/maintenanceEventStateChangeReasonDialog.xml"/>
+
+        <view:view resource="view/maintenanceEventToPlannedEventDialog.xml"/>
+
+        <view:view resource="view/oldSolutionsSubassembly.xml"/>
+        <view:view resource="view/oldSolutionsWorkstation.xml"/>
+        <view:view resource="view/oldSolutionsLine.xml"/>
+        <view:view resource="view/oldSolutionsDivision.xml"/>
+
+        <view:view resource="view/sourceCostDetails.xml"/>
+        <view:view resource="view/sourceCostList.xml"/>
+
+        <menu:menu-category name="maintenance"/>
+
+        <menu:menu-item name="sourceCostList" category="maintenance" view="sourceCostList"
+                        defaultAuthorizationRole="ROLE_SOURCE_COST"/>
+
+        <menu:menu-item name="events" category="maintenance" view="eventsList"
+                        defaultAuthorizationRole="ROLE_EVENTS"/>
+
+        <menu:menu-item name="machineParts" category="basic" view="machinePartsList"
+                        defaultAuthorizationRole="ROLE_MACHINE_PARTS"/>
+
+        <menu:menu-item name="plannedEvents" category="maintenance" view="plannedEventsList"
+                        defaultAuthorizationRole="ROLE_PLANNED_EVENTS_ACTIONS_VIEW"/>
+        <menu:menu-item name="actions" category="basic" view="actionsList" defaultAuthorizationRole="ROLE_ACTIONS"/>
+        <menu:menu-item name="timeUsageReport" category="maintenance" view="timeUsageReport"
+                        defaultAuthorizationRole="ROLE_MAINTENANCE"/>
+        <menu:menu-item name="sourceCostReports" category="maintenance" view="sourceCostReports"
+                        defaultAuthorizationRole="ROLE_MAINTENANCE"/>
+
+        <view:view resource="view/plannedEventsList.xml"/>
+        <view:view resource="view/plannedEventDetails.xml"/>
+        <view:view resource="view/plannedEventActions.xml"/>
+        <view:view resource="view/actionForPlannedEventDetails.xml"/>
+        <view:view resource="view/plannedEventRealizationDetails.xml"/>
+
+        <view:view resource="view/plannedEventStateChangeReasonDialog.xml"/>
+
+        <view:view resource="view/timeUsageReport.xml"/>
+
+        <view:view resource="view/sourceCostReports.xml"/>
+
+        <view:view resource="view/workTimeForUserList.xml"/>
+        <view:view resource="view/addActionsForPlannedEvent.xml"/>
+
+        <view:view-tab resource="view/tabExtensions/parameters.xml"/>
+
+        <view:view-tab resource="view/tabExtensions/documentDetails.xml"/>
+        <view:view-tab resource="view/tabExtensions/factoryDetails.xml"/>
+
+        <!-- view extensions -->
+
+        <!-- model -->
+
+        <model:model model="machinePartAttachment" resource="model/machinePartAttachment.xml"/>
+        <model:model model="eventAttachment" resource="model/eventAttachment.xml"/>
+        <model:model model="maintenanceEvent" resource="model/maintenanceEvent.xml"/>
+        <model:model model="maintenanceEventListDto" resource="model/maintenanceEventListDto.xml"/>
+        <model:model model="staffWorkTime" resource="model/staffWorkTime.xml"/>
+        <model:model model="machinePartForEvent" resource="model/machinePartForEvent.xml"/>
+
+        <model:model model="maintenanceEventStateChange" resource="model/maintenanceEventStateChange.xml"/>
+        <model:model model="maintenanceEventContext" resource="model/maintenanceEventContext.xml"/>
+
+        <model:model model="plannedEvent" resource="model/plannedEvent.xml"/>
+        <model:model model="plannedEventListDto" resource="model/plannedEventListDto.xml"/>
+        <model:model model="plannedEventContext" resource="model/plannedEventContext.xml"/>
+        <model:model model="plannedEventRealization" resource="model/plannedEventRealization.xml"/>
+        <model:model model="plannedEventAttachment" resource="model/plannedEventAttachment.xml"/>
+        <model:model model="plannedEventStateChange" resource="model/plannedEventStateChange.xml"/>
+
+        <model:model model="action" resource="model/action.xml"/>
+        <model:model model="actionForPlannedEvent" resource="model/actionForPlannedEvent.xml"/>
+
+        <model:model model="sourceCost" resource="model/sourceCost.xml"/>
+        <model:model model="plannedEventXLSHelper" resource="model/plannedEventXLSHelper.xml"/>
+        <model:model model="maintenanceEventXLSHelper" resource="model/maintenanceEventXLSHelper.xml"/>
+        <model:model model="timeUsageReportFilter" resource="model/timeUsageReportFilter.xml"/>
+        <model:model model="sourceCostReportFilter" resource="model/sourceCostReportFilter.xml"/>
+
+        <model:model model="workTimeForUserDto" resource="model/workTimeForUserDto.xml"/>
+
+        <!-- model extensions -->
+
+        <model:model-field plugin="basic" model="parameter">
+            <model:decimal name="possibleWorkTimeDeviation"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="parameter">
+            <model:boolean name="acceptanceEvents"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="product">
+            <model:hasMany name="machinePartAttachments" joinField="product" model="machinePartAttachment"
+                           cascade="delete" plugin="cmmsMachineParts"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="product">
+            <model:hasMany name="machinePartsForEvent" joinField="machinePart" model="machinePartForEvent"
+                           cascade="delete" plugin="cmmsMachineParts"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="product">
+            <model:string name="catalogNumber"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="product">
+            <model:string name="drawingNumber"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="product">
+            <model:boolean name="machinePart"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="shift">
+            <model:hasMany name="maintenanceEventStateChanges" model="maintenanceEventStateChange" joinField="shift"
+                           plugin="cmmsMachineParts"
+                           cascade="nullify"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="workstation">
+            <model:manyToMany name="actions" model="action" plugin="cmmsMachineParts" cascade="nullify"
+                              joinField="workstations"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="workstation">
+            <model:hasMany name="maintenanceEvents" model="maintenanceEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="workstation" copyable="false"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="workstationType">
+            <model:manyToMany name="actions" model="action" plugin="cmmsMachineParts" cascade="nullify"
+                              joinField="workstationTypes"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="subassembly">
+            <model:manyToMany name="actions" model="action" plugin="cmmsMachineParts" cascade="nullify"
+                              joinField="subassemblies"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="subassembly">
+            <model:hasMany name="maintenanceEvents" model="maintenanceEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="subassembly" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="factory">
+            <model:hasMany name="maintenanceEvents" model="maintenanceEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="factory" copyable="false"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="factory">
+            <model:hasMany name="maintenanceEventContexts" model="maintenanceEventContext" plugin="cmmsMachineParts"
+                           cascade="nullify"
+                           joinField="factory" copyable="false"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="factory">
+            <model:belongsTo name="warehouse" model="location" plugin="materialFlow"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="division">
+            <model:hasMany name="maintenanceEventContexts" model="maintenanceEventContext" plugin="cmmsMachineParts"
+                           cascade="nullify"
+                           joinField="division" copyable="false"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="division">
+            <model:hasMany name="maintenanceEvents" model="maintenanceEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="division" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="faultType">
+            <model:hasMany name="maintenanceEvents" model="maintenanceEvent" plugin="cmmsMachineParts"
+                           joinField="faultType" cascade="nullify"
+                           copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="states" model="message">
+            <model:belongsTo name="maintenanceEventStateChange" plugin="cmmsMachineParts"
+                             model="maintenanceEventStateChange"/>
+        </model:model-field>
+        <model:model-field plugin="states" model="message">
+            <model:belongsTo name="plannedEventStateChange" plugin="cmmsMachineParts"
+                             model="plannedEventStateChange"/>
+        </model:model-field>
+
+        <model:model-field plugin="materialFlow" model="location">
+            <model:hasMany name="machinePartsForEvent" joinField="warehouse" model="machinePartForEvent"
+                           cascade="delete" plugin="cmmsMachineParts"/>
+        </model:model-field>
+        <model:model-field plugin="materialFlow" model="location">
+            <model:hasMany name="factories" model="factory" plugin="basic"
+                           cascade="nullify"
+                           joinField="warehouse" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="materialFlowResources" model="document">
+            <model:belongsTo name="maintenanceEvent" plugin="cmmsMachineParts"
+                             model="maintenanceEvent"/>
+        </model:model-field>
+        <model:model-field plugin="materialFlowResources" model="document">
+            <model:belongsTo name="plannedEvent" plugin="cmmsMachineParts"
+                             model="plannedEvent"/>
+        </model:model-field>
+
+        <model:model-field plugin="materialFlowResources" model="documentDto">
+            <model:integer name="plannedEvent_id"/>
+        </model:model-field>
+        <model:model-field plugin="materialFlowResources" model="documentDto">
+            <model:string name="plannedEventNumber"/>
+        </model:model-field>
+        <model:model-field plugin="materialFlowResources" model="documentDto">
+            <model:integer name="maintenanceEvent_id"/>
+        </model:model-field>
+        <model:model-field plugin="materialFlowResources" model="documentDto">
+            <model:string name="maintenanceEventNumber"/>
+        </model:model-field>
+
+        <model:model-field plugin="productionLines" model="factoryStructureElement">
+            <model:belongsTo name="maintenanceEvent" model="maintenanceEvent" plugin="cmmsMachineParts"/>
+        </model:model-field>
+        <model:model-field plugin="productionLines" model="productionLine">
+            <model:hasMany name="maintenanceEvents" model="maintenanceEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="productionLine" copyable="false"/>
+        </model:model-field>
+
+        <!-- planned events -->
+
+        <model:model-field plugin="basic" model="company">
+            <model:hasMany name="plannedEvents" model="plannedEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="company" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="staff">
+            <model:manyToMany name="plannedEvents" model="plannedEvent" joinField="responsibleWorkers"
+                              plugin="cmmsMachineParts"
+                              cascade="nullify"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="staff">
+            <model:hasMany name="actionsForPlannedEvent" model="actionForPlannedEvent" joinField="responsibleWorker"
+                           plugin="cmmsMachineParts"
+                           cascade="nullify"/>
+        </model:model-field>
+        <model:model-field model="staff" plugin="basic">
+            <model:manyToMany name="timeUsageReportFilters" model="timeUsageReportFilter" joinField="workers"
+                              plugin="cmmsMachineParts"
+                              cascade="nullify"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="workstation">
+            <model:hasMany name="plannedEvents" model="plannedEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="workstation" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="factory">
+            <model:hasMany name="plannedEventContexts" model="plannedEventContext" plugin="cmmsMachineParts"
+                           cascade="nullify"
+                           joinField="factory" copyable="false"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="factory">
+            <model:hasMany name="plannedEvents" model="plannedEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="factory" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="division">
+            <model:hasMany name="plannedEventContexts" model="plannedEventContext" plugin="cmmsMachineParts"
+                           cascade="nullify"
+                           joinField="division" copyable="false"/>
+        </model:model-field>
+        <model:model-field plugin="basic" model="division">
+            <model:hasMany name="plannedEvents" model="plannedEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="division" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="basic" model="subassembly">
+            <model:hasMany name="plannedEvents" model="plannedEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="subassembly" copyable="false"/>
+        </model:model-field>
+
+        <model:model-field plugin="productionLines" model="productionLine">
+            <model:hasMany name="plannedEvents" model="plannedEvent" plugin="cmmsMachineParts" cascade="nullify"
+                           joinField="productionLine" copyable="false"/>
+        </model:model-field>
+
+        <model:model-hook plugin="materialFlowResources" model="document">
+            <model:validatesWith
+                    class="com.qcadoo.mes.cmmsMachineParts.validators.DocumentValidatorsCMP"
+                    method="checkSelectedEvents"/>
+        </model:model-hook>
+
+        <view:view-listener plugin="cmmsMachineParts" view="machinePartDetails"
+                            component="form" event="redirectToWarehouseStateList"
+                            class="com.qcadoo.mes.cmmsMachineParts.listeners.MachinePartDetailsListeners"
+                            method="redirectToWarehouseStateList"/>
+
+        <view:view-hook plugin="materialFlowResources" view="documentDetails" type="beforeRender"
+                        class="com.qcadoo.mes.cmmsMachineParts.hooks.DocumentDetailsHooksCMP"
+                        method="toggleEnabledForEventLookup"/>
+        <view:view-listener plugin="materialFlowResources" view="documentDetails" component="type"
+                            event="onSelectedEntityChange"
+                            class="com.qcadoo.mes.cmmsMachineParts.listeners.DocumentDetailsListenersCMP"
+                            method="clearEvents"/>
+
+        <view:view-grid-column plugin="materialFlowResources" view="documentsList" component="grid">
+            <view:column name="maintenanceEventNumber" fields="maintenanceEventNumber"
+                         searchable="true" orderable="true" width="50"/>
+        </view:view-grid-column>
+
+        <view:view-grid-column plugin="materialFlowResources" view="documentsList" component="grid">
+            <view:column name="plannedEventNumber" fields="plannedEventNumber"
+                         searchable="true" orderable="true" width="65"/>
+        </view:view-grid-column>
+
+        <model:model-field plugin="materialFlowResources" model="positionDto">
+            <model:string name="maintenanceEventNumber"/>
+        </model:model-field>
+        <view:view-grid-column plugin="materialFlowResources"
+                               view="documentPositionsList" component="grid">
+            <view:column name="maintenanceEventNumber" fields="maintenanceEventNumber" orderable="true"
+                         searchable="true" width="45"/>
+        </view:view-grid-column>
+
+        <model:model-field plugin="materialFlowResources" model="positionDto">
+            <model:string name="plannedEventNumber"/>
+        </model:model-field>
+        <view:view-grid-column plugin="materialFlowResources"
+                               view="documentPositionsList" component="grid">
+            <view:column name="plannedEventNumber" fields="plannedEventNumber" orderable="true"
+                         searchable="true" width="52"/>
+        </view:view-grid-column>
+
+        <view:resource uri="public/**/*"/>
+
+        <custom:custom
+                class="com.qcadoo.mes.cmmsMachineParts.DefaultActionsLoaderModule"/>
+    </modules>
+
+</plugin>

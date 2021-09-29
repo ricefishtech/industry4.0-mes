@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view defaultAuthorizationRole="ROLE_TECHNOLOGIES" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view"
+      xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+      name="technologiesList" modelName="technologyDto" menuAccessible="true">
+
+    <component type="window" name="window" reference="window">
+        <ribbon>
+            <template name="standardGridTemplate"/>
+            <group name="status">
+                <smallButton name="acceptTechnology" icon="startIcon16.png" state="disabled"
+                             action="#{grid}.changeTechnologyState(acceptTechnology);"/>
+                <smallButton name="cancelTechnology" icon="deleteIcon16.png" state="disabled"
+                             action="#{grid}.changeTechnologyState(cancelTechnology);"/>
+                <smallButton name="checkTechnology" icon="startIcon16.png" state="disabled"
+                             action="#{grid}.changeTechnologyState(checkTechnology);"/>
+            </group>
+            <group name="action">
+                <bigButton name="changeParameters" icon="generateIcon24.png"
+                           state="disabled">
+                    <script>
+                        <![CDATA[
+							this.addOnChangeListener({
+								onClick: function() {
+									#{grid}.performEvent('changeParameters', []);
+								}
+							});
+						]]>
+                    </script>
+                </bigButton>
+            </group>
+        </ribbon>
+
+        <component type="grid" name="technologies" reference="grid">
+            <script>
+                <![CDATA[
+					var toggleRibbonItems = ["actions.delete"];
+
+					this.addOnChangeListener({
+						onChange: function(selectedEntitiesArray) {
+							if (selectedEntitiesArray && selectedEntitiesArray.length > 0) {
+								updateRibbon(selectedEntitiesArray);
+							} else {
+								resetRibbon();
+							}
+						}
+					});
+
+					this.changeTechnologyState = function(eventPerformer, ribbonItemName, entityId) {
+						var ribbonItem = #{window}.getRibbonItem("status." + ribbonItemName);
+						var newState = ribbonItem.forState;
+						if (window.confirm(ribbonItem.confirmMessage)) {
+							if (window.canClose()) {
+								#{grid}.fireEvent(eventPerformer, 'changeState', [newState]);
+							}
+						}
+					}
+
+					function resetRibbon() {
+						for (var elementKey in toggleRibbonItems) {
+							getRibbonItem(toggleRibbonItems[elementKey]).disable();
+						}
+						getRibbonItem("status.acceptTechnology").disable();
+						getRibbonItem("status.cancelTechnology").disable();
+						getRibbonItem("status.checkTechnology").disable();
+						getRibbonItem("action.changeParameters").disable();
+					}
+
+					function updateRibbon(selectedEntitiesArray) {
+						var locked = shouldLockStatusRibbonItems(selectedEntitiesArray);
+						var lockedMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.canNotModifyTechnology)}";
+						var differentStatesMessage = "#{translate(technologies.technologiesList.window.ribbon.status.differentStates)}";
+						var externalMessage = "#{translate(technologies.technology.ribbon.message.technologyIsSynchronized)}";
+						var differentStates = statesAreDifferent(selectedEntitiesArray);
+						var isSynchronized = isSomeSynchronized(selectedEntitiesArray);
+						var allMaster = isAllMaster(selectedEntitiesArray);
+
+						for (var elementKey in toggleRibbonItems) {
+							var ribbonItem = getRibbonItem(toggleRibbonItems[elementKey]);
+							if (!ribbonItem) {
+								continue;
+							}
+
+							if (locked && differentStates) {
+								ribbonItem.disable(differentStatesMessage);
+							} else if (locked) {
+								ribbonItem.disable(lockedMessage);
+							} else {
+								ribbonItem.enable();
+							}
+						}
+
+						if (!differentStates) {
+							var state = selectedEntitiesArray[0].fields.state;
+						}
+
+						if (state && state != "02accepted") {
+							getRibbonItem("actions.delete").enable();
+						}
+
+						var acceptState = getRibbonItem("status.acceptTechnology");
+						var cancelState = getRibbonItem("status.cancelTechnology");
+						var checkState = getRibbonItem("status.checkTechnology");
+						var changeParameters = getRibbonItem("action.changeParameters");
+                        changeParameters.disable();
+						acceptState.disable();
+						acceptState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.accepted)}";
+						acceptState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.acceptTechnology)}");
+						cancelState.disable();
+						cancelState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.cancelTechnology)}");
+						checkState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.checkTechnology)}");
+
+						if (!state) {
+							acceptState.disable(differentStatesMessage);
+							cancelState.disable(differentStatesMessage);
+							checkState.disable(differentStatesMessage);
+							return;
+						}
+						if (isSynchronized) {
+							acceptState.disable(externalMessage);
+							cancelState.disable(externalMessage);
+							checkState.disable(externalMessage);
+							getRibbonItem("actions.delete").disable(externalMessage);
+							return;
+						}
+
+						acceptState.forState="02accepted";
+						cancelState.forState="03declined";
+						checkState.forState="05checked";
+						cancelState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.declined)}";
+						cancelState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.declineTechnology)}");
+
+						checkState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.checkTechnology)}");
+						checkState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.checked)}";
+
+						if (state == "01draft") {
+							acceptState.enable();
+							cancelState.enable();
+							checkState.enable();
+						} else if (state == "02accepted") {
+							acceptState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.accepted)}";
+							acceptState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.acceptTechnology)}");
+							cancelState.enable();
+							cancelState.forState="04outdated";
+							cancelState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.outdated)}";
+							cancelState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.outdateTechnology)}");
+							checkState.disable();
+						} else if (state == "03declined") {
+						} else if (state == "04outdated") {
+							cancelState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.outdateTechnology)}");
+						} else if (state == "05checked") {
+							cancelState.enable();
+							checkState.enable();
+							checkState.forState="01draft"
+							checkState.confirmMessage = "#{translate(technologies.technologyDetails.window.ribbon.status.confirm.draft)}";
+							checkState.setLabel("#{translate(technologies.technologyDetails.window.ribbon.status.draftTechnology)}");
+							acceptState.enable();
+						}else{
+							cancelState.enable();
+						}
+
+						if(state == "02accepted" && allMaster) {
+						    changeParameters.enable();
+						} else {
+						    changeParameters.disable();
+						}
+					}
+
+					function getRibbonItem(ribbonPath) {
+						return #{window}.getRibbonItem(ribbonPath);
+					}
+
+					function shouldLockStatusRibbonItems(selectedEntitiesArray) {
+						return selectedEntitiesArray[0].fields.state != '01draft' ||
+								statesAreDifferent(selectedEntitiesArray);
+					}
+
+					function statesAreDifferent(selectedEntitiesArray) {
+						if (selectedEntitiesArray.length < 2) {
+							return false;
+						}
+						for (var i = 1; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i-1].fields.state != selectedEntitiesArray[i].fields.state) {
+								return true;
+							}
+						}
+						return false;
+					}
+
+					function isAllMaster(selectedEntitiesArray) {
+						for (var i = 0; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i].fields.master == '0') {
+								return false;
+							}
+						}
+						return true;
+					}
+
+					function isSomeSynchronized(selectedEntitiesArray) {
+						for (var i = 0; i < selectedEntitiesArray.length; i++) {
+							if (selectedEntitiesArray[i].fields.externalSynchronized == '0') {
+								return true;
+							}
+						}
+						return false;
+					}
+				]]>
+            </script>
+
+            <listener event="changeState" class="com.qcadoo.mes.technologies.states.TechnologyStateChangeViewClient"
+                      method="changeState"/>
+            <listener event="changeParameters" class="com.qcadoo.mes.technologies.listeners.TechnologiesListListeners"
+                      method="changeParameters"/>
+
+            <option type="column" name="number" fields="number" link="true"
+                    width="100"/>
+            <option type="column" name="name" fields="name" link="true" width="150"/>
+            <option type="column" name="productNumber" fields="productNumber"
+                    width="100"/>
+			<option type="column" name="productGlobalTypeOfMaterial" fields="productGlobalTypeOfMaterial"
+					width="80"/>
+            <option type="column" name="state" fields="state" width="55"/>
+            <option type="column" name="master" fields="master" width="35"/>
+            <option type="column" name="technologyGroupNumber" fields="technologyGroupNumber"
+                    width="45"/>
+            <option type="column" name="externalSynchronized" fields="externalSynchronized" hidden="true"/>
+			<option type="column" name="divisionName" fields="divisionName"
+					width="55"/>
+			<option type="column" name="standardPerformanceTechnology" fields="standardPerformanceTechnology"
+					width="55"/>
+            <option type="column" name="dateAndTime" fields="dateAndTime"
+                    width="60"/>
+            <option type="column" name="productionLineNumber" fields="productionLineNumber"
+                    width="55"/>
+            <option type="column" name="assortmentName" fields="assortmentName"
+                    width="55"/>
+			<option type="column" name="attachmentsExists" fields="attachmentsExists"
+					width="55"/>
+            <option type="order" column="number" direction="desc"/>
+            <option type="searchable" value="name,number,productNumber,state,technologyGroupNumber,productGlobalTypeOfMaterial,
+                divisionName,master,standardPerformanceTechnology,attachmentsExists,dateAndTime,productionLineNumber,assortmentName"/>
+            <option type="orderable" value="name,number,productNumber,state,technologyGroupNumber,productGlobalTypeOfMaterial,
+                divisionName,master,standardPerformanceTechnology,attachmentsExists,dateAndTime,productionLineNumber,assortmentName"/>
+            <option type="correspondingView" value="technologies/technologyDetails"/>
+            <option type="correspondingComponent" value="form"/>
+            <option type="fullscreen" value="true"/>
+            <option type="multiselect" value="true"/>
+
+            <criteriaModifier class="com.qcadoo.mes.technologies.criteriaModifiers.TechnologyCriteriaModifiers"
+                              method="showPatternTechnology"/>
+        </component>
+        <option type="fixedHeight" value="true"/>
+        <option type="header" value="false"/>
+    </component>
+</view>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<model name="productionBalance" activable="true"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/model"
+       xsi:schemaLocation="http://schema.qcadoo.org/model http://schema.qcadoo.org/model.xsd">
+
+    <fields>
+
+        <string name="number" required="true" unique="true">
+            <validatesLength max="255"/>
+        </string>
+
+        <string name="name">
+            <validatesLength max="1024"/>
+        </string>
+
+        <boolean name="generated"/>
+        <manyToMany name="orders" plugin="orders" model="order" joinField="productionBalance" cascade="nullify"
+                    copyable="true"/>
+
+        <datetime name="date"/>
+        <string name="worker"/>
+        <string name="description"/>
+        <string name="fileName">
+            <validatesLength max="1024"/>
+        </string>
+
+        <enum name="sourceOfOperationCostsPB"
+              values="01technologyOperation,02parameters"
+              required="true" default="01technologyOperation"/>
+
+        <boolean name="includeTPZ" default="true"/>
+        <boolean name="includeAdditionalTime" default="true"/>
+        <decimal name="registrationPriceOverhead" default="0">
+            <validatesUnscaledValue max="7"/>
+            <validatesScale max="5"/>
+            <validatesRange from="0" exclusively="false"/>
+        </decimal>
+        <decimal name="profit" default="0">
+            <validatesUnscaledValue max="7"/>
+            <validatesScale max="5"/>
+            <validatesRange from="0" exclusively="false"/>
+        </decimal>
+
+        <enum name="sourceOfMaterialCosts"
+              values="01currentGlobalDefinitionsInProduct,02fromOrdersMaterialCosts"
+              required="true" default="01currentGlobalDefinitionsInProduct"/>
+
+        <enum name="calculateMaterialCostsMode"
+              values="01nominal,02average,03lastPurchase,04averageOfferCost,05lastOfferCost,06costForOrder"
+              required="true" default="01nominal"/>
+
+        <decimal name="productionCostMargin" default="0">
+            <validatesUnscaledValue max="7"/>
+            <validatesScale max="5"/>
+        </decimal>
+
+        <decimal name="materialCostMargin" default="0">
+            <validatesUnscaledValue max="7"/>
+            <validatesScale max="5"/>
+        </decimal>
+
+        <decimal name="additionalOverhead" default="0">
+            <validatesUnscaledValue max="7"/>
+            <validatesScale max="5"/>
+        </decimal>
+
+        <boolean name="isSetFieldsFromParameter"
+                 persistent="false"/>
+        <boolean name="includeWageGroups" default="false"/>
+    </fields>
+
+    <hooks>
+        <validatesWith
+                class="com.qcadoo.mes.productionCounting.validators.ProductionBalanceValidators"
+                method="validatesWith"/>
+        <onCopy
+                class="com.qcadoo.mes.productionCounting.hooks.ProductionBalanceHooks"
+                method="onCopy"/>
+    </hooks>
+
+    <identifier expression="#name"/>
+
+</model>

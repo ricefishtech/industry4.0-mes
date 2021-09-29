@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://schema.qcadoo.org/modules/localization" xmlns="http://schema.qcadoo.org/modules/localization" elementFormDefault="qualified">
+
+	<xs:element name="translation">
+		<xs:complexType>			
+			<xs:attribute name="path" type="xs:string" use="required" />
+			<xs:attribute name="basename" type="xs:string" use="optional" default="*" />
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="translation-group">
+		<xs:complexType>			
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:attribute name="prefix" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="translation-locale">
+		<xs:complexType>			
+			<xs:attribute name="locale" type="xs:language" use="required" />
+			<xs:attribute name="label" type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

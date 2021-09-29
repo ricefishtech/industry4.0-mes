@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<windowTabExtension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/modules/windowTabExtension" 
+	xsi:schemaLocation="http://schema.qcadoo.org/modules/windowTabExtension http://schema.qcadoo.org/modules/windowTabExtension.xsd" 
+	plugin="basic"
+	view="parameters">
+	
+	<windowTab name="timeConsumptionForTechnologyTab" reference="timeConsumptionForTechnologyTab">
+		<component type="gridLayout" name="timeConsumptionForTechnologyLayout" columns="3" rows="2">
+			<layoutElement column="1" row="1">
+				<component type="checkbox" name="workstationsQuantityFromProductionLine" 
+							field="#{form}.workstationsQuantityFromProductionLine" hasDescription="true">
+					<option type="labelWidth" value="80" />
+					<option type="align" value="right" />
+				</component>
+			</layoutElement>
+            <layoutElement column="1" row="2">
+                <component type="borderLayout" name="borderLayoutIncludedInWorkTime"
+                           reference="borderLayoutIncludedInWorkTime">
+                    <option type="label" value="includedInWorkTime" />
+                    <component type="gridLayout" name="includedInWorkTime"
+                               columns="1" rows="2">
+                        <layoutElement column="1" row="1">
+                            <component type="checkbox" name="includeTpzPS" reference="includeTpzPS"
+                                       field="#{form}.includeTpzPS">
+                                <option type="labelWidth" value="80" />
+                            </component>
+                        </layoutElement>
+                        <layoutElement column="1" row="2">
+                            <component type="checkbox" name="includeAdditionalTimePS" reference="includeAdditionalTimePS"
+                                       field="#{form}.includeAdditionalTimePS">
+                                <option type="labelWidth" value="80" />
+                            </component>
+                        </layoutElement>
+                    </component>
+                </component>
+            </layoutElement>
+		</component>
+	</windowTab>
+</windowTabExtension>

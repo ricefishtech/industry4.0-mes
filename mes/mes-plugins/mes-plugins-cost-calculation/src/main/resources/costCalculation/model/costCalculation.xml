@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo MES
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<model name="costCalculation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://schema.qcadoo.org/model"
+	xsi:schemaLocation="http://schema.qcadoo.org/model http://schema.qcadoo.org/model.xsd">
+	<fields>
+		<string name="number" required="true" unique="true">
+			<validatesLength max="255" />
+		</string>
+		<tree name="calculationOperationComponents" joinField="costCalculation"
+			model="calculationOperationComponent" plugin="costNormsForOperation"
+			cascade="delete" />
+		<belongsTo name="product" model="product" plugin="basic"
+			required="true" />
+		<belongsTo name="defaultTechnology" model="technology"
+			plugin="technologies" />
+		<belongsTo name="technology" model="technology" plugin="technologies"
+			required="true" />
+		<belongsTo name="productionLine" model="productionLine"
+			plugin="productionLines" required="true" />
+		<decimal name="quantity" required="true" />
+		<belongsTo name="order" model="order" plugin="orders" />
+		<decimal name="totalMaterialCosts">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="totalMachineHourlyCosts">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="totalPieceworkCosts">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="totalLaborHourlyCosts">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="totalTechnicalProductionCosts">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+        <decimal name="technicalProductionCosts">
+            <validatesUnscaledValue max="14" />
+            <validatesScale max="5" />
+        </decimal>
+		<decimal name="productionCostMargin">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+            <validatesRange from="0" exclusively="false"/>
+		</decimal>
+		<decimal name="productionCostMarginValue">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="materialCostMargin">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+            <validatesRange from="0" exclusively="false"/>
+		</decimal>
+		<decimal name="materialCostMarginValue">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="additionalOverhead">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+            <validatesRange from="0" exclusively="false"/>
+		</decimal>
+		<decimal name="additionalOverheadValue" default="0" />
+		<decimal name="registrationPriceOverhead" >
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+            <validatesRange from="0" exclusively="false"/>
+		</decimal>
+		<decimal name="registrationPriceOverheadValue" >
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="profit">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+            <validatesRange from="0" exclusively="false"/>
+		</decimal>
+		<decimal name="profitValue">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="sellPriceValue">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="totalOverhead">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="totalCosts">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<decimal name="totalCostPerUnit">
+			<validatesUnscaledValue max="14" />
+			<validatesScale max="5" />
+		</decimal>
+		<string name="description">
+			<validatesLength max="2024" />
+		</string>
+
+		<boolean name="includeTPZ" default="true" />
+		<boolean name="includeAdditionalTime" default="true" />
+		<boolean name="printCostNormsOfMaterials" default="true" />
+		<boolean name="printOperationNorms" default="true" />
+
+		<enum name="sourceOfMaterialCosts"
+			values="01currentGlobalDefinitionsInProduct,02fromOrdersMaterialCosts"
+			required="true" default="01currentGlobalDefinitionsInProduct" />
+
+		<enum name="calculateMaterialCostsMode"
+			values="01nominal,02average,03lastPurchase,04averageOfferCost,05lastOfferCost,06costForOrder"
+			required="true" default="01nominal" />
+
+		<enum name="sourceOfOperationCosts"
+			values="01technologyOperation,02parameters"
+			required="true" default="01technologyOperation" />
+
+		<datetime name="date" />
+		<boolean name="generated" />
+		<string name="fileName" />
+		<boolean name="justCreated" persistent="false" default="true"/>
+
+		<hasMany name="componentCosts" joinField="costCalculation" model="componentCost"
+				 cascade="delete" />
+	</fields>
+	<hooks>
+		<validatesWith
+			class="com.qcadoo.mes.costCalculation.validators.CostCalculationValidators"
+			method="ifSourceOfMaterialIsFromOrderThenOrderIsNeeded" />
+		<validatesWith
+			class="com.qcadoo.mes.costCalculation.validators.CostCalculationValidators"
+			method="checkIfCurrentGlobalIsSelected" />
+		<validatesWith
+			class="com.qcadoo.mes.costCalculation.validators.CostCalculationValidators"
+			method="checkIfTheTechnologyHasCorrectState" />
+		<onCopy
+			class="com.qcadoo.mes.costCalculation.hooks.CostCalculationHooks"
+			method="clearGeneratedOnCopy" />
+		<onCopy
+			class="com.qcadoo.mes.costCalculation.hooks.CostCalculationHooks"
+			method="clearGeneratedCosts" />
+	</hooks>
+	<identifier expression="#number + ' - ' + #name" />
+</model>

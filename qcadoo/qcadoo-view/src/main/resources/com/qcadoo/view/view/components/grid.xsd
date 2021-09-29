@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schema.qcadoo.org/view/components/grid"
+           xmlns="http://schema.qcadoo.org/view/components/grid">
+
+    <xs:include schemaLocation="component.xsd"/>
+
+    <xs:element name="component">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="fieldComponentType">
+                    <xs:choice>
+                        <xs:element name="option" type="genericGridOption" minOccurs="0"/>
+                        <xs:element name="predefinedFilters" type="predefinedFilterType" maxOccurs="1"/>
+                        <xs:element name="rowStyleResolver" type="hookType" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="criteriaModifier" type="hookType" minOccurs="0" maxOccurs="1"/>
+                    </xs:choice>
+                    <xs:attribute name="type" use="required">
+                        <xs:simpleType>
+                            <xs:restriction>
+                                <xs:enumeration value="grid"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="gridOption"/>
+
+    <xs:element name="option" type="genericGridOption"/>
+
+    <xs:complexType name="genericGridOption">
+        <xs:complexContent>
+            <xs:extension base="gridOption">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:restriction>
+                            <xs:enumeration value="column"/>
+                            <xs:enumeration value="order"/>
+                            <xs:enumeration value="searchable"/>
+                            <xs:enumeration value="orderable"/>
+                            <xs:enumeration value="correspondingView"/>
+                            <xs:enumeration value="correspondingComponent"/>
+
+                            <xs:enumeration value="correspondingLookup"/>
+                            <xs:enumeration value="correspondingViewInModal"/>
+                            <xs:enumeration value="paginable"/>
+                            <xs:enumeration value="creatable"/>
+                            <xs:enumeration value="hasPredefinedFilters"/>
+                            <xs:enumeration value="filtersDefaultVisible"/>
+                            <xs:enumeration value="deletable"/>
+                            <xs:enumeration value="prioritizable"/>
+                            <xs:enumeration value="height"/>
+                            <xs:enumeration value="width"/>
+                            <xs:enumeration value="lookup"/>
+                            <xs:enumeration value="multiSearch"/>
+                            <xs:enumeration value="weakRelation"/>
+                            <xs:enumeration value="fixedHeight"/>
+                            <xs:enumeration value="fullscreen"/>
+                            <xs:enumeration value="multiselect"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="name" type="identifierType"/>
+                <xs:attribute name="fields" type="xs:string"/>
+                <xs:attribute name="expression" type="xs:string"/>
+                <xs:attribute name="width" type="xs:positiveInteger"/>
+                <xs:attribute name="link" type="xs:string"/>
+                <xs:attribute name="hidden" type="xs:boolean"/>
+                <xs:attribute name="column" type="identifierType"/>
+                <xs:attribute name="direction" type="directionType"/>
+                <xs:attribute name="value" type="xs:anyType"/>
+                <xs:attribute name="classesNames" type="xs:string"/>
+                <xs:attribute name="classesCondition" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="predefinedFilterType">
+        <xs:sequence>
+            <xs:element name="predefinedFilter" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="filterRestriction" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="column" type="identifierType" use="required"/>
+                                <xs:attribute name="value" type="xs:string" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="filterOrder" minOccurs="0" maxOccurs="1">
+                            <xs:complexType>
+                                <xs:attribute name="column" type="identifierType" use="required"/>
+                                <xs:attribute name="direction" type="directionType" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="name" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="directionType">
+        <xs:restriction>
+            <xs:enumeration value="desc"/>
+            <xs:enumeration value="asc"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="column">
+        <xs:complexContent>
+            <xs:extension base="gridOption">
+                <xs:attribute name="name" use="required" type="identifierType"/>
+                <xs:attribute name="fields" type="xs:string"/>
+                <xs:attribute name="expression" type="xs:string"/>
+                <xs:attribute name="width" type="xs:positiveInteger"/>
+                <xs:attribute name="link" type="xs:string" default="false"/>
+                <xs:attribute name="hidden" type="xs:boolean" default="false"/>
+                <xs:attribute name="align" default="left">
+                    <xs:simpleType>
+                        <xs:restriction>
+                            <xs:enumeration value="left"/>
+                            <xs:enumeration value="right"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="classesNames" type="xs:string"/>
+                <xs:attribute name="classesCondition" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="order">
+        <xs:complexContent>
+            <xs:extension base="gridOption">
+                <xs:attribute name="column" use="required" type="identifierType"/>
+                <xs:attribute name="direction" use="required" type="directionType"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="searchable">
+        <xs:attribute name="value" use="required" type="identifiersList"/>
+    </xs:complexType>
+
+    <xs:complexType name="orderable">
+        <xs:attribute name="value" use="required" type="identifiersList"/>
+    </xs:complexType>
+
+    <xs:complexType name="multiSearch">
+        <xs:attribute name="value" use="required" type="identifiersList"/>
+    </xs:complexType>
+
+    <xs:complexType name="fullscreen">
+        <xs:attribute name="value" use="required" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="multiselect">
+        <xs:attribute name="value" use="required" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="correspondingView">
+        <xs:attribute name="value" use="required" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="correspondingComponent">
+        <xs:attribute name="value" use="required">
+            <xs:simpleType>
+                <xs:restriction>
+                    <xs:pattern value="[a-zA-Z][a-zA-Z0-9]*"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="correspondingLookup">
+        <xs:attribute name="value" use="required" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="correspondingViewInModal">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="paginable">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="true"/>
+    </xs:complexType>
+
+    <xs:complexType name="creatable">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="hasPredefinedFilters">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="filtersDefaultVisible">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="true"/>
+    </xs:complexType>
+
+    <xs:complexType name="deletable">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="height">
+        <xs:attribute name="value" use="required" type="xs:integer" default="300"/>
+    </xs:complexType>
+
+    <xs:complexType name="width">
+        <xs:attribute name="value" use="required" type="xs:integer" default="300"/>
+    </xs:complexType>
+
+    <xs:complexType name="lookup">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="weakRelation">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="fixedHeight">
+        <xs:attribute name="value" use="required" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:simpleType name="identifiersList">
+        <xs:restriction>
+            <!-- Identifiers separated by comma -->
+            <xs:pattern value="[a-z][a-zA-Z0-9]*(,[a-z][a-zA-Z0-9]*)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

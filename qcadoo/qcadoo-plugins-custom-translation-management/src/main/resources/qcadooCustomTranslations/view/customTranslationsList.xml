@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ***************************************************************************
+    Copyright (c) 2010 Qcadoo Limited
+    Project: Qcadoo Framework
+    Version: 1.4
+
+    This file is part of Qcadoo.
+
+    Qcadoo is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation; either version 3 of the License,
+    or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    ***************************************************************************
+
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.qcadoo.org/view" 
+	xsi:schemaLocation="http://schema.qcadoo.org/view http://schema.qcadoo.org/view.xsd"
+	name="customTranslationsList"
+	modelPlugin="qcadooCustomTranslation"
+	modelName="customTranslation"
+	menuAccessible="true"
+	defaultAuthorizationRole="ROLE_ADMIN">
+	
+	<component type="window" name="window">
+		<ribbon>
+			<template name="standardGridTemplate" excludeGroups="actions" />
+			<group name="clean">
+				<bigButton name="cleanCustomTranslations" icon="genealogyIcon24.png" action="#{grid}.fireEvent(cleanCustomTranslations);"
+					state="enabled" />
+			</group>
+			<group name="replace">
+				<bigButton name="replaceCustomTranslations" icon="genealogyIcon24.png" action="#{grid}.fireEvent(replaceCustomTranslations);" 
+					state="enabled" />
+			</group>
+		</ribbon>
+			
+		<component type="gridLayout" name="gridLayout" columns="3"
+			rows="2" hasBorders="false">
+			<layoutElement column="1" row="1">
+				<component type="form" name="localeForm" reference="localeForm">
+					<component type="select" name="locale" field="locale" reference="locale">
+						<listener
+							event="onSelectedEntityChange" 
+							class="com.qcadoo.plugins.customTranslations.internal.hooks.CustomTranslationsListViewHooks"
+							method="addDiscriminatorRestrictionToGrid" />
+					</component>
+				</component>
+			</layoutElement>
+			<layoutElement column="1" row="2" width="3">
+				<component type="grid" name="customTranslationsGrid" reference="grid">
+					<option type="column" name="pluginName" fields="pluginName" link="true" />
+					<option type="column" name="key" fields="key" link="true" />
+					<option type="column" name="propertiesTranslation" fields="propertiesTranslation" link="true" />
+					<option type="column" name="active" fields="active" />
+					<option type="column" name="customTranslation" fields="customTranslation" link="true" />
+
+					<option type="searchable" value="pluginIdentifier,key,active,propertiesTranslation,customTranslation,locale" />
+					<option type="orderable" value="pluginIdentifier,key,active,propertiesTranslation,customTranslation,locale" />
+					
+					<option type="order" column="pluginIdentifier" direction="asc" />
+					
+					<option type="correspondingView" value="qcadooCustomTranslations/customTranslationDetails" />
+					<option type="correspondingComponent" value="form" />
+					
+					<option type="fullscreen" value="true" />
+					<option type="multiselect" value="true" />
+					<option type="creatable" value="false" />
+					<option type="deletable" value="false" />
+		
+					<listener event="cleanCustomTranslations" class="com.qcadoo.plugins.customTranslations.internal.listeners.CustomTranslationsListListeners" 
+						method="cleanCustomTranslations" />
+					<listener event="replaceCustomTranslations" class="com.qcadoo.plugins.customTranslations.internal.listeners.CustomTranslationsListListeners" 
+						method="replaceCustomTranslations" />
+				</component>
+			</layoutElement>
+		</component>
+		
+		<option type="header" value="false" />
+	</component>
+	
+	<hooks>
+		<beforeRender
+			class="com.qcadoo.plugins.customTranslations.internal.hooks.CustomTranslationsListViewHooks"
+			method="setLocaleToDefault" />
+		<beforeRender 
+			class="com.qcadoo.plugins.customTranslations.internal.hooks.CustomTranslationsListViewHooks"
+			method="updateRibbonState" />
+		<beforeRender 
+			class="com.qcadoo.plugins.customTranslations.internal.hooks.CustomTranslationsListViewHooks"
+			method="addDiscriminatorRestrictionToGrid" />
+	</hooks>
+</view>
