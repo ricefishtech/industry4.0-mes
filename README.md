@@ -9,8 +9,8 @@ industry4.0-mes
 2、解压tomcat-9.0.20.zip
 解压到一个文件夹，配置文件在mesconf文件夹里面，修改db.properties中的数据库配置
 
-3、解压src-code.zip
-1）解压到一个文件夹，使用IDEA直接打开这个文件夹，导入maven project,调整JDK、tomcat安装文件夹
+3、编译源码
+1）导入maven project,调整JDK、tomcat安装文件夹
 2）maven顺序：
 qcadoo-super-pom-open
 qcadoo-maven-plugin
@@ -20,20 +20,24 @@ mes
 打包后的war包在mes/mes-application/target/，可以直接copy war包到tomcat/webapps下面
 
 
-新版本演示：
-DEMO 版本是完整的商业版本
-http://demo.cloudmes.io/login.html  
-test001/123456 test002/123456
-test003/123456 test004/123456
-test005/123456 test006/123456
+## **新版本演示：**
+DEMO 版本是完整的商业版本 \
+http://demo.cloudmes.io/login.html \
+test001/123456 \
+test002/123456 \
+test003/123456 \
+test004/123456 \
+test005/123456 \
+test006/123456
 
-##*联系我们：
-QQ群：622319616 
-微信：17898898894
+## **联系我们：**
+QQ群：622319616 \
+微信：17898898894 \
 contact@cloudmes.io
 
 
-答疑： Q：是个人还是公司？ A：公司。
+## **答疑：**
+Q：是个人还是公司？ A：公司
 
 Q：商业部分开源吗？ A：商业部分代码付费开源，可以联系 17898898894.
 
