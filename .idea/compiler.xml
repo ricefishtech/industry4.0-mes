@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AjcSettings">
+    <option name="ajcPath" value="$MAVEN_REPOSITORY$/org/aspectj/aspectjtools/1.8.2/aspectjtools-1.8.2.jar" />
+    <option name="cmdLineParams" value="-showWeaveInfo" />
+    <option name="delegateToJavac" value="true" />
+  </component>
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="ajc" />
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/qcadoo/qcadoo-plugin-archetype/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="mes-plugins-material-requirements" />
+        <module name="qcadoo-commons" />
+        <module name="qcadoo-mail" />
+        <module name="qcadoo-plugins-custom-translation-management" />
+        <module name="qcadoo-plugins-export" />
+        <module name="mes-plugins-master-orders" />
+        <module name="mes-plugins-assignment-to-shift" />
+        <module name="mes-plugins-product-catalog-numbers" />
+        <module name="qcadoo-custom-translation" />
+        <module name="qcadoo-schema" />
+        <module name="mes-plugins-product-characteristics" />
+        <module name="mes-plugins-gantt-for-operation" />
+        <module name="mes-plugins-production-lines" />
+        <module name="mes-plugins-material-requirement-coverage-for-order" />
+        <module name="mes-plugins-time-norms-for-operations" />
+        <module name="mes-plugins-deviation-causes-reporting" />
+        <module name="qcadoo-testing" />
+        <module name="mes-plugins-tech-subcontracting" />
+        <module name="qcadoo-plugins-menu-management" />
+        <module name="qcadoo-plugin-archetype" />
+        <module name="mes-plugins-tech-subcontr-for-negot" />
+        <module name="mes-plugins-orders" />
+        <module name="mes-plugins-operation-time-calculations" />
+        <module name="mes-plugins-line-changeover-norms" />
+        <module name="mes-plugins-cost-norms-for-materials" />
+        <module name="mes-plugins-production-scheduling" />
+        <module name="mes-plugins-technologies" />
+        <module name="mes-plugins-minimal-affordable-quantity" />
+        <module name="mes-plugins-basic" />
+        <module name="mes-plugins-simple-material-balance" />
+        <module name="qcadoo-view" />
+        <module name="mes-plugins-advanced-genealogy-for-orders" />
+        <module name="mes-plugins-advanced-genealogy" />
+        <module name="mes-plugins-states" />
+        <module name="mes-plugins-tech-subcontr-for-production-counting" />
+        <module name="mes-plugins-stoppage" />
+        <module name="mes-plugins-work-plans" />
+        <module name="qcadoo-plugins-plugin-management" />
+        <module name="qcadoo-plugins-unit-conversion-management" />
+        <module name="qcadoo-plugins-dictionary-management" />
+        <module name="mes-plugins-email-notifications" />
+        <module name="mes-plugins-cost-norms-for-product" />
+        <module name="qcadoo-plugin" />
+        <module name="mes-plugins-production-counting" />
+        <module name="mes-plugins-tech-subcontr-for-oper-tasks" />
+        <module name="qcadoo-swagger" />
+        <module name="mes-plugins-cmms-machine-parts" />
+        <module name="mes-plugins-tech-subcontr-for-deliveries" />
+        <module name="mes-plugins-warehouse-minimal-state" />
+        <module name="mes-plugins-time-gaps-preview" />
+        <module name="mes-plugins-avg-labor-cost-calc-for-order" />
+        <module name="mes-plugins-cost-norms-for-operation-in-order" />
+        <module name="mes-plugins-production-per-shift" />
+        <module name="qcadoo-plugins-user-management" />
+        <module name="mes-plugins-deliveries-min-state" />
+        <module name="qcadoo-report" />
+        <module name="mes-plugins-negot-for-order-supplies-with-tech-subcontr" />
+        <module name="mes-plugins-deliveries-to-material-flow" />
+        <module name="mes-plugins-negot-for-order-supplies" />
+        <module name="mes-plugins-orders-for-subproducts-generation" />
+        <module name="mes-plugins-tech-subcontr-for-order-supplies" />
+        <module name="mes-plugins-material-flow-multitransfers" />
+        <module name="qcadoo-maven-plugin" />
+        <module name="mes-plugins-order-supplies" />
+        <module name="mes-plugins-cost-calculation" />
+        <module name="mes-plugins-column-extension" />
+        <module name="mes-plugins-sub-orders" />
+        <module name="mes-plugins-material-flow-resources" />
+        <module name="mes-plugins-cat-numbers-in-deliveries" />
+        <module name="mes-plugins-line-changeover-norms-for-orders" />
+        <module name="mes-plugins-technologies-generator" />
+        <module name="mes-plugins-production-balance-per-shift" />
+        <module name="mes-plugins-gantt-for-shifts" />
+        <module name="mes-plugins-operation-cost-calculations" />
+        <module name="mes-plugins-material-flow" />
+        <module name="qcadoo-model" />
+        <module name="mes-plugins-deliveries" />
+        <module name="mes-plugins-cost-norms-for-operation" />
+        <module name="mes-plugins-wage-groups" />
+        <module name="qcadoo-localization" />
+        <module name="mes-application" />
+        <module name="mes-plugins-product-flow-thru-division" />
+        <module name="qcadoo-security" />
+        <module name="mes-plugins-cat-numbers-in-negot" />
+        <module name="qcadoo-tenant" />
+        <module name="mes-plugins-basic-production-counting" />
+        <module name="mes-plugins-supply-negotiations" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mes" target="1.8" />
+      <module name="mes-application" target="1.8" />
+      <module name="mes-plugins" target="1.8" />
+      <module name="mes-plugins-advanced-genealogy" target="1.8" />
+      <module name="mes-plugins-advanced-genealogy-for-orders" target="1.8" />
+      <module name="mes-plugins-assignment-to-shift" target="1.8" />
+      <module name="mes-plugins-avg-labor-cost-calc-for-order" target="1.8" />
+      <module name="mes-plugins-basic" target="1.8" />
+      <module name="mes-plugins-basic-production-counting" target="1.8" />
+      <module name="mes-plugins-cat-numbers-in-deliveries" target="1.8" />
+      <module name="mes-plugins-cat-numbers-in-negot" target="1.8" />
+      <module name="mes-plugins-cmms-machine-parts" target="1.8" />
+      <module name="mes-plugins-column-extension" target="1.8" />
+      <module name="mes-plugins-cost-calculation" target="1.8" />
+      <module name="mes-plugins-cost-norms-for-materials" target="1.8" />
+      <module name="mes-plugins-cost-norms-for-operation" target="1.8" />
+      <module name="mes-plugins-cost-norms-for-operation-in-order" target="1.8" />
+      <module name="mes-plugins-cost-norms-for-product" target="1.8" />
+      <module name="mes-plugins-deliveries" target="1.8" />
+      <module name="mes-plugins-deliveries-min-state" target="1.8" />
+      <module name="mes-plugins-deliveries-to-material-flow" target="1.8" />
+      <module name="mes-plugins-deviation-causes-reporting" target="1.8" />
+      <module name="mes-plugins-email-notifications" target="1.8" />
+      <module name="mes-plugins-gantt-for-operation" target="1.8" />
+      <module name="mes-plugins-gantt-for-shifts" target="1.8" />
+      <module name="mes-plugins-line-changeover-norms" target="1.8" />
+      <module name="mes-plugins-line-changeover-norms-for-orders" target="1.8" />
+      <module name="mes-plugins-master-orders" target="1.8" />
+      <module name="mes-plugins-material-flow" target="1.8" />
+      <module name="mes-plugins-material-flow-multitransfers" target="1.8" />
+      <module name="mes-plugins-material-flow-resources" target="1.8" />
+      <module name="mes-plugins-material-requirement-coverage-for-order" target="1.8" />
+      <module name="mes-plugins-material-requirements" target="1.8" />
+      <module name="mes-plugins-minimal-affordable-quantity" target="1.8" />
+      <module name="mes-plugins-negot-for-order-supplies" target="1.8" />
+      <module name="mes-plugins-negot-for-order-supplies-with-tech-subcontr" target="1.8" />
+      <module name="mes-plugins-operation-cost-calculations" target="1.8" />
+      <module name="mes-plugins-operation-time-calculations" target="1.8" />
+      <module name="mes-plugins-order-supplies" target="1.8" />
+      <module name="mes-plugins-orders" target="1.8" />
+      <module name="mes-plugins-orders-for-subproducts-generation" target="1.8" />
+      <module name="mes-plugins-product-catalog-numbers" target="1.8" />
+      <module name="mes-plugins-product-characteristics" target="1.8" />
+      <module name="mes-plugins-product-flow-thru-division" target="1.8" />
+      <module name="mes-plugins-production-balance-per-shift" target="1.8" />
+      <module name="mes-plugins-production-counting" target="1.8" />
+      <module name="mes-plugins-production-lines" target="1.8" />
+      <module name="mes-plugins-production-per-shift" target="1.8" />
+      <module name="mes-plugins-production-scheduling" target="1.8" />
+      <module name="mes-plugins-simple-material-balance" target="1.8" />
+      <module name="mes-plugins-states" target="1.8" />
+      <module name="mes-plugins-stoppage" target="1.8" />
+      <module name="mes-plugins-sub-orders" target="1.8" />
+      <module name="mes-plugins-supply-negotiations" target="1.8" />
+      <module name="mes-plugins-tech-subcontr-for-deliveries" target="1.8" />
+      <module name="mes-plugins-tech-subcontr-for-negot" target="1.8" />
+      <module name="mes-plugins-tech-subcontr-for-oper-tasks" target="1.8" />
+      <module name="mes-plugins-tech-subcontr-for-order-supplies" target="1.8" />
+      <module name="mes-plugins-tech-subcontr-for-production-counting" target="1.8" />
+      <module name="mes-plugins-tech-subcontracting" target="1.8" />
+      <module name="mes-plugins-technologies" target="1.8" />
+      <module name="mes-plugins-technologies-generator" target="1.8" />
+      <module name="mes-plugins-time-gaps-preview" target="1.8" />
+      <module name="mes-plugins-time-norms-for-operations" target="1.8" />
+      <module name="mes-plugins-wage-groups" target="1.8" />
+      <module name="mes-plugins-warehouse-minimal-state" target="1.8" />
+      <module name="mes-plugins-work-plans" target="1.8" />
+      <module name="qcadoo" target="1.8" />
+      <module name="qcadoo-commons" target="1.8" />
+      <module name="qcadoo-custom-translation" target="1.8" />
+      <module name="qcadoo-javadoc" target="1.8" />
+      <module name="qcadoo-localization" target="1.8" />
+      <module name="qcadoo-mail" target="1.8" />
+      <module name="qcadoo-maven-plugin" target="1.8" />
+      <module name="qcadoo-model" target="1.8" />
+      <module name="qcadoo-plugin" target="1.8" />
+      <module name="qcadoo-plugin-archetype" target="1.8" />
+      <module name="qcadoo-plugins-custom-translation-management" target="1.8" />
+      <module name="qcadoo-plugins-dictionary-management" target="1.8" />
+      <module name="qcadoo-plugins-export" target="1.8" />
+      <module name="qcadoo-plugins-menu-management" target="1.8" />
+      <module name="qcadoo-plugins-plugin-management" target="1.8" />
+      <module name="qcadoo-plugins-unit-conversion-management" target="1.8" />
+      <module name="qcadoo-plugins-user-management" target="1.8" />
+      <module name="qcadoo-report" target="1.8" />
+      <module name="qcadoo-schema" target="1.8" />
+      <module name="qcadoo-security" target="1.8" />
+      <module name="qcadoo-super-pom" target="1.8" />
+      <module name="qcadoo-swagger" target="1.8" />
+      <module name="qcadoo-tenant" target="1.8" />
+      <module name="qcadoo-testing" target="1.8" />
+      <module name="qcadoo-view" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="mes-application:war">
+    <output-path>$PROJECT_DIR$/mes/mes-application/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>mes-application</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="mes-application-1.5-SNAPSHOT.war">
+      <element id="artifact" artifact-name="mes-application:war exploded" />
+    </root>
+  </artifact>
+</component>

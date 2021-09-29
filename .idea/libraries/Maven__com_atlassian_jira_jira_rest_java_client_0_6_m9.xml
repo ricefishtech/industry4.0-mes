@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.atlassian.jira:jira-rest-java-client:0.6-m9">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/atlassian/jira/jira-rest-java-client/0.6-m9/jira-rest-java-client-0.6-m9.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/atlassian/jira/jira-rest-java-client/0.6-m9/jira-rest-java-client-0.6-m9-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/atlassian/jira/jira-rest-java-client/0.6-m9/jira-rest-java-client-0.6-m9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

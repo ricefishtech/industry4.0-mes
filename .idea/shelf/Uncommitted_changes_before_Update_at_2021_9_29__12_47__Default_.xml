@@ -1,0 +1,234 @@
+<changelist name="Uncommitted_changes_before_Update_at_2021_9_29,_12_47_[Default]" date="1632890894345" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021_9_29,_12_47_[Default]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2021/9/29, 12:47 [Default]" />
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-production-lines/src/main/resources/productionLines/public/css/icons/intermediateIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/operationIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/productImportSchema_zh.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic.zip" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/staffImportSchema_en.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/newOperationIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-application/src/main/webapp/tmp/IGNOREME" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/finalProductIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-application/jetty-run.bat" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/materialIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-samples/.checkstyle" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/materialIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/newTechnologyIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/productImportSchema_de.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-application/driver/postgresql-42.0.0.jar" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/newTechnologyIcon16.xcf" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-production-lines/src/main/resources/productionLines/public/css/icons/companyIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/staffImportSchema_de.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/technologyIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/materialIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/newTechnologyIcon16.xcf" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-deliveries/src/main/resources/deliveries/public/css/icon_search.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/operationIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/technologyIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/finalProductIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/newOperationIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/intermediateIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-production-lines/src/main/resources/productionLines/public/css/icons/workstationIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-application/driver/aspectjweaver-1.8.2.jar" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/newTechnologyIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-stoppage/src/main/resources/stoppage/public/css/icons/iconStop24.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/staffImportSchema_zh.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icon_search.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-production-lines/src/main/resources/productionLines/public/css/icons/factoryIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/productImportSchema_en.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-master-orders/hs_err_pid12944.log" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/intermediateIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/newTechnologyIcon16.xcf" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/productImportSchema_pl.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/newOperationIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/resources/staffImportSchema_pl.xlsx" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-technologies/src/main/resources/technologies/public/css/icons/technologyIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/intermediateIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/newTechnologyIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-basic/src/main/resources/basic/public/css/icons/operationIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="mes-plugins/mes-plugins-cmms-machine-parts/src/main/resources/cmmsMachineParts/public/css/icons/finalProductIcon16.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+</changelist>

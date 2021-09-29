@@ -1,0 +1,370 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="mes-application:war exploded">
+    <output-path>$PROJECT_DIR$/mes/mes-application/target/mes-application-1.5-SNAPSHOT</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>mes-application</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="mes-application" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="archive" name="mes-plugins-deliveries-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-deliveries" />
+          </element>
+          <element id="archive" name="mes-plugins-production-scheduling-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-production-scheduling" />
+          </element>
+          <element id="archive" name="mes-plugins-orders-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-orders" />
+          </element>
+          <element id="archive" name="mes-plugins-basic-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-basic" />
+          </element>
+          <element id="library" level="project" name="Maven: com.logdigger:logdigger-connector-core:3.0.2" />
+          <element id="library" level="project" name="Maven: com.logdigger:logdigger-connector-jdbc:3.0.2" />
+          <element id="library" level="project" name="Maven: com.atlassian.jira:jira-rest-java-client:0.6-m9" />
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-client:1.5" />
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-core:1.5" />
+          <element id="library" level="project" name="Maven: com.sun.jersey.contribs:jersey-multipart:1.5" />
+          <element id="library" level="project" name="Maven: org.jvnet:mimepull:1.4" />
+          <element id="library" level="project" name="Maven: com.sun.jersey.contribs:jersey-apache-client:1.5" />
+          <element id="library" level="project" name="Maven: commons-httpclient:commons-httpclient:3.1" />
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-json:1.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.jettison:jettison:1.1" />
+          <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.5.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.5.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-jaxrs:1.5.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-xc:1.5.5" />
+          <element id="library" level="project" name="Maven: com.sun.jersey.contribs.jersey-oauth:oauth-client:1.5" />
+          <element id="library" level="project" name="Maven: com.sun.jersey.contribs.jersey-oauth:oauth-signature:1.5" />
+          <element id="archive" name="mes-plugins-states-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-states" />
+          </element>
+          <element id="archive" name="mes-plugins-material-requirements-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-material-requirements" />
+          </element>
+          <element id="archive" name="mes-plugins-work-plans-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-work-plans" />
+          </element>
+          <element id="archive" name="mes-plugins-technologies-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-technologies" />
+          </element>
+          <element id="library" level="project" name="Maven: net.objecthunter:exp4j:0.4.4" />
+          <element id="library" level="project" name="Maven: commons-net:commons-net:3.6" />
+          <element id="archive" name="mes-plugins-stoppage-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-stoppage" />
+          </element>
+          <element id="archive" name="mes-plugins-minimal-affordable-quantity-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-minimal-affordable-quantity" />
+          </element>
+          <element id="archive" name="mes-plugins-gantt-for-shifts-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-gantt-for-shifts" />
+          </element>
+          <element id="archive" name="mes-plugins-gantt-for-operation-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-gantt-for-operation" />
+          </element>
+          <element id="archive" name="mes-plugins-material-flow-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-material-flow" />
+          </element>
+          <element id="archive" name="mes-plugins-material-flow-resources-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-material-flow-resources" />
+          </element>
+          <element id="archive" name="mes-plugins-material-flow-multitransfers-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-material-flow-multitransfers" />
+          </element>
+          <element id="archive" name="mes-plugins-time-norms-for-operations-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-time-norms-for-operations" />
+          </element>
+          <element id="archive" name="mes-plugins-cost-norms-for-product-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cost-norms-for-product" />
+          </element>
+          <element id="archive" name="mes-plugins-cost-norms-for-operation-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cost-norms-for-operation" />
+          </element>
+          <element id="archive" name="mes-plugins-cost-calculation-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cost-calculation" />
+          </element>
+          <element id="archive" name="mes-plugins-simple-material-balance-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-simple-material-balance" />
+          </element>
+          <element id="archive" name="mes-plugins-production-counting-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-production-counting" />
+          </element>
+          <element id="archive" name="mes-plugins-basic-production-counting-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-basic-production-counting" />
+          </element>
+          <element id="archive" name="mes-plugins-cost-norms-for-materials-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cost-norms-for-materials" />
+          </element>
+          <element id="archive" name="mes-plugins-production-lines-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-production-lines" />
+          </element>
+          <element id="archive" name="mes-plugins-operation-time-calculations-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-operation-time-calculations" />
+          </element>
+          <element id="archive" name="mes-plugins-operation-cost-calculations-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-operation-cost-calculations" />
+          </element>
+          <element id="archive" name="mes-plugins-production-per-shift-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-production-per-shift" />
+          </element>
+          <element id="archive" name="mes-plugins-deviation-causes-reporting-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-deviation-causes-reporting" />
+          </element>
+          <element id="archive" name="mes-plugins-line-changeover-norms-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-line-changeover-norms" />
+          </element>
+          <element id="archive" name="mes-plugins-line-changeover-norms-for-orders-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-line-changeover-norms-for-orders" />
+          </element>
+          <element id="archive" name="mes-plugins-wage-groups-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-wage-groups" />
+          </element>
+          <element id="archive" name="mes-plugins-assignment-to-shift-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-assignment-to-shift" />
+          </element>
+          <element id="archive" name="mes-plugins-cost-norms-for-operation-in-order-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cost-norms-for-operation-in-order" />
+          </element>
+          <element id="archive" name="mes-plugins-avg-labor-cost-calc-for-order-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-avg-labor-cost-calc-for-order" />
+          </element>
+          <element id="archive" name="mes-plugins-column-extension-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-column-extension" />
+          </element>
+          <element id="archive" name="mes-plugins-deliveries-to-material-flow-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-deliveries-to-material-flow" />
+          </element>
+          <element id="archive" name="mes-plugins-cat-numbers-in-deliveries-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cat-numbers-in-deliveries" />
+          </element>
+          <element id="archive" name="mes-plugins-master-orders-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-master-orders" />
+          </element>
+          <element id="archive" name="mes-plugins-cmms-machine-parts-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cmms-machine-parts" />
+          </element>
+          <element id="archive" name="mes-plugins-warehouse-minimal-state-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-warehouse-minimal-state" />
+          </element>
+          <element id="archive" name="qcadoo-plugins-unit-conversion-management-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugins-unit-conversion-management" />
+          </element>
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-orm:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:3.2.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:3.2.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:3.2.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-aspects:3.2.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aspects:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.8.2" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-core:3.6.9.Final" />
+          <element id="library" level="project" name="Maven: antlr:antlr:2.7.6" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.1" />
+          <element id="library" level="project" name="Maven: dom4j:dom4j:1.6.1" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-commons-annotations:3.2.0.Final" />
+          <element id="library" level="project" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final" />
+          <element id="library" level="project" name="Maven: javax.transaction:jta:1.1" />
+          <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.3.2" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.9.1" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
+          <element id="library" level="project" name="Maven: commons-validator:commons-validator:1.4.0" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-test:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: org.javassist:javassist:3.18.1-GA" />
+          <element id="library" level="project" name="Maven: org.quartz-scheduler:quartz:1.8.5" />
+          <element id="library" level="project" name="Maven: org.aspectj:aspectjrt:1.8.2" />
+          <element id="archive" name="qcadoo-commons-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-commons" />
+          </element>
+          <element id="archive" name="qcadoo-plugins-plugin-management-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugins-plugin-management" />
+          </element>
+          <element id="archive" name="qcadoo-model-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-model" />
+          </element>
+          <element id="library" level="project" name="Maven: net.sourceforge.saxon:saxon:9.1.0.8" />
+          <element id="library" level="project" name="Maven: cglib:cglib:2.2" />
+          <element id="library" level="project" name="Maven: asm:asm:3.1" />
+          <element id="library" level="project" name="Maven: net.sf.ehcache:ehcache-core:2.3.1" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-jsp:2.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-servlet:2.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-template:2.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-core:2.2.2" />
+          <element id="library" level="project" name="Maven: org.apache.tiles:tiles-api:2.2.2" />
+          <element id="library" level="project" name="Maven: commons-digester:commons-digester:2.0" />
+          <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.2.2" />
+          <element id="library" level="project" name="Maven: com.yahoo.platform.yui:yuicompressor:2.3.6" />
+          <element id="archive" name="mes-plugins-product-catalog-numbers-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-product-catalog-numbers" />
+          </element>
+          <element id="archive" name="mes-plugins-tech-subcontracting-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-tech-subcontracting" />
+          </element>
+          <element id="archive" name="mes-plugins-tech-subcontr-for-oper-tasks-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-tech-subcontr-for-oper-tasks" />
+          </element>
+          <element id="archive" name="mes-plugins-tech-subcontr-for-deliveries-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-tech-subcontr-for-deliveries" />
+          </element>
+          <element id="archive" name="mes-plugins-tech-subcontr-for-production-counting-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-tech-subcontr-for-production-counting" />
+          </element>
+          <element id="archive" name="mes-plugins-deliveries-min-state-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-deliveries-min-state" />
+          </element>
+          <element id="archive" name="mes-plugins-advanced-genealogy-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-advanced-genealogy" />
+          </element>
+          <element id="archive" name="mes-plugins-advanced-genealogy-for-orders-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-advanced-genealogy-for-orders" />
+          </element>
+          <element id="archive" name="mes-plugins-supply-negotiations-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-supply-negotiations" />
+          </element>
+          <element id="archive" name="mes-plugins-cat-numbers-in-negot-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-cat-numbers-in-negot" />
+          </element>
+          <element id="archive" name="mes-plugins-product-flow-thru-division-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-product-flow-thru-division" />
+          </element>
+          <element id="archive" name="mes-plugins-material-requirement-coverage-for-order-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-material-requirement-coverage-for-order" />
+          </element>
+          <element id="archive" name="mes-plugins-negot-for-order-supplies-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-negot-for-order-supplies" />
+          </element>
+          <element id="archive" name="mes-plugins-negot-for-order-supplies-with-tech-subcontr-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-negot-for-order-supplies-with-tech-subcontr" />
+          </element>
+          <element id="archive" name="mes-plugins-tech-subcontr-for-negot-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-tech-subcontr-for-negot" />
+          </element>
+          <element id="archive" name="mes-plugins-tech-subcontr-for-order-supplies-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-tech-subcontr-for-order-supplies" />
+          </element>
+          <element id="archive" name="mes-plugins-order-supplies-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-order-supplies" />
+          </element>
+          <element id="archive" name="mes-plugins-orders-for-subproducts-generation-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-orders-for-subproducts-generation" />
+          </element>
+          <element id="archive" name="mes-plugins-production-balance-per-shift-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-production-balance-per-shift" />
+          </element>
+          <element id="archive" name="mes-plugins-sub-orders-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-sub-orders" />
+          </element>
+          <element id="archive" name="mes-plugins-time-gaps-preview-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-time-gaps-preview" />
+          </element>
+          <element id="archive" name="mes-plugins-product-characteristics-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-product-characteristics" />
+          </element>
+          <element id="archive" name="mes-plugins-technologies-generator-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-technologies-generator" />
+          </element>
+          <element id="archive" name="mes-plugins-email-notifications-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="mes-plugins-email-notifications" />
+          </element>
+          <element id="archive" name="qcadoo-plugin-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugin" />
+          </element>
+          <element id="archive" name="qcadoo-tenant-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-tenant" />
+          </element>
+          <element id="library" level="project" name="Maven: jgrapht:jgrapht:0.8.2" />
+          <element id="library" level="project" name="Maven: com.zaxxer:HikariCP:3.3.1" />
+          <element id="archive" name="qcadoo-localization-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-localization" />
+          </element>
+          <element id="archive" name="qcadoo-security-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-security" />
+          </element>
+          <element id="archive" name="qcadoo-mail-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-mail" />
+          </element>
+          <element id="library" level="project" name="Maven: javax.mail:mail:1.4.5" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
+          <element id="archive" name="qcadoo-view-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-view" />
+          </element>
+          <element id="library" level="project" name="Maven: org.json:json:20090211" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.2" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.4" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4" />
+          <element id="archive" name="qcadoo-report-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-report" />
+          </element>
+          <element id="library" level="project" name="Maven: com.lowagie:itext:2.1.7" />
+          <element id="library" level="project" name="Maven: bouncycastle:bcmail-jdk14:138" />
+          <element id="library" level="project" name="Maven: bouncycastle:bcprov-jdk14:138" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bctsp-jdk14:1.38" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk14:1.38" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcmail-jdk14:1.38" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi:3.9" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi-ooxml:3.9" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi-ooxml-schemas:3.9" />
+          <element id="library" level="project" name="Maven: org.apache.xmlbeans:xmlbeans:2.3.0" />
+          <element id="library" level="project" name="Maven: net.sf.jasperreports:jasperreports:4.0.2" />
+          <element id="library" level="project" name="Maven: jfree:jcommon:1.0.15" />
+          <element id="library" level="project" name="Maven: jfree:jfreechart:1.0.12" />
+          <element id="library" level="project" name="Maven: xml-apis:xml-apis:1.3.02" />
+          <element id="library" level="project" name="Maven: eclipse:jdtcore:3.1.0" />
+          <element id="archive" name="qcadoo-plugins-menu-management-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugins-menu-management" />
+          </element>
+          <element id="archive" name="qcadoo-plugins-user-management-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugins-user-management" />
+          </element>
+          <element id="archive" name="qcadoo-plugins-dictionary-management-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugins-dictionary-management" />
+          </element>
+          <element id="archive" name="qcadoo-custom-translation-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-custom-translation" />
+          </element>
+          <element id="archive" name="qcadoo-plugins-custom-translation-management-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugins-custom-translation-management" />
+          </element>
+          <element id="archive" name="qcadoo-plugins-export-1.5-SNAPSHOT.jar">
+            <element id="module-output" name="qcadoo-plugins-export" />
+          </element>
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:3.2.11.RELEASE" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.1.3" />
+          <element id="library" level="project" name="Maven: org.jdom:jdom:1.1" />
+          <element id="library" level="project" name="Maven: joda-time:joda-time:2.3" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava:18.0" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.55" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.6.1" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" />
+          <element id="library" level="project" name="Maven: log4j:log4j:1.2.16" />
+          <element id="library" level="project" name="Maven: org.slf4j:jcl-over-slf4j:1.6.1" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.6.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.6.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.0" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.6.2" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/mes/mes-application/target/mes-application-1.5-SNAPSHOT/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="mes-application/web/Web" />
+    </root>
+  </artifact>
+</component>
