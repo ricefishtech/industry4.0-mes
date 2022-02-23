@@ -3,6 +3,8 @@
 
 ## **机加工MES、食品包装MES、制鞋MES、服装MES、离散MES**
 
+### 最新的低代码开发平台，欢迎试用
+
 ## **编译说明：**
 **1、安装postgresql 12.2及以上的版本** \
 执行以下脚本导入db-init.sql "C:\Program Files\PostgreSQL\12\bin\psql.exe" -U 数据库用户名 -d 数据库名称 < db-init.sql
