@@ -5,23 +5,6 @@
 
 ### 最新的低代码开发平台，欢迎试用
 
-## **编译说明：**
-**1、安装postgresql 12.2及以上的版本** \
-执行以下脚本导入db-init.sql "C:\Program Files\PostgreSQL\12\bin\psql.exe" -U 数据库用户名 -d 数据库名称 < db-init.sql
-
-**2、解压tomcat-9.0.20.zip** \
-解压到一个文件夹，配置文件在mesconf文件夹里面，修改db.properties中的数据库配置
-
-**3、编译源码** \
-1）导入maven project,调整JDK、tomcat安装文件夹 \
-2) 将lib文件夹里面的内容复制到maven repository文件夹里面，比如/users/aa/.m2/repository \
-3）maven install顺序：\
-   qcadoo-super-pom-open \
-   qcadoo-maven-plugin \
-   qcadoo \
-   mes
-
-打包后的war包在mes/mes-application/target/，可以直接copy war包到tomcat/webapps下面
 
 ## **升级的最新版本演示**：
 ## DEMO 版本是完整的商业版本 
@@ -40,6 +23,26 @@ contact@cloudmes.io
 
 截图：
 输入图片说明 输入图片说明 输入图片说明
+
+
+
+## **编译说明：**
+**1、安装postgresql 12.2及以上的版本** \
+执行以下脚本导入db-init.sql "C:\Program Files\PostgreSQL\12\bin\psql.exe" -U 数据库用户名 -d 数据库名称 < db-init.sql
+
+**2、解压tomcat-9.0.20.zip** \
+解压到一个文件夹，配置文件在mesconf文件夹里面，修改db.properties中的数据库配置
+
+**3、编译源码** \
+1）导入maven project,调整JDK、tomcat安装文件夹 \
+2) 将lib文件夹里面的内容复制到maven repository文件夹里面，比如/users/aa/.m2/repository \
+3）maven install顺序：\
+   qcadoo-super-pom-open \
+   qcadoo-maven-plugin \
+   qcadoo \
+   mes
+
+打包后的war包在mes/mes-application/target/，可以直接copy war包到tomcat/webapps下面
 
 ## **答疑：**
 Q：是个人还是公司？ A：公司
