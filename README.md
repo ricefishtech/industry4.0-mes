@@ -3,13 +3,7 @@
 
 ## **机加工MES、食品包装MES、制鞋MES、服装MES、离散MES**
 
-## 最新的低代码MES,欢迎咨询
-
-
-## **升级的最新版本演示**：
-## DEMO 版本是完整的商业版本 
-
-## 旧的DEMO已经停用，使用最新版的DEMO
+## 新版代码仓库请到：https://github.com/metaxk/cloudmes
 ## 演示账号：
 ## https://mesv2.cloudmes.io/ 
 ## 账号：demo1   密码：111111   
