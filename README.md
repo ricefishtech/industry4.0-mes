@@ -3,7 +3,7 @@
 
 ## **机加工MES、食品包装MES、制鞋MES、服装MES、离散MES**
 
-## 新版代码仓库请到：[https://github.com/metaxk/cloudmes](https://github.com/metaxk-company/free-mes)
+## 新版代码仓库请到：https://github.com/metaxk-company/free-mes
 ## 演示账号：
 ## https://mesv2.cloudmes.io/ 
 ## 账号：test001   密码：123456   
