@@ -3,11 +3,11 @@
 
 ## **机加工MES、食品包装MES、制鞋MES、服装MES、离散MES**
 
-## 新版代码仓库请到：https://github.com/metaxk/cloudmes
+## 新版代码仓库请到：[https://github.com/metaxk/cloudmes](https://github.com/metaxk-company/free-mes)
 ## 演示账号：
 ## https://mesv2.cloudmes.io/ 
-## 账号：demo1   密码：111111   
-## 账号：demo2   密码：111111
+## 账号：test001   密码：123456   
+## 账号：test002   密码：123456
 <img width="1399" alt="image" src="https://github.com/ricefishtech/industry4.0-mes/assets/26316047/03e11976-aa8b-4c0f-863f-30b9bb4f7efd">
 
 
